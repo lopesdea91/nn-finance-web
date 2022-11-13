@@ -1,5 +1,13 @@
 import { RouteRecordRaw } from "vue-router"
 
-const routes: RouteRecordRaw[] = []
+import PageSettingsAccount from '../resource/pages/settings/Account.vue'
+
+const routes: RouteRecordRaw[] = [
+    {
+        path: 'settings/account',
+        name: 'settings-account',
+        components: PageSettingsAccount
+    }
+]
 
 export default routes

@@ -1,5 +1,13 @@
 import { RouteRecordRaw } from "vue-router"
 
-const routes: RouteRecordRaw[] = []
+import PageDashboard from '../resource/pages/dashboard/Dashboard.vue'
+
+const routes: RouteRecordRaw[] = [
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: PageDashboard
+    }
+]
 
 export default routes
