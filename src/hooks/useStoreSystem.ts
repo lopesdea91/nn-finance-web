@@ -1,22 +1,17 @@
+import { useRouter } from "vue-router";
 import appStore from "@/store/AppStore";
 import { SystemUser } from "@/types/storeApp";
-import { computed } from "vue";
+import useApiCommon from "./useApiCommon";
+import api from "@/services/api";
 
 interface SignInProps {
     user: SystemUser
     period: string
 }
+
 export default function useStoreSystem() {
-
-    const token = computed(() => {
-        return window.localStorage.getItem('nn-finance') || ''
-    })
-
-    const setToken = async (t: string) => {
-        new Promise(() => {
-            window.localStorage.setItem('nn-finance', t)
-        })
-    }
+    const apiCommon = useApiCommon()
+    const router = useRouter();
 
     const signIn = async ({ user, period }: SignInProps) => {
         new Promise(() => {
@@ -26,9 +21,35 @@ export default function useStoreSystem() {
         })
     }
 
+    const prepareStore = async () => {
+        if (!apiCommon.token) {
+            router.push('/');
+            return;
+        }
+
+        /**
+         * validar o token
+         * - se estiver valido, continua
+         * - se não estiver valido, redirecionar para /login
+         */
+
+        const resultDataUser = await api.user.data();
+
+        if (!resultDataUser.status) {
+            console.log("fazer oo alerta");
+            return;
+        }
+
+        await signIn({
+            user: resultDataUser.data.user,
+            period: resultDataUser.data.period,
+        });
+
+        router.push({ name: "dashboard" });
+    }
+
     return {
-        token: token.value,
-        setToken,
-        signIn
+        signIn,
+        prepareStore
     }
 }

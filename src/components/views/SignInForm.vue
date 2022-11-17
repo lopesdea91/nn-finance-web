@@ -4,8 +4,10 @@ import { useRouter } from "vue-router";
 import api from "@/services/api";
 import { SignInForm } from "@/types";
 import useStoreSystem from "@/hooks/useStoreSystem";
+import useApiCommon from "@/hooks/useApiCommon";
 
 const storeSystem = useStoreSystem();
+const apiCommon = useApiCommon()
 const router = useRouter();
 
 const form = reactive<SignInForm>({
@@ -26,7 +28,7 @@ const signIn = async (): Promise<void> => {
     return;
   }
 
-  await storeSystem.setToken(resultSignIn.data.token);
+  await apiCommon.setToken(resultSignIn.data.token);
 
   const resultDataUser = await api.user.data();
 
