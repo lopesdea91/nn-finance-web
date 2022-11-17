@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from "vue-router"
 
-import PageDashboard from '../resource/pages/dashboard/Dashboard.vue'
+import PageDashboard from '../resource/views/dashboard/Dashboard.vue'
 
 const routes: RouteRecordRaw[] = [
     {

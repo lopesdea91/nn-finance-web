@@ -1,10 +1,10 @@
 import { RouteRecordRaw } from "vue-router"
 
-import PageAdmin from '../resource/pages/admin/Admin.vue'
+import PageAdmin from '../resource/views/admin/Admin.vue'
 
 const routes: RouteRecordRaw[] = [
     {
-        path: 'admin',
+        path: '/admin',
         name: 'admin',
         components: PageAdmin
     }
