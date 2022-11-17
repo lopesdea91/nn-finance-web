@@ -1,5 +1,5 @@
 import common from '@/config/services/api/common'
-import { SignInPayload, SignInResponse, SignInResponseData } from '@/types/auth'
+import { SignInPayload, SignInResponse, SignInResponseData, SignUpPayload, SignUpResponse, SignUpResponseData } from '@/types/auth'
 
 export default {
     signIn: async (props: SignInPayload): Promise<SignInResponse> => {
@@ -17,7 +17,22 @@ export default {
             data
         }
     },
-    signUp: () => { },
+    signUp: async (props: SignUpPayload): Promise<SignUpResponse> => {
+        const { post } = common()
+
+        const form = props
+
+        const { status, data } = await post<SignUpResponseData>({
+            url: 'v1/auth/sign-up',
+            form
+        })
+
+        return {
+            status: status === 201,
+            data
+        }
+
+    },
     signOut: () => { },
     forgotPassword: () => { },
 }

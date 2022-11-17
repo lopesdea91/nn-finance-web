@@ -13,8 +13,6 @@ export default () => {
     }
 
     const get = async<Data>({ url }: GetProps): Promise<GetResult<Data>> => {
-        console.log('token', token);
-
         return await axios.get<Data>(url, options)
             .catch((result) => {
                 console.log('MESSAGE GET', result);

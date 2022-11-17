@@ -7,7 +7,7 @@ import useStoreSystem from "@/hooks/useStoreSystem";
 import useApiCommon from "@/hooks/useApiCommon";
 
 const storeSystem = useStoreSystem();
-const apiCommon = useApiCommon()
+const apiCommon = useApiCommon();
 const router = useRouter();
 
 const form = reactive<SignInForm>({
@@ -17,7 +17,7 @@ const form = reactive<SignInForm>({
   // password: "",
 });
 
-const signIn = async (): Promise<void> => {
+const onSubmit = async (): Promise<void> => {
   const resultSignIn = await api.auth.signIn({
     email: form.email,
     password: form.password,
@@ -45,17 +45,10 @@ const signIn = async (): Promise<void> => {
   router.push({ name: "dashboard" });
 };
 
-// const teste = async () => {
-//   const result = await api.user.data();
-
-//   console.log("result", result);
-// };
 </script>
 
 <template>
-  <!-- <AppButton content="Entrar" class="w-full" @click="teste" /> -->
-
-  <AppForm @onSubmit="signIn" class="signIn__form">
+  <AppForm @onSubmit="onSubmit" class="signIn__form">
     <AppText content="Bem vindo" size="display" />
 
     <AppDivisor />
