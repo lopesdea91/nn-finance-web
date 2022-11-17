@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <div class="app__btn--group">
     <slot />

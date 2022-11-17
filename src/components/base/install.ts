@@ -1,4 +1,4 @@
-import { App } from "vue"
+import { Component } from "vue"
 
 import AppButton from './Button/AppButton.vue'
 import AppButtonGroup from './Button/AppButtonGroup.vue'
@@ -9,15 +9,15 @@ import AppTextarea from './Form/AppTextarea.vue'
 import AppText from './Text/AppText.vue'
 import AppTextLink from './Text/AppTextLink.vue'
 
-export default {
-    install(app: App) {
-        app.component('AppButton', AppButton)
-        app.component('AppButtonGroup', AppButtonGroup)
-        app.component('AppDivisor', AppDivisor)
-        app.component('AppForm', AppForm)
-        app.component('AppInput', AppInput)
-        app.component('AppTextarea', AppTextarea)
-        app.component('AppText', AppText)
-        app.component('AppTextLink', AppTextLink)
-    }
-}
+const components: Record<string, Component> = {
+    AppButton,
+    AppButtonGroup,
+    AppDivisor,
+    AppForm,
+    AppInput,
+    AppTextarea,
+    AppText,
+    AppTextLink,
+};
+
+export default components;
