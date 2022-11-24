@@ -3,14 +3,8 @@ import App from '@/App.vue'
 
 import '@/assets/css/app.scss'
 
-import configFontAwesome from '@/config/fontawesome'
-import configGlobalComponents from '@/config/global-components'
-import router from '@/config/vue-router'
+import config from '@/config'
 
 const app = createApp(App)
-
-app.use(configFontAwesome)
-app.use(configGlobalComponents)
-app.use(router)
-
+app.use(config)
 app.mount('#app')

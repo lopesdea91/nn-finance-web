@@ -30,7 +30,7 @@ const vBindButton = computed(() => {
 <template>
   <button v-bind="{ ...$attrs, ...vBindButton }">
     <div v-if="$props.icon && $props.iconPosition === 'left'">
-      <Icon :icon="$props.icon" />
+      <AppIcon :icon="$props.icon" />
     </div>
 
     {{ $props.content }}
@@ -38,7 +38,7 @@ const vBindButton = computed(() => {
     <slot v-if="!$props.content" />
 
     <div v-if="$props.icon && $props.iconPosition === 'rigth'">
-      <Icon :icon="$props.icon" />
+      <AppIcon :icon="$props.icon" />
     </div>
   </button>
 </template>

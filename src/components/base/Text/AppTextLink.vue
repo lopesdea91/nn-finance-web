@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <a v-bind="$attrs">
     <!-- <div v-if="icon && iconPosition === 'left'">
-      <Icon :icon="icon" />
+      <AppIcon :icon="icon" />
     </div> -->
 
     {{ content }}
@@ -15,7 +15,7 @@ defineProps<{
     <slot v-if="!content" />
 
     <!-- <div v-if="icon && iconPosition === 'rigth'">
-      <Icon :icon="icon" />
+      <AppIcon :icon="icon" />
     </div> -->
   </a>
 </template>

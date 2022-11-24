@@ -2,8 +2,3 @@
 @import './_mixin.scss';
 @import './reset.scss';
 @import './geral.scss';
-@import './layout.scss';
-
-#app {
-    @include w-h-screen;
-}

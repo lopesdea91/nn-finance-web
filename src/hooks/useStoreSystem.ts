@@ -1,7 +1,7 @@
 import { useRouter } from "vue-router";
 import appStore from "@/store/AppStore";
 import { SystemUser } from "@/types/storeApp";
-import useApiCommon from "./useApiCommon";
+import useApiCommon from "@/hooks/useApiCommon";
 import api from "@/services/api";
 
 interface SignInProps {

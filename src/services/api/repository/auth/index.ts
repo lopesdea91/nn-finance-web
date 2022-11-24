@@ -1,8 +1,12 @@
 import common from '@/config/services/api/common'
 import { SignInPayload, SignInResponse, SignInResponseData, SignUpPayload, SignUpResponse, SignUpResponseData } from '@/types/auth'
+import { getCurrentInstance } from 'vue'
 
 export default {
     signIn: async (props: SignInPayload): Promise<SignInResponse> => {
+        const aa = getCurrentInstance()
+        console.log('aa', aa);
+        
         const { post } = common()
 
         const form = props

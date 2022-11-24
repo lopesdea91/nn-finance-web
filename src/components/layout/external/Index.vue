@@ -4,3 +4,9 @@
         <slot />
     </div>
 </template>
+
+<style lang="scss">
+.layout_external {
+    @apply h-full flex justify-center items-center;
+}
+</style>
