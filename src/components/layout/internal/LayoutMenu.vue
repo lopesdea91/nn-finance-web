@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, toRefs } from "vue";
+import menuList from "@/content/layout.menu";
 import layoutStore from "@/store/LayoutStore";
 
 const { menuOpen } = toRefs(layoutStore.state);
-
-const menuList = computed(() => [
-  { icon: "fa-solid fa-house", label: "Dashboard" },
-  { icon: "fa-solid fa-cash-register", label: "Novo registro" },
-  { icon: "fa-solid fa-receipt", label: "Extrato" }, // <i class="fa-solid fa-receipt"></i>
-  { icon: "fa-solid fa-rectangle-list", label: "Lista" }, // <i class="fa-regular fa-rectangle-list"></i>
-  { icon: "fa-solid fa-credit-card", label: "Fatura" }, // <i class="fa-regular fa-credit-card"></i>
-  // { icon: "fa-solid fa-house", label: "Dashboard" },
-  // { icon: "fa-solid fa-house", label: "Dashboard" },
-]);
 
 onUnmounted(() => {
   layoutStore.actions.resizeOff();
@@ -56,19 +47,21 @@ onMounted(() => {
     -->
 
     <ul class="layout_internal_menu_list">
-      <li
-        v-for="(menuItem, i) in menuList"
+      <RouterLink
+        v-for="(item, i) in menuList"
         :key="i"
         class="layout_internal_menu_listItem"
-        :title="menuItem.label"
+        :class="item.class"
+        :title="item.label"
+        :to="item.to"
       >
         <div class="layout_internal_menu_listItem__icon">
-          <AppIcon :icon="menuItem.icon" />
+          <AppIcon :icon="item.icon" />
         </div>
         <span class="layout_internal_menu_listItem__text">
-          {{ menuItem.label }}
+          {{ item.label }}
         </span>
-      </li>
+      </RouterLink>
     </ul>
   </div>
 </template>
@@ -135,14 +128,25 @@ onMounted(() => {
   @apply mx-4 sm:mx-2;
 
   &Item {
-    @apply flex items-stretch sm:justify-center lg:justify-start gap-2 px-2 h-9 pb-1 mb-1 cursor-pointer text-gray-800 duration-150;
+    @apply flex items-stretch sm:justify-center lg:justify-start gap-2 px-2 h-9 pb-1 mb-1 cursor-pointer text-gray-800 duration-150 relative;
 
     &:not(:last-child) {
       @apply border-b border-b-gray-300;
     }
-
     &:hover {
-      @apply bg-stone-800 text-white;
+      @apply bg-stone-600 text-white;
+    }
+    &.active {
+      @apply bg-stone-300;
+    }
+    &.--plus {
+      @apply text-gray-500;
+    }
+    &.--plus::after {
+      @apply absolute -left-1 top-1 h-3 w-3 flex items-center justify-center text-xs text-white bg-gray-300 rounded-lg; // w-3 h-3
+      content: "+";
+      // line-height: 1
+      font-family: monospace;
     }
     &__icon {
       @apply inline-flex items-center justify-center;
