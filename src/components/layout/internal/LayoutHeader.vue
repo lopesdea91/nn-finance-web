@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import layoutStore from "@/store/LayoutStore";
+import options from "@/content/layout.header-dropdown";
 </script>
 
 <template>
@@ -11,7 +12,22 @@ import layoutStore from "@/store/LayoutStore";
     <span>TITULO</span>
 
     <div class="layout_internal_headerBtn__profile">
-      <AppIcon icon="fa-solid fa-id-card" />
+      <AppDropdown>
+        <template v-slot:toggle>
+          <AppIcon icon="fa-solid fa-id-card" />
+        </template>
+
+        <template v-slot:item>
+          <RouterLink
+            :to="option.to"
+            class="layout_internal_headerRouterLink"
+            v-for="option in options"
+            :key="option.label"
+          >
+            {{ option.label }}
+          </RouterLink>
+        </template>
+      </AppDropdown>
     </div>
 
     <div
@@ -42,10 +58,18 @@ import layoutStore from "@/store/LayoutStore";
     @apply duration-150 cursor-pointer;
   }
   &Btn__profile {
-    @apply ml-auto border border-gray-300 px-2 text-2xl;
+    @apply ml-auto border border-gray-300 text-2xl px-1;
   }
   &Btn__menu {
-    @apply sm:hidden border border-gray-300 py-0.5 px-2 text-lg;
+    @apply sm:hidden border border-gray-300 py-0.5 text-lg px-2;
+  }
+}
+.layout_internal_headerRouterLink {
+  @apply md:text-sm block p-2 cursor-pointer text-gray-800 duration-150;
+
+  &:hover,
+  &.active {
+    @apply bg-gray-200;
   }
 }
 </style>

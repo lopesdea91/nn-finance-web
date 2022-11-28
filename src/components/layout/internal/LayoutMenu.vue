@@ -116,31 +116,20 @@ onMounted(() => {
   &_logo {
     @apply flex items-center justify-center h-12;
   }
-  // &--mobile {
-  //   @apply md:hidden;
-  // }
-  // &--dasktop {
-  //   @apply hidden md:block;
-  // }
 }
 
 .layout_internal_menu_list {
   @apply mx-4 sm:mx-2;
 
   &Item {
-    @apply flex items-stretch sm:justify-center lg:justify-start gap-2 px-2 h-9 pb-1 mb-1 cursor-pointer text-gray-800 duration-150 relative;
+    @apply flex items-stretch sm:justify-center lg:justify-start gap-2 px-2 h-11 sm:h-9 pb-1 mb-1 cursor-pointer text-gray-800 duration-150 relative;
 
     &:not(:last-child) {
       @apply border-b border-b-gray-300;
     }
-    &:hover {
-      @apply bg-stone-600 text-white;
-    }
+    &:hover,
     &.active {
-      @apply bg-stone-300;
-    }
-    &.--plus {
-      @apply text-gray-500;
+      @apply bg-gray-200;
     }
     &.--plus::after {
       @apply absolute -left-1 top-1 h-3 w-3 flex items-center justify-center text-xs text-white bg-gray-300 rounded-lg; // w-3 h-3
