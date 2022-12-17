@@ -1,0 +1,138 @@
+@keyframes showLayout {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.app-layout {
+  animation: showLayout 0.5s forwards;
+
+  &_internal-header {
+    z-index: 3;
+    @include layoutTransition;
+    position: fixed;
+    top: 0.25rem;
+    left: 0.5rem;
+    right: 0.5rem;
+
+    @media (min-width: 768px) {
+      left: 5.25rem;
+    }
+
+    @media (min-width: 1200px) {
+      left: 12rem;
+      right: 0.75rem;
+    }
+
+    .header-brand {
+      @include hoverBtn;
+    }
+
+    .header-profile {
+      @include sizeIcon;
+      @include hoverBtn;
+    }
+
+    .header-menu {
+      @include sizeIcon;
+      @include hoverBtn;
+    }
+  }
+
+  &_internal-menu {
+    @include layoutTransition;
+    z-index: 2;
+    position: fixed;
+    border: 1px solid var(--bs-gray-400);
+
+    @media (max-width: 768px) {
+      top: 3.7rem;
+      right: 0.5rem;
+      bottom: 0.5rem;
+      left: 0.5rem;
+
+      width: 0;
+
+      &:not(.--show) {
+        opacity: 0;
+        overflow: hidden;
+      }
+
+      &.--show {
+        width: calc(100% - 1rem);
+        opacity: 1;
+      }
+    }
+
+    @media (min-width: 768px) {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4.5rem;
+    }
+
+    @media (min-width: 1200px) {
+      width: 11.5rem;
+    }
+
+    .menu-brand {
+      min-height: 52px;
+    }
+
+    .menu-list-group {
+      .menu-text {
+        @include layoutTransition;
+        color: var(--bs-gray-600);
+      }
+
+      .menu-icon {
+        @include layoutTransition;
+        @include sizeIcon;
+        width: 30px;
+        height: 32px;
+        color: var(--bs-gray-600);
+      }
+
+      .menu-link:hover,
+      .--active {
+
+        .menu-text,
+        .menu-icon {
+          background: var(--bs-gray-800);
+          color: white;
+        }
+      }
+    }
+  }
+
+  &_internal-content {
+    z-index: 1;
+    @include layoutTransition;
+    min-height: 100vh;
+
+    padding-top: 3.75rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+
+    @media (min-width: 768px) {
+      // padding: 3.85rem 0.75rem 0.5rem 5.5rem;
+      padding-top: 3.85rem;
+      // padding-right: 0.5rem;
+      // padding-bottom: 0.5rem;
+      padding-left: 5.25rem;
+    }
+
+    @media (min-width: 1200px) {
+      // padding: 3.85rem 0.75rem 0.5rem 12.5rem;
+      // padding-top: 3.85rem;
+      padding-right: 0.85rem;
+      // padding-bottom: 0.5rem;
+      padding-left: 12.15rem;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@mixin layoutTransition {
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+
+@mixin hoverBtn {
+  color: var(--bs-gray-dark);
+  cursor: pointer;
+  transition-duration: 0.2s;
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  &.--btn:hover {
+    box-shadow: 0 2px 8px -1px;
+  }
+}
+
+@mixin sizeIcon {
+  font-size: 20px;
+
+  @media (min-width: 768px) {
+    font-size: 18px;
+  }
+}
