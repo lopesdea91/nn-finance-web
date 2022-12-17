@@ -13,7 +13,7 @@ type Props = {
 export const FormSignUp = ({ }: Props) => {
   const { fields, errors, rule, register, handleSubmit, onChangeField } = formSignValidation()
   const router = useRouter()
-  const apiCommon = useApiCommon();
+  const { setToken } = useApiCommon();
   const { signInSystem } = useSystemStore()
 
   const onSubmit = async () => {
@@ -26,7 +26,7 @@ export const FormSignUp = ({ }: Props) => {
       return;
     }
 
-    apiCommon.setToken(resultSignIn.data.token);
+    setToken(resultSignIn.data.token);
 
     const resultDataUser = await api.user.data();
 

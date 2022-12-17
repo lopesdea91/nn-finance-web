@@ -97,13 +97,17 @@
         color: var(--bs-gray-600);
       }
 
-      .menu-link:hover,
-      .--active {
+      .menu-link {
+        @include layoutTransition;
 
-        .menu-text,
-        .menu-icon {
+        &:hover,
+        &.--active {
           background: var(--bs-gray-800);
-          color: white;
+
+          .menu-text,
+          .menu-icon {
+            color: white;
+          }
         }
       }
     }
