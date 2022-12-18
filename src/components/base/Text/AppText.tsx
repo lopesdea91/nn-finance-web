@@ -6,7 +6,7 @@ interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagra
   size: 'sm' | 'md' | 'lg' | 'xl'
 }
 
-export const AppText = ({ children, size, ...rest }: Props) => {
+const AppText = React.forwardRef<any, Props>(({ children, size, ...rest }: Props) => {
 
   const sizeText = useMemo(() => {
     const sizes = {
@@ -21,4 +21,8 @@ export const AppText = ({ children, size, ...rest }: Props) => {
   return (
     <p className={sizeText} {...rest}>{children}</p>
   )
-}
+})
+
+AppText.displayName = 'AppText'
+
+export { AppText }

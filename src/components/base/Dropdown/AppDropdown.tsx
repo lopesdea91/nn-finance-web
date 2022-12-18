@@ -1,3 +1,4 @@
+import React from 'react'
 import { useRouter } from "next/router";
 import { Dropdown } from "react-bootstrap";
 import { AppDropdownItem } from "@/types/layout";
@@ -7,7 +8,7 @@ type Props = {
   children?: JSX.Element
   items: AppDropdownItem[]
 }
-export const AppDropdown = ({ title, children, items }: Props) => {
+const AppDropdown = React.forwardRef<any, Props>(({ title, children, items }: Props) => {
   const router = useRouter()
 
   const handleClick = ({ to, click }: AppDropdownItem) => {
@@ -32,4 +33,8 @@ export const AppDropdown = ({ title, children, items }: Props) => {
       </Dropdown.Menu>
     </Dropdown>
   )
-};
+});
+
+AppDropdown.displayName = 'AppDropdown'
+
+export { AppDropdown }

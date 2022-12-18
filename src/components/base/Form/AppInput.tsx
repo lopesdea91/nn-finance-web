@@ -7,7 +7,7 @@ type Props = FormControlProps & {
   error?: string | undefined
 }
 
-export const AppInput = React.forwardRef<any, Props>(({ children, label, text, error, ...rest }, ref) => {
+const AppInput = React.forwardRef<any, Props>(({ children, label, text, error, ...rest }, ref) => {
 
   return (
     <Form.Group ref={ref} className="mb-2 position-relative" controlId={label}>
@@ -29,6 +29,9 @@ export const AppInput = React.forwardRef<any, Props>(({ children, label, text, e
   )
 });
 
+AppInput.displayName = 'AppInput'
+
+export { AppInput }
 
 // export const AppInput = ({ children, label, text, error, ...rest }: Props) => {
 // }
