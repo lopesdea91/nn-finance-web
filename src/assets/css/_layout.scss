@@ -12,6 +12,7 @@
   animation: showLayout 0.5s forwards;
 
   &_internal-header {
+    border-color: var(--bs-gray-400);
     z-index: 3;
     @include layoutTransition;
     position: fixed;
@@ -139,4 +140,9 @@
       padding-left: 12.15rem;
     }
   }
+}
+
+.page {
+  min-height: 70vh;
+  border-color: var(--bs-gray-400);
 }

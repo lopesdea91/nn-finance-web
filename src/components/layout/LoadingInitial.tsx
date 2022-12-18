@@ -25,7 +25,13 @@ export const LoadingInitial = ({ children }: Props) => {
       period: resultDataUser.data.period
     })
 
-    router.push('/dashboard');
+    if (
+      router.asPath === '/' ||
+      router.asPath === '/sign-in' ||
+      router.asPath === '/dashboard'
+    ) {
+      router.push('/dashboard');
+    }
   }
 
   useEffect(() => {

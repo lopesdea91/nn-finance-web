@@ -22,7 +22,7 @@ export const AppDropdown = ({ title, children, items }: Props) => {
   ))
 
   return (
-    <Dropdown autoClose="outside" >
+    <Dropdown>
       <Dropdown.Toggle size="sm" as="span" className="border rounded-0 px-1">
         {title} {children}
       </Dropdown.Toggle>

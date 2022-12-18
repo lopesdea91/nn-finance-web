@@ -2,11 +2,11 @@ import { AppDropdownItem } from "@/types/layout";
 
 export const headerMenu: AppDropdownItem[] = [
   {
-    text: 'Perfil',
-    to: 'settings/perfil'
+    text: 'Minha conta',
+    to: '/settings/account'
   },
   {
     text: 'Configurações',
-    to: 'settings'
+    to: '/settings'
   },
 ]
