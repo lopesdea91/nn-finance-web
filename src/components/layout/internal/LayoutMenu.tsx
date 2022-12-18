@@ -2,8 +2,8 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { AppIcon } from "@/components/base"
 import { menuList } from "@/content/layout-menu.content"
-import { useLayoutStore } from "@/hooks/useLayoutStore"
 import { MenuItem, MenuGroup } from "@/types/layout"
+import useLayoutStore from "@/hooks/useLayoutStore"
 
 const LayoutMenuLinkItem = ({ label, href, icon }: MenuItem) => {
   const { asPath } = useRouter()

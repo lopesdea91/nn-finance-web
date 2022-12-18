@@ -30,17 +30,19 @@
     }
 
     .header-brand {
-      @include hoverBtn;
+      // @include hoverBtn;
     }
 
     .header-profile {
       @include sizeIcon;
       @include hoverBtn;
+      min-height: 36px
     }
 
     .header-menu {
       @include sizeIcon;
       @include hoverBtn;
+      min-height: 36px
     }
   }
 
