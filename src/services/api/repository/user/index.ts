@@ -4,7 +4,7 @@ import {
     UserPutPayload, UserPutResponse, UserPutResponseData,
 } from '@/types/entities/User';
 
-export default {
+const request = {
     data: async (): Promise<UserDataResponse> => {
         const { get } = common()
 
@@ -37,3 +37,4 @@ export default {
         }
     },
 }
+export default request

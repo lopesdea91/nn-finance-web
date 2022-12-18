@@ -1,5 +1,7 @@
 import wallet from './wallet'
 
-export default {
+const requests = {
     wallet
 }
+
+export default requests

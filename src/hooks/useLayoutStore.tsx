@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/store'
 import { menuSet } from '@/store/features/layout/layoutSlice'
 
-export const useLayoutStore = () => {
+const useLayoutStore = () => {
   const state = useSelector((state: RootState) => state.layout)
 
   const dispatch = useDispatch()
@@ -24,3 +24,4 @@ export const useLayoutStore = () => {
     closeMenu
   }
 }
+export default useLayoutStore

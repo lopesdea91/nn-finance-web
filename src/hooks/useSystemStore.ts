@@ -3,7 +3,7 @@ import { RootState } from '@/store'
 import { layoutDone, signIn as signInSlice, signUp as signUpSlice } from '@/store/features/system/systemSlice'
 import { User } from '@/types/system'
 
-export default () => {
+const useSystemStore = () => {
   const state = useSelector((state: RootState) => state.system)
 
   const dispatch = useDispatch()
@@ -17,7 +17,7 @@ export default () => {
   const signInSystem = ({ user, period }: { user: User, period: string }) => {
     dispatch(
       signInSlice({
-        user, 
+        user,
         period
       })
     )
@@ -34,3 +34,4 @@ export default () => {
     signUpSystem,
   }
 }
+export default useSystemStore

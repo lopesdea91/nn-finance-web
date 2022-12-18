@@ -1,3 +1,11 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "plugins": [
+    "react-hooks"
+  ],
+  "rules": {
+    "react/no-unescaped-entities": "off",
+    "react-hooks/rules-of-hooks": "off", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "off" // Checks effect dependencies
+  }
 }

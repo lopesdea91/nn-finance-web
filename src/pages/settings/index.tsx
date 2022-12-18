@@ -8,7 +8,6 @@ const Item = ({ text, href }: ItemProps) => {
     </Link>
   )
 }
-
 const Menu = ({ title, items }: { title: string, items: ItemProps[] }) => {
   const links = items.map((item, i) => <Item {...item} key={`${title}-${i}`} />)
 
@@ -23,7 +22,6 @@ const Menu = ({ title, items }: { title: string, items: ItemProps[] }) => {
     </div>
   )
 }
-
 const MenuAccont = () => {
   const items = [
     { text: 'Perfil', href: '/settings/account' }
@@ -39,9 +37,7 @@ const MenuFinance = () => {
   ]
   return <Menu title="Finança" items={items} />
 }
-
-export default () => {
-
+const Page = () => {
   return (
     <div className="page bg-white border-bottom p-2 rounded shadow-sm">
       <h2 className="fs-4 mb-2 border-bottom">Configuração</h2>
@@ -53,3 +49,4 @@ export default () => {
     </div>
   )
 }
+export default Page

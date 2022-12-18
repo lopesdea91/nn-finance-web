@@ -1,6 +1,7 @@
-export default () => {
+const Page = () => {
 
   return (
-    <div>category</div>
+    <div>Category</div>
   )
 }
+export default Page

@@ -22,8 +22,7 @@ const parse = (item: FinanceWalletData): FinanceWallet => {
         panel: Number(item.panel),
     }
 }
-
-export default {
+const request = {
     page: async (props: FinanceWalletParams) => {
         const { page } = common()
 
@@ -100,3 +99,4 @@ export default {
     },
     del: async (): Promise<void> => { },
 }
+export default request

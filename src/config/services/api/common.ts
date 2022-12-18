@@ -20,7 +20,7 @@ import useApiCommon, { NameApi } from '@/hooks/useApiCommon';
 //     })
 // }
 
-export default (nameApi: NameApi = 'finance') => {
+const common = (nameApi: NameApi = 'finance') => {
     const { token } = useApiCommon(nameApi)
 
     const options = {
@@ -103,3 +103,5 @@ export default (nameApi: NameApi = 'finance') => {
 
     return { get, post, put, del, page }
 }
+
+export default common

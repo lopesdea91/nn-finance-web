@@ -1,9 +1,11 @@
 import { FormSignUp } from "@/components/form/FormSignUp";
 
-export default () => {
+const Page = () => {
   function submitSuccess() { }
 
   return (
     <FormSignUp submitSuccess={submitSuccess} />
   )
 }
+
+export default Page

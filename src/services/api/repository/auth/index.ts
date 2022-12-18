@@ -4,7 +4,7 @@ import {
     SignUpPayload, SignUpResponse, SignUpResponseData
 } from '@/types/entities/auth'
 
-export default {
+const request = {
     signIn: async (props: SignInPayload): Promise<SignInResponse> => {
         const { post } = common()
 
@@ -39,3 +39,4 @@ export default {
     signOut: () => { },
     forgotPassword: () => { },
 }
+export default request

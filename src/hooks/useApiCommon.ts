@@ -2,7 +2,7 @@
 
 export type NameApi = 'finance'
 
-export default (name: NameApi = 'finance') => {
+const useApiCommon = (name: NameApi = 'finance') => {
     const inClient = typeof window !== "undefined"
 
     const namesApi = {
@@ -23,3 +23,5 @@ export default (name: NameApi = 'finance') => {
         setToken
     }
 }
+
+export default useApiCommon

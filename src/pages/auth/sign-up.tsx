@@ -1,6 +1,6 @@
 // import { FormSignUp } from "@/components/form/FormSignUp";
 
-export default () => {
+const Page = () => {
   // function submitSuccess() { }
 
   return (
@@ -8,3 +8,4 @@ export default () => {
     // <FormSignUp submitSuccess={submitSuccess} />
   )
 }
+export default Page

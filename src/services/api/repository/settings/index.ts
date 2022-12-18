@@ -1,5 +1,7 @@
 import finance from './finance/index'
 
-export default {
+const requests = {
     ...finance,
 }
+
+export default requests
