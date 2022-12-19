@@ -3,11 +3,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import featureSystem from './features/system/systemSlice'
 import featureLayout from './features/layout/layoutSlice'
+import featurePages from './features/pages/pagesSlice'
 
 const store = configureStore({
     reducer: {
         system: featureSystem,
-        layout: featureLayout
+        layout: featureLayout,
+        pages: featurePages
     }
 })
 

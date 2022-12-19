@@ -1,21 +1,22 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Form, FormControlProps } from 'react-bootstrap'
 
 type Props = FormControlProps & {
   label?: string
   text?: string
-  error?: string | undefined
+  error?: string | undefined | any
+  value: string | number
 }
 
 const AppInput = React.forwardRef<any, Props>(({ children, label, text, error, ...rest }, ref) => {
 
   return (
-    <Form.Group ref={ref} className="mb-2 position-relative" controlId={label}>
+    <Form.Group className="position-relative mb-1 px-1" controlId={label} ref={ref}>
       {label &&
-        <Form.Label className='mb-1'>{label}</Form.Label>
+        <Form.Label style={{ fontSize: '11px' }} className='mb-1'>{label}</Form.Label>
       }
 
-      <Form.Control className="shadow-sm" size='sm' {...rest} />
+      <Form.Control className="shadow-sm" type="text" size='sm' {...rest} />
 
       {text &&
         <Form.Text className="text-muted">
@@ -32,6 +33,3 @@ const AppInput = React.forwardRef<any, Props>(({ children, label, text, error, .
 AppInput.displayName = 'AppInput'
 
 export { AppInput }
-
-// export const AppInput = ({ children, label, text, error, ...rest }: Props) => {
-// }

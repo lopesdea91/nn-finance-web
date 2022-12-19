@@ -13,7 +13,7 @@ const rule = {
   password: { required: 'Campo obrigatório' },
 }
 
-const validation = () => {
+export const authSignInFormValidation = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<Fields>()
 
   const [fields, setFields] = useState<Fields>({
@@ -43,5 +43,3 @@ const validation = () => {
     register,
   }
 }
-
-export default validation

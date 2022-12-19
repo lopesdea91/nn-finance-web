@@ -8,7 +8,7 @@ type Props = {
   children?: JSX.Element
   items: AppDropdownItem[]
 }
-const AppDropdown = React.forwardRef<any, Props>(({ title, children, items }: Props) => {
+const AppDropdown = React.forwardRef<any, Props>(({ title, children, items }: Props, ref) => {
   const router = useRouter()
 
   const handleClick = ({ to, click }: AppDropdownItem) => {
@@ -23,7 +23,7 @@ const AppDropdown = React.forwardRef<any, Props>(({ title, children, items }: Pr
   ))
 
   return (
-    <Dropdown>
+    <Dropdown ref={ref}>
       <Dropdown.Toggle size="sm" as="span" className="border rounded-0 px-1">
         {title} {children}
       </Dropdown.Toggle>

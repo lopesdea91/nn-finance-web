@@ -17,9 +17,9 @@ const parse = (item: FinanceWalletData): FinanceWallet => {
     return {
         id: item.id,
         description: item.description,
-        enable: Number(item.enable),
-        json: item.json,
-        panel: Number(item.panel),
+        enable: item.enable,
+        json: JSON.parse(item.json),
+        panel: item.panel,
     }
 }
 const request = {
@@ -97,6 +97,6 @@ const request = {
             data: parse(data)
         }
     },
-    del: async (): Promise<void> => { },
+    del: async (id: number): Promise<void> => { },
 }
 export default request

@@ -1,24 +1,6 @@
 import axios from 'axios'
 import { PageProps, GetProps, GetResult, PostProps, PostResult, PutProps, PutResult, DelProps, DelResult } from '@/types/request';
 import useApiCommon, { NameApi } from '@/hooks/useApiCommon';
-// import layoutStore from '@/store/layoutStore';
-
-// const renderAlerts = (message: string | string[]) => {
-//     const content = Array.isArray(message) ? message : [message]
-
-//     const check = (msg: string) => {
-//         if (msg.includes('SQLSTATE'))
-//             return 'Erro interno'
-//         return msg
-//     }
-
-//     content.forEach((msg) => {
-//         layoutStore.actions.addAlert({
-//             label: check(msg),
-//             type: 'danger'
-//         })
-//     })
-// }
 
 const common = (nameApi: NameApi = 'finance') => {
     const { token } = useApiCommon(nameApi)
@@ -99,7 +81,6 @@ const common = (nameApi: NameApi = 'finance') => {
         //     return res
         // })
     }
-
 
     return { get, post, put, del, page }
 }

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition, faBars, faUserAlt, faHouse, faCashRegister, faReceipt, faRectangleList, faCreditCard } from '@fortawesome/free-solid-svg-icons'
+import { IconDefinition, faBars, faUserAlt, faHouse, faCashRegister, faReceipt, faRectangleList, faCreditCard, faSave, faRemove, faRotateBack, faEdit, faPlus, faBroom } from '@fortawesome/free-solid-svg-icons'
 
 export type IconNames = 'menu'
   | 'profile'
@@ -8,12 +8,19 @@ export type IconNames = 'menu'
   | "receipt"
   | "aaa"
   | "creditCard"
+  | 'new'
+  | 'edit'
+  | "save"
+  | "remove"
+  | "reset"
+  | "clean"
 
 type Props = {
+  className?: string
   variant: IconNames
 }
 
-export const AppIcon = (props: Props) => {
+export const AppIcon = ({ variant, ...rest }: Props) => {
   const variants: Record<IconNames, IconDefinition> = {
     menu: faBars,
     profile: faUserAlt,
@@ -22,9 +29,14 @@ export const AppIcon = (props: Props) => {
     receipt: faReceipt,
     aaa: faRectangleList,
     creditCard: faCreditCard,
-
+    new: faPlus,
+    edit: faEdit,
+    save: faSave,
+    remove: faRemove,
+    reset: faRotateBack,
+    clean: faBroom,
   }
-  const variant = variants[props.variant]
+  const selected = variants[variant]
 
-  return props.variant ? <FontAwesomeIcon icon={variant} /> : null
+  return variant ? <FontAwesomeIcon icon={selected} {...rest} /> : null
 }

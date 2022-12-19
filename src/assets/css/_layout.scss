@@ -25,7 +25,7 @@
     }
 
     @media (min-width: 1200px) {
-      left: 12rem;
+      left: 12.15rem;
       right: 0.75rem;
     }
 
@@ -119,27 +119,30 @@
   &_internal-content {
     z-index: 1;
     @include layoutTransition;
-    min-height: 100vh;
-
-    padding-top: 3.75rem;
-    padding-right: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
+    position: fixed;
+    top: 4.15rem;
+    left: 0.5rem;
+    right: 0.5rem;
 
     @media (min-width: 768px) {
-      // padding: 3.85rem 0.75rem 0.5rem 5.5rem;
-      padding-top: 3.85rem;
-      // padding-right: 0.5rem;
-      // padding-bottom: 0.5rem;
-      padding-left: 5.25rem;
+      left: 5.25rem;
     }
 
     @media (min-width: 1200px) {
-      // padding: 3.85rem 0.75rem 0.5rem 12.5rem;
-      // padding-top: 3.85rem;
-      padding-right: 0.85rem;
-      // padding-bottom: 0.5rem;
-      padding-left: 12.15rem;
+      left: 12.15rem;
+      right: 0.75rem;
+    }
+  }
+
+  &_internal-loading {
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+    z-index: -1;
+    opacity: 0;
+
+    &.--active {
+      z-index: 4;
+      opacity: 1;
     }
   }
 }

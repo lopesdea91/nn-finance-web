@@ -9,4 +9,8 @@ export const headerMenu: AppDropdownItem[] = [
     text: 'Configurações',
     to: '/settings'
   },
+  {
+    text: 'Sair',
+    to: '/auth/sign-out'
+  },
 ]

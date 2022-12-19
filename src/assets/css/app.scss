@@ -1,4 +1,15 @@
-@import 'bootstrap/dist/css/bootstrap.min.css';
+$theme-colors: (
+  "primary": #087990,
+  "secondary": #495057,
+  // "success":    $success,
+  // "info":       $info,
+  "warning": #cc9a06,
+  "danger": #b02a37,
+  "light": #e9ecef,
+  // "dark":       $dark
+);
+
+@import "~bootstrap/scss/bootstrap";
 
 @import 'mixin';
 @import 'layout';

@@ -6,7 +6,7 @@ interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLParagra
   size: 'sm' | 'md' | 'lg' | 'xl'
 }
 
-const AppText = React.forwardRef<any, Props>(({ children, size, ...rest }: Props) => {
+const AppText = React.forwardRef<any, Props>(({ children, size, ...rest }: Props, ref) => {
 
   const sizeText = useMemo(() => {
     const sizes = {
@@ -19,7 +19,7 @@ const AppText = React.forwardRef<any, Props>(({ children, size, ...rest }: Props
   }, [])
 
   return (
-    <p className={sizeText} {...rest}>{children}</p>
+    <p className={sizeText} ref={ref} {...rest}>{children}</p>
   )
 })
 

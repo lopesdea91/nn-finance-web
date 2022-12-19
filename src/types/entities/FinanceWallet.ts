@@ -4,15 +4,15 @@ export interface FinanceWallet {
     id: number | null
     description: string
     json: string
-    enable: number
-    panel: number
+    enable: 1 | 0
+    panel: 1 | 0
 }
 export interface FinanceWalletData extends responseBadBase {
     id: number
     description: string
     json: string
-    enable: number
-    panel: number
+    enable: 1 | 0
+    panel: 1 | 0
 }
 export interface FinanceWalletParams {
     page?: number
