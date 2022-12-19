@@ -31,8 +31,8 @@ const slice = createSlice({
             state.user = user
             state.period = period
         },
-        signUp(state) {
-            state.login = true
+        signOut(state) {
+            state.login = false
             state.user = {
                 id: null,
                 name: '',
@@ -48,5 +48,5 @@ export default slice.reducer
 export const {
     layoutDone,
     signIn,
-    signUp
+    signOut
 } = slice.actions

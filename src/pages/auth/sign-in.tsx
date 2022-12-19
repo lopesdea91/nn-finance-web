@@ -1,10 +1,10 @@
-import { FormSignUp } from "@/components/form/FormSignUp";
+import { AuthSignInForm } from "@/components/form/AuthSignInForm";
 
 const Page = () => {
   function submitSuccess() { }
 
   return (
-    <FormSignUp submitSuccess={submitSuccess} />
+    <AuthSignInForm submitSuccess={submitSuccess} />
   )
 }
 

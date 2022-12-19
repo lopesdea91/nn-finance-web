@@ -1,5 +1,3 @@
-// const KEY_TOKEN = import.meta.env.VITE_KEY_TOKEN
-
 export type NameApi = 'finance'
 
 const useApiCommon = (name: NameApi = 'finance') => {
@@ -18,9 +16,14 @@ const useApiCommon = (name: NameApi = 'finance') => {
         }
     }
 
+    const removeToken = () => {
+        window.localStorage.removeItem(nameToken)
+    }
+
     return {
         token,
-        setToken
+        setToken,
+        removeToken
     }
 }
 

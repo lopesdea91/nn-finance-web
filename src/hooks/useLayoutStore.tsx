@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/store'
-import { menuSet } from '@/store/features/layout/layoutSlice'
+import { setMenu, setLoading } from '@/store/features/layout/layoutSlice'
 
 const useLayoutStore = () => {
   const state = useSelector((state: RootState) => state.layout)
@@ -8,20 +8,33 @@ const useLayoutStore = () => {
   const dispatch = useDispatch()
 
   const toggleMenu = () => {
-    dispatch(menuSet(!state.menu))
+    dispatch(setMenu(!state.menu))
   }
   const openMenu = () => {
-    dispatch(menuSet(true))
+    dispatch(setMenu(true))
   }
   const closeMenu = () => {
-    dispatch(menuSet(false))
+    dispatch(setMenu(false))
+  }
+
+  const startLoading = () => {
+    dispatch(
+      setLoading(true)
+    )
+  }
+  const endLoading = () => {
+    dispatch(
+      setLoading(false)
+    )
   }
 
   return {
     state,
     toggleMenu,
     openMenu,
-    closeMenu
+    closeMenu,
+    startLoading,
+    endLoading,
   }
 }
 export default useLayoutStore

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/store'
-import { layoutDone, signIn as signInSlice, signUp as signUpSlice } from '@/store/features/system/systemSlice'
+import { layoutDone, signIn as signInSlice, signOut as signOutSlice } from '@/store/features/system/systemSlice'
 import { User } from '@/types/system'
 
 const useSystemStore = () => {
@@ -23,15 +23,15 @@ const useSystemStore = () => {
     )
   }
 
-  const signUpSystem = () => {
-    dispatch(signUpSlice())
+  const signOutSystem = () => {
+    dispatch(signOutSlice())
   }
 
   return {
     state,
     layoutIsReady,
     signInSystem,
-    signUpSystem,
+    signOutSystem,
   }
 }
 export default useSystemStore

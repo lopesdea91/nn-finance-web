@@ -1,17 +1,17 @@
+import { useRouter } from "next/router";
 import React from "react";
 import { AppButton, AppInput, AppText } from "@/components/base";
-import formSignValidation from "@/validation/formSignValidation";
+import { authSignInFormValidation } from "@/validation/authSignInFormValidation";
 import api from "@/services/api";
 import useApiCommon from "@/hooks/useApiCommon";
 import useSystemStore from "@/hooks/useSystemStore";
-import { useRouter } from "next/router";
 
 type Props = {
   submitSuccess: () => void
 }
 
-export const FormSignUp = ({ }: Props) => {
-  const { fields, errors, rule, register, handleSubmit, onChangeField } = formSignValidation()
+export const AuthSignInForm = ({ }: Props) => {
+  const { fields, errors, rule, register, handleSubmit, onChangeField } = authSignInFormValidation()
   const router = useRouter()
   const { setToken } = useApiCommon();
   const { signInSystem } = useSystemStore()
@@ -45,7 +45,8 @@ export const FormSignUp = ({ }: Props) => {
   return (
     <form
       className="col-9 col-md-6 col-lg-4 col-xl-3 p-3 border shadow-sm"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
 
       <AppText size="xl">Login</AppText>
 
@@ -53,7 +54,7 @@ export const FormSignUp = ({ }: Props) => {
         label="E-mail"
         type="email"
         {...register("email", rule.email)}
-        defaultValue={fields.email}
+        value={fields.email}
         onChange={onChangeField}
         error={errors?.email?.message}
       />
@@ -62,7 +63,7 @@ export const FormSignUp = ({ }: Props) => {
         label="Senha"
         type="password"
         {...register("password", rule.password)}
-        defaultValue={fields.password}
+        value={fields.password}
         onChange={onChangeField}
         error={errors?.password?.message}
       />

@@ -2,18 +2,23 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export interface IState {
   menu: boolean
+  loading: boolean
 }
 
 const initialState: IState = {
-  menu: false
+  menu: false,
+  loading: false,
 }
 
 const slice = createSlice({
   name: 'layout',
   initialState,
   reducers: {
-    menuSet(state, { payload }: { payload: boolean }) {
+    setMenu(state, { payload }: { payload: boolean }) {
       state.menu = payload
+    },
+    setLoading(state, { payload }: { payload: boolean }) {
+      state.loading = payload
     },
   }
 })
@@ -21,5 +26,6 @@ const slice = createSlice({
 export default slice.reducer
 
 export const {
-  menuSet
+  setMenu,
+  setLoading
 } = slice.actions
