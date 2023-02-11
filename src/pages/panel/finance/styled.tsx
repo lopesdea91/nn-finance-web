@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { AppColumn, AppColumns, AppText } from "@/components/base";
+import { AppText } from "@/components/base";
 
 const wrapper = `
   margin-bottom: 1rem;
@@ -46,7 +46,6 @@ export const BalanceValue = styled(p => <AppText variant="body1" {...p} />)`
     }
   }
 `
-
 export const OriginWrapper = styled.div`
   ${wrapper}
 `

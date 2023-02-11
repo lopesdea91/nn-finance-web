@@ -8,6 +8,7 @@ const nextConfig = {
       permanent: true,
     },
   ],
+  pageExtensions: ["page.tsx"],
 };
 
 module.exports = nextConfig;
