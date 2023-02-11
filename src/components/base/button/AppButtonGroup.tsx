@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import ButtonGroup from "@material-ui/core/Button";
+import { ButtonGroup } from '@mui/material';
 
 type Props = {
   children: React.ReactNode
 }
 
-const StyledButtonGroup = styled(ButtonGroup)``
+const StyledButtonGroup = styled(p => <ButtonGroup {...p} />)``
 
 const AppButtonGroup = ({ children }: Props) => {
   return (
