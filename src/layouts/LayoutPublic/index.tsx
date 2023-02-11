@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container } from './styled'
 
-export default function ({ children }: { children: React.ReactNode }) {
+export default function LayoutPublic({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Container>

@@ -10,7 +10,7 @@ type Props = {
   layout: LayoutType | undefined
 }
 
-export default function ({ children, layout }: Props) {
+export default function Layout({ children, layout }: Props) {
   const { isPending } = useStorePrepare()
 
   if (isPending) {
