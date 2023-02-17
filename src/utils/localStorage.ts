@@ -2,7 +2,9 @@ import { $ } from "@/utils"
 
 /** LocalStorage */
 export const getLocalStorageItem = (key: string): string => {
-  return window.localStorage.getItem(key) || ''
+  const content = window.localStorage.getItem(key) || ''
+
+  return content ? JSON.parse(content) : content
 }
 export const setLocalStorageItem = (key: string, value: any) => {
   return window.localStorage.setItem(key, JSON.stringify(value))
@@ -10,12 +12,12 @@ export const setLocalStorageItem = (key: string, value: any) => {
 
 /** Token */
 export const getToken = () => {
-  const KEY_TOKEN = $.nextKeyToken()
+  const KEY_TOKEN = $.nextKeyToken() || ''
 
-  return getLocalStorageItem(KEY_TOKEN as string)
+  return window.localStorage.getItem(KEY_TOKEN) || ''
 }
 export const setToken = (token: string) => {
-  const KEY_TOKEN = $.nextKeyToken()
+  const KEY_TOKEN: string = $.nextKeyToken() || ''
 
-  return setLocalStorageItem(KEY_TOKEN as string, token)
+  return window.localStorage.setItem(KEY_TOKEN, token)
 }

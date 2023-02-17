@@ -1,6 +1,9 @@
 import { FinanceDataResponse } from "@/types/entities/finance"
 import { requestConfig } from "../../config"
 import requestWallet from './requestWallet'
+import requestOrigin from './requestOrigin'
+import requestTag from './requestTag'
+import requestItem from './requestItem'
 
 const requestFinance = {
   data: async () => {
@@ -14,7 +17,10 @@ const requestFinance = {
 
 const requests = {
   ...requestFinance,
-  wallet: requestWallet
+  wallet: requestWallet,
+  origin: requestOrigin,
+  tag: requestTag,
+  item: requestItem,
 }
 
 export default requests

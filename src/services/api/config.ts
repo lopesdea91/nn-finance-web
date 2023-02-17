@@ -12,7 +12,6 @@ import { $ } from '@/utils'
 
 export const requestConfig = () => {
   const token: string = $.getToken()
-
   axios.defaults.baseURL = $.nextBaseUrl()
   axios.defaults.headers['Content-Type'] = 'application/json'
   axios.defaults.headers['Accept'] = 'application/json'
