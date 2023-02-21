@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import Router from "next/router"
+import { useRouter } from "next/router"
 import { api } from '@/services/api'
 import { useStoreAuth } from '@/hooks/useStoreAuth'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
@@ -11,6 +11,7 @@ export const useStorePrepare = () => {
   const { dispatchSetPeriod, dispatchSetWalletPanelId } = useStoreSystem()
   const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
   const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
+  const router = useRouter()
 
   useEffect(() => {
     if (!isPending) {
@@ -21,7 +22,8 @@ export const useStorePrepare = () => {
 
     if (tokenEmpty) {
       setIsPending(false)
-      Router.push('/auth/sign-in')
+      router.push('/auth/sign-in')
+      return
     }
 
     async function handler() {
@@ -41,10 +43,15 @@ export const useStorePrepare = () => {
           status: financeResult.data.status,
           type: financeResult.data.type,
         })
+
+        if (router.route === '/auth/sign-in') {
+          router.push('/panel/finance')
+        }
+
       } catch (error) {
         console.log('onSubmit - error', error)
       } finally {
-        setIsPending(false)
+        setTimeout(() => setIsPending(false), 1000)
       }
     }
 
@@ -52,12 +59,5 @@ export const useStorePrepare = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const isLogged = useMemo(() => {
-    return !!authState.user.id
-  }, [authState.user])
-
-  return {
-    isPending,
-    isLogged
-  }
+  return { isPending }
 }

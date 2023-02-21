@@ -14,7 +14,7 @@ export default function Layout({ children, layout }: Props) {
   const { isPending } = useStorePrepare()
 
   if (isPending) {
-    return <Loading />
+    return <Loading fullPage />
   }
 
   if (!layout) {

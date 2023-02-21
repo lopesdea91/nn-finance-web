@@ -6,10 +6,10 @@ const wrapper = `
   display: grid;
   gap: 0.5rem;
 
-  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr));
+  grid-template-columns: repeat( auto-fit, minmax(140px, 1fr));
 
   @media (min-width: 426px){
-    grid-template-columns: repeat( auto-fit, minmax(175px, 200px));
+    grid-template-columns: repeat( auto-fit, minmax(175px, 1fr));
   }
 `
 

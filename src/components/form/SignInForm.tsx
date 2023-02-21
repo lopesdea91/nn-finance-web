@@ -1,8 +1,5 @@
-'use client'
-
 import Router from "next/router"
 import { useSignInForm } from '@/hooks/useForm'
-// import { SignInFieldsForm } from '@/types/form/signIn'
 import { AppButton, AppColumn, AppColumns, AppDivisor, AppForm, AppInput } from '@/components/base'
 import { AppText } from '@/components/base/text/AppText'
 import { api } from '@/services/api'
@@ -17,7 +14,6 @@ export const SignInForm = () => {
   const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
   const { fields, onChangeField } = useSignInForm()
 
-
   const getToken = async () => {
     try {
       const { data: { token } } = await api.auth.signIn({
@@ -31,8 +27,12 @@ export const SignInForm = () => {
 
       $.setToken(token)
 
+      return true
+
     } catch (error) {
       console.log('getToken - error', error)
+
+      return false
     }
   }
 
@@ -42,8 +42,12 @@ export const SignInForm = () => {
 
       dispatchSetUser(user)
       dispatchSetPeriod(period)
+
+      return true
     } catch (error) {
       console.log('getUserData - error', error)
+
+      return false
     }
   }
 
@@ -60,26 +64,28 @@ export const SignInForm = () => {
         status: financeResult.data.status,
         type: financeResult.data.type,
       })
+
+      return true
+
     } catch (error) {
       console.log('getFinanceData - error', error)
+
+      return false
     }
+
   }
 
   const onSubmit = async () => {
-    try {
-      await getToken()
-      await getUserData()
-      await getFinanceData()
-    } catch (error) {
-      console.log('onSubmit - error', error)
-    }
+    const resultPromise = await Promise.all([
+      getToken(),
+      getUserData(),
+      getFinanceData(),
+    ])
+      .then(res => res.every(Boolean))
 
-    Router.push('/panel/finance')
-    // signIn({
-    //   id: 1,
-    //   name: 'nino',
-    //   email: 'email.com'
-    // })
+    if (resultPromise) {
+      Router.push('/panel/finance')
+    };
   }
 
   return (

@@ -53,6 +53,16 @@ export const baseApi = (props: baseApiProps) => {
 
     return request.delete<R>(`${url}/${id}`)
   }
+  function enabled<R>({ id }: { id: number }) {
+    const { request } = common()
 
-  return { page, get, id, post, put, remove }
+    return request.get<R>(`${url}/${id}/enabled`)
+  }
+  function disabled<R>({ id }: { id: number }) {
+    const { request } = common()
+
+    return request.get<R>(`${url}/${id}/disabled`)
+  }
+
+  return { page, get, id, post, put, remove, enabled, disabled }
 }

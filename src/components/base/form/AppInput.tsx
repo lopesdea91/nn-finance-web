@@ -7,7 +7,7 @@ type Props = TextFieldProps & {
   value: string | number | undefined
 }
 
-const AppInput = ({ label, text, error, ...rest }: Props) => {
+export const AppInput = ({ label, text, error, ...rest }: Props) => {
 
   return (
     <FormControl fullWidth error={!!error} sx={{ pt: 0.25 }}>
@@ -26,4 +26,4 @@ const AppInput = ({ label, text, error, ...rest }: Props) => {
   )
 };
 
-export { AppInput }
+export default AppInput 

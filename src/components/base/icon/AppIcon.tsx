@@ -3,10 +3,11 @@ import {
   IconDefinition,
   faBars, faGear, faHouse, faCashRegister, faReceipt, faArrowRightFromBracket, faCreditCard, faSave,
   faRemove, faRotateBack, faEdit, faSearch, faPlus, faBroom, faWallet, faCalendarDays, faArrowLeft, faArrowRight,
-  faX,
+  faX, faEllipsisV, faTrashCan,
   faSpinner
 } from '@fortawesome/free-solid-svg-icons'
-import { useEffect, useRef } from 'react'
+import { faCopy, faCircleCheck } from '@fortawesome/free-regular-svg-icons'
+import '@fortawesome/fontawesome-svg-core/styles.css';
 
 export type IconNames = 'menu'
   | 'gear'
@@ -17,13 +18,17 @@ export type IconNames = 'menu'
   | "creditCard"
   | "signOut"
   | "spinner"
-// | 'search'
-// | 'new'
-// | 'edit'
-// | "save"
-// | "remove"
-// | "reset"
-// | "clean"
+  | 'new'
+  | 'edit'
+  | "save"
+  | "remove"
+  | "reset"
+  | 'search'
+  | "clean"
+  | 'ellipsisV'
+  | 'copy'
+  | 'circleCheck'
+  | 'trash'
 // | "wallet"
 // | "arrowLeft"
 // | "arrowRight"
@@ -36,7 +41,6 @@ type Props = {
 }
 
 export const AppIcon = ({ variant, ...rest }: Props) => {
-  const isMounted = useRef<boolean>(false)
   const variants: Record<IconNames, IconDefinition> = {
     menu: faBars,                     // menu
     gear: faGear,                     // config
@@ -45,15 +49,19 @@ export const AppIcon = ({ variant, ...rest }: Props) => {
     cashRegister: faCashRegister,     // novo item 
     receipt: faReceipt,               // listas
     creditCard: faCreditCard,         // faturas
-    spinner: faSpinner,
     signOut: faArrowRightFromBracket, // sair
-    // search: faSearch,
-    // new: faPlus,
-    // edit: faEdit,
-    // save: faSave,
-    // remove: faRemove,
-    // reset: faRotateBack,
-    // clean: faBroom,
+    spinner: faSpinner,               // loading
+    new: faPlus,
+    edit: faEdit,
+    save: faSave,
+    remove: faRemove,
+    reset: faRotateBack,
+    search: faSearch,
+    clean: faBroom,
+    ellipsisV: faEllipsisV,
+    copy: faCopy,
+    circleCheck: faCircleCheck,
+    trash: faTrashCan
     // wallet: faWallet,
     // arrowLeft: faArrowLeft,
     // arrowRight: faArrowRight,
@@ -61,14 +69,7 @@ export const AppIcon = ({ variant, ...rest }: Props) => {
   }
   const selected = variants[variant]
 
-  useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true
-    }
-    return () => {
-      isMounted.current = false
-    }
-  }, [])
-
-  return isMounted.current ? <FontAwesomeIcon icon={selected} {...rest} /> : null
+  return <FontAwesomeIcon icon={selected} {...rest} />
 }
+
+export default AppIcon

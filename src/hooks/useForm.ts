@@ -1,7 +1,11 @@
-'use client'
-
 import { FormEvent, useState } from "react";
 import { SignInFieldsForm } from '@/types/form/signIn'
+import { FinanceOriginFormFields } from "@/types/form/settingsFinanceOrigin";
+import { FinanceWalletFormFields } from "@/types/form/settingsFinanceWallet";
+import { FinanceTagFormFields } from "@/types/form/settingsFinanceTag";
+import { FinanceItemFormFields } from "@/types/form/financeItem";
+import { useStoreSystem } from "./useStoreSystem";
+import dayjs from "dayjs";
 
 export type FieldError = {
   required: boolean
@@ -24,6 +28,7 @@ export const useForm = <Fields>(initialFields: Fields, initialErrors: Object) =>
         return acc
       }, {}) as Errors<Fields>
   })
+  const [confirmDoDelete, setConfirmDoDelete] = useState<boolean>(false)
 
   const setFields = (partialFields: Partial<Fields>) => {
     let oldFields = JSON.parse(JSON.stringify(fields)) as Record<string, any>
@@ -46,7 +51,6 @@ export const useForm = <Fields>(initialFields: Fields, initialErrors: Object) =>
       oldErrors[key] = false
       oldFields[key] = value
     })
-
     setFieldsState(oldFields as Fields)
     setErrorsState(oldErrors as Errors<Fields>)
   }
@@ -69,12 +73,16 @@ export const useForm = <Fields>(initialFields: Fields, initialErrors: Object) =>
   const onSubmitForm = (e: FormEvent) => {
     e.preventDefault()
   }
+  const toggleConfirmDoDelete = () => {
+    setConfirmDoDelete(!confirmDoDelete)
+  }
 
   return {
     fields, setFields,
     onChangeField, onResetFields, onClearFields,
     onSubmitForm,
     errors,
+    confirmDoDelete, toggleConfirmDoDelete
   }
 }
 
@@ -82,5 +90,61 @@ export const useSignInForm = () => {
   return useForm<SignInFieldsForm>({
     email: 'test1@email.com',
     password: '1234'
+  }, {})
+}
+
+export const useSettingsFinanceWalletForm = () => {
+  return useForm<FinanceWalletFormFields>({
+    id: null,
+    description: '',
+    json: {},
+    enable: 1,
+    panel: 0
+  }, {})
+}
+
+export const useSettingsFinanceOriginForm = () => {
+  const { systemState } = useStoreSystem()
+
+  return useForm<FinanceOriginFormFields>({
+    id: null,
+    description: '',
+    enable: 1,
+    typeId: null,
+    // type: null,
+    walletId: systemState.walletPanelId,
+    // wallet?: null,
+    parentId: null,
+    // parent: null,
+  }, {})
+}
+
+export const useSettingsFinanceTagForm = () => {
+  const { systemState } = useStoreSystem()
+
+  return useForm<FinanceTagFormFields>({
+    id: null,
+    description: '',
+    enable: 1,
+    typeId: null,
+    walletId: systemState.walletPanelId
+  }, {})
+}
+
+export const useFinanceItemForm = () => {
+  const { systemState } = useStoreSystem()
+
+  return useForm<FinanceItemFormFields>({
+    id: null,
+    value: 0,
+    date: dayjs().format('YYYY-MM-DD'),
+    obs: '',
+    sort: 0,
+    enable: 1,
+    origin_id: null,
+    status_id: 2,
+    type_id: 2,
+    tag_ids: [],
+    wallet_id: systemState.walletPanelId,
   }, {})
 }

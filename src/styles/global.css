@@ -21,3 +21,12 @@ body {
   list-style: none;
   list-style-type: none;
 }
+
+@keyframes opacityIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

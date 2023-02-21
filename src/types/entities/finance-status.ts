@@ -1,4 +1,6 @@
+import { FinanceStatusId } from "../enum";
+
 export interface FinanceStatus {
-  id: number,
+  id: FinanceStatusId,
   description: string
 }

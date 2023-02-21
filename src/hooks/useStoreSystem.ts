@@ -1,8 +1,5 @@
-'use client'
-
 import { actionsSystemSlice } from '@/store/features/system/systemSlice'
 import { useAppDispatch, useAppSelector } from '@/store/hook'
-import { FinanceWalletShort } from '@/types/entities/finance-wallet'
 
 export const useStoreSystem = () => {
   const dispatch = useAppDispatch()
@@ -30,6 +27,14 @@ export const useStoreSystem = () => {
     dispatch(actionsSystemSlice.setMenu(false))
   }
 
+  // loading
+  const dispatchLoadingStart = () => {
+    dispatch(actionsSystemSlice.setloading(true))
+  }
+  const dispatchLoadingEnd = () => {
+    dispatch(actionsSystemSlice.setloading(false))
+  }
+
   return {
     systemState,
     dispatchSetPeriod,
@@ -37,5 +42,7 @@ export const useStoreSystem = () => {
     dispatchToggleMenu,
     dispatchOpenMenu,
     dispatchCloseMenu,
+    dispatchLoadingStart,
+    dispatchLoadingEnd
   }
 }

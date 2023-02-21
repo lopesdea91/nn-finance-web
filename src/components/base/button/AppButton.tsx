@@ -32,3 +32,4 @@ export const AppButton = styled(p => <Button size="small" variant="outlined" {..
   &.MuiButtonBase-root{
   }
 `
+export default AppButton

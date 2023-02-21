@@ -10,7 +10,7 @@ type Props = SelectProps & {
   options: Options[]
 }
 
-export const AppSelect = ({ children, label, text, error, options, optionEmpty, ...rest }: Props) => {
+export const AppSelect = ({ label, text, error, options, optionEmpty, ...rest }: Props) => {
   return (
     <FormControl fullWidth error={!!error}>
       {label &&
@@ -36,3 +36,5 @@ export const AppSelect = ({ children, label, text, error, options, optionEmpty, 
     </FormControl >
   )
 }
+
+export default AppSelect

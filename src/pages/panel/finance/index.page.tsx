@@ -40,7 +40,7 @@ export default function Page() {
   }, [systemState.period])
 
   return (
-    <div>
+    <>
       <AppText variant='h5'>Balanço</AppText>
       <BalanceWrapper>
         <BalanceItem>
@@ -73,6 +73,6 @@ export default function Page() {
         </BalanceItem>
       </OriginWrapper> 
       */}
-    </div >
+    </ >
   )
 }

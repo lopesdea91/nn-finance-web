@@ -13,13 +13,13 @@ export default function Header() {
         <InputPeriod
           label="Periodo"
           type="month"
-          value={systemState.period}
+          value={systemState.period || ''}
           onChange={(e) => dispatchSetPeriod(e.target.value)}
         />
 
         <SelectWallet
           label="Carteira finança"
-          value={systemState.walletPanelId || 0}
+          value={systemState.walletPanelId || ''}
           options={financeState.wallet.map(el => ({ id: el.id, description: el.description }))}
           onChange={(e) => dispatchSetWalletPanelId(Number(e.target.value))}
         />

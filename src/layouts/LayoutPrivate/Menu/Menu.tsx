@@ -1,37 +1,113 @@
-import React, { useEffect, useRef, useState } from 'react'
-// import { useMediaQuery } from '@mui/material'
+import React, { useEffect } from 'react'
+import Router from 'next/router'
+import { useMediaQuery } from '@mui/material'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
-import MenuDesktop from './Menu-desktop'
-import MenuMobile from './Menu-mobile'
+import MenuDesktop from './MenuDesktop/MenuDesktop'
+import MenuMobile from './MenuMobile/MenuMobile'
+import {
+  MenuBrand,
+  MenuLinkContainer, MenuLinkSection, MenuLinkTitle, MenuLinkItem, MenuLinkIcon, MenuLinkText,
+  MenuFooter, MenuFooterItem, MenuFooterItemIcon,
+} from './Menu.styled'
+import { SectionMenuLinks } from '@/types/system'
 
-export default function Menu() {
-  const time = useRef<NodeJS.Timeout>()
-  const [isDesktop, setValue] = useState(false)
-  const { dispatchCloseMenu } = useStoreSystem()
 
-  function handler() {
-    const innerWidth = window.innerWidth
+const useHandleMenuLink = () => {
+  const { systemState, dispatchToggleMenu } = useStoreSystem()
 
-    setValue(innerWidth >= 426 ? true : false)
-
-    dispatchCloseMenu()
+  const handleMenuLink = () => {
+    systemState.menu && dispatchToggleMenu()
   }
 
+  return handleMenuLink
+}
+const Brand = () => {
+  return (
+    <MenuBrand onClick={() => Router.push('/panel/finance')} variant='h4'>NN</MenuBrand>
+  )
+}
+const Links = () => {
+  const handleMenuLink = useHandleMenuLink()
+
+  const sectionPrincipal: SectionMenuLinks = {
+    title: 'Painel',
+    child: [
+      { href: '/panel/finance', label: 'Finanças', icon: 'home' }
+    ]
+  }
+  const sectionFinance: SectionMenuLinks = {
+    title: 'Finança',
+    child: [
+      { href: '/finance/item/new', label: 'Cadastrar', icon: 'cashRegister' },
+      { href: '/finance/extract', label: 'Extrato', icon: 'calendarDays' },
+      { href: '/finance/list', label: 'Listas', icon: 'receipt' },
+      { href: '/finance/invoice', label: 'Faturas', icon: 'creditCard' },
+    ]
+  }
+
+  return (
+    <MenuLinkContainer>
+      {[sectionPrincipal, sectionFinance].map((section) => (
+        <MenuLinkSection key={`${section.title}-title`}>
+          <MenuLinkTitle variant='h6'>
+            {section.title}
+          </MenuLinkTitle>
+
+          {section.child.map(child => (
+            <MenuLinkItem
+              key={child.label}
+              href={child.href}
+              title={`${section.title}/${child.label}`}
+              onClick={() => handleMenuLink()}
+            >
+              <MenuLinkIcon variant={child.icon} />
+              <MenuLinkText variant='body2'>{child.label}</MenuLinkText>
+            </MenuLinkItem>
+          ))}
+        </MenuLinkSection>
+      ))}
+    </MenuLinkContainer>
+  )
+}
+const Footer = () => {
+  const handleMenuLink = useHandleMenuLink()
+
+  return (
+    <MenuFooter>
+      <MenuFooterItem href='/settings' onClick={() => handleMenuLink()}>
+        <MenuFooterItemIcon variant='gear' />
+      </MenuFooterItem>
+
+      <MenuFooterItem href='/sign-out' onClick={() => handleMenuLink()}>
+        <MenuFooterItemIcon variant='signOut' />
+      </MenuFooterItem>
+    </MenuFooter>
+  )
+}
+
+export default function Menu() {
+  const { systemState, dispatchCloseMenu } = useStoreSystem()
+  const isDesktop = useMediaQuery('(min-width: 426px)')
+
   useEffect(() => {
-    function onResize() {
-      clearTimeout(time.current)
-
-      time.current = setTimeout(handler, 50)
-    }
-    onResize()
-
-    window.addEventListener('resize', onResize)
-
-    return () => {
-      window.removeEventListener('resize', onResize)
-    }
+    dispatchCloseMenu()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isDesktop])
 
-  return isDesktop ? <MenuDesktop /> : <MenuMobile />
+  if (isDesktop)
+    return (
+      <MenuDesktop>
+        <Brand />
+        <Links />
+        <Footer />
+      </MenuDesktop>
+    )
+
+  return (
+    <MenuMobile status={systemState.menu}>
+      <Brand />
+      <Links />
+      <Footer />
+    </MenuMobile>
+  )
 }

@@ -1,14 +1,29 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  min-height: 100vh;
+interface ContainerProps {
+  fullPage?: true
+  fullContent?: true
+}
+export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @keyframes rotation {
+  
+  ${({ fullPage }) => fullPage && {
+    minHeight: '100vh'
+  }}
+  ${({ fullContent }) => fullContent && {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    background: '#ffffff95'
+  }}
+  
+  @keyframes animateRotationLoading {
     0% {
-      opacity: 0.75;
+      opacity: 0.85;
       transform: rotate(0)
     }
     80% {
@@ -20,7 +35,7 @@ export const Container = styled.div`
   }
 
   > * {
-    animation: rotation 1s infinite;
+    animation: animateRotationLoading 1s infinite;
     font-size: 2rem;
     color: #90caf9;
   }

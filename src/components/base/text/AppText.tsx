@@ -7,3 +7,5 @@ type Props = TypographyProps & {
 export const AppText = ({ children, ...rest }: Props) => {
   return <Typography {...rest}>{children}</Typography>
 }
+
+export default AppText

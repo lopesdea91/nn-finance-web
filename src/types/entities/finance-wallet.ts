@@ -1,4 +1,4 @@
-import { Enable } from '../enum'
+import { Enable, _limitApi } from '../enum'
 
 export interface FinanceWallet {
   id: number,
@@ -10,4 +10,12 @@ export interface FinanceWallet {
 export interface FinanceWalletShort {
   id: number,
   description: string,
+}
+export interface FinanceWalletSearch {
+  _total?: number
+  _limit?: _limitApi
+  _q?: string
+  page?: number
+  enable?: Enable
+  panel?: number
 }

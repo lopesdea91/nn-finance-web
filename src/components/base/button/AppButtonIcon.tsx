@@ -3,21 +3,26 @@ import { AppIcon, IconNames } from "../icon/AppIcon"
 import { AppButton } from './AppButton';
 
 type Props = {
-  onClick: () => void,
   variant: IconNames
+  onClick?: () => void
+  disabled?: boolean
+  color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
+  text?: string
 }
 
 export const AppButtonStyled = styled(AppButton)`
   &.MuiButton-root {
     min-width: initial;
+    gap: 0.5rem;
   }
 `
-const AppButtonIcon = ({ onClick, variant, ...rest }: Props) => {
+export const AppButtonIcon = ({ text, variant, ...rest }: Props) => {
   return (
-    <AppButtonStyled onClick={onClick} {...rest}>
+    <AppButtonStyled {...rest}>
       <AppIcon variant={variant} />
+      {text}
     </AppButtonStyled>
   )
 }
 
-export { AppButtonIcon }
+export default AppButtonIcon

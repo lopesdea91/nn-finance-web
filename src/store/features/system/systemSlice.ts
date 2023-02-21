@@ -4,12 +4,14 @@ export interface IState {
   menu: boolean
   period: string,
   walletPanelId: number | null,
+  loading: boolean,
 }
 
 const initialState: IState = {
   menu: false,
   period: '',
-  walletPanelId: null
+  walletPanelId: null,
+  loading: false
 }
 
 const slice = createSlice({
@@ -24,6 +26,9 @@ const slice = createSlice({
     },
     setWalletPanelId(state, action: { payload: number }) {
       state.walletPanelId = action.payload
+    },
+    setloading(state, action: { payload: boolean }) {
+      state.loading = action.payload
     },
   }
 })

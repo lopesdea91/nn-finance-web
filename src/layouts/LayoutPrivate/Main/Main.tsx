@@ -1,10 +1,14 @@
+import Loading from '@/layouts/Loading'
 import React from 'react'
-import { MainContainer } from '@/styles/layout/private.styled'
+import { Container, Wrapper } from './Main.styled'
 
-export default function Main({ children }: { children: React.ReactNode }) {
+export default function Main({ children, loading }: { children: React.ReactNode, loading: boolean }) {
   return (
-    <MainContainer>
-      {children}
-    </MainContainer>
+    <Container>
+      {loading && <Loading fullContent />}
+      <Wrapper>
+        {children}
+      </Wrapper>
+    </Container>
   )
 }

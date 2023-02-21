@@ -23,3 +23,5 @@ export const AppForm = ({ children, onSubmit, containersx }: Props) => {
     </Box>
   )
 }
+
+export default AppForm

@@ -7,7 +7,7 @@ type Props = {
 
 const StyledButtonGroup = styled(p => <ButtonGroup {...p} />)``
 
-const AppButtonGroup = ({ children }: Props) => {
+export const AppButtonGroup = ({ children }: Props) => {
   return (
     <StyledButtonGroup>
       {children}
@@ -15,4 +15,4 @@ const AppButtonGroup = ({ children }: Props) => {
   )
 }
 
-export { AppButtonGroup }
+export default AppButtonGroup

@@ -1,9 +1,13 @@
 import { AppIcon } from "@/components/base";
 import { Container } from "./styled";
 
-export default function Loading() {
+interface LoadingProps {
+  fullPage?: true
+  fullContent?: true
+}
+export default function Loading(props: LoadingProps) {
   return (
-    <Container>
+    <Container {...props}>
       <AppIcon variant="spinner" />
     </Container>
   )

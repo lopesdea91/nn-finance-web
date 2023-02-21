@@ -7,5 +7,5 @@ export const $ = {
   queryString: convertObjectToString,
   nextBaseUrl, nextKeyToken,
   getLocalStorageItem, setLocalStorageItem, getToken, setToken,
-  parseItemToOption
+  parseItemToOption,
 }
