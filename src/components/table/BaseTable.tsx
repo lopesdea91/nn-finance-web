@@ -10,9 +10,9 @@ type BaseTableProps = {
 	bodyItemsLength: number
 	columnsCount: number
 	search: {
-		_total: number
-		_limit: number
+		limit: number
 		page: number
+		total: number
 	}
 	changePage: (n: number) => void
 	changePerPage: (n: _limitApi) => void
@@ -69,15 +69,15 @@ export const BaseTable = (props: BaseTableProps) => {
 					}
 				</TableBody>
 
-				{(props?.search && !!props.search._total && !!props.search.page) &&
+				{(props?.search && !!props.search.total && !!props.search.page) &&
 					<TableFooter>
 						<TableRow>
 							<TablePagination
 								labelRowsPerPage=''
 								rowsPerPageOptions={[15, 25, 50]}
 								colSpan={props.columnsCount}
-								count={props.search._total}
-								rowsPerPage={props.search._limit}
+								count={props.search.total}
+								rowsPerPage={props.search.limit}
 								page={props.search.page - 1}
 								SelectProps={{
 									inputProps: { 'aria-label': '' },

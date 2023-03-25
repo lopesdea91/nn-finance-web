@@ -14,6 +14,7 @@ import { AppIcon } from './icon/AppIcon'
 import { AppText } from './text/AppText'
 import { AppTitle } from './text/AppTitle'
 import { AppDropdown, AppDropdownItem } from './dropdown/AppDropdpwn'
+import { AppSkeleton, AppSkeletonContainer } from './skeleton/AppSkeleton'
 
 export {
   AppColumns,
@@ -31,6 +32,6 @@ export {
   AppIcon,
   AppText,
   AppTitle,
-  AppDropdown,
-  AppDropdownItem,
+  AppDropdown, AppDropdownItem,
+  AppSkeleton, AppSkeletonContainer
 } 

@@ -28,7 +28,7 @@ export const AppInputDate = (props: Props) => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MobileDatePicker
         label={props.label}
-        inputFormat="MM/DD/YYYY"
+        inputFormat="DD/MM/YYYY"
         value={value}
         disabled={props.disabled}
         renderInput={(params) => <TextField size='small' {...params} />}

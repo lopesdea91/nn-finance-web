@@ -1,67 +1,52 @@
-import { $ } from "@/utils"
-import { requestConfig } from "./config"
+import { $utils } from "@/utils"
+import { AxiosStatic } from "axios"
 
 type baseApiProps = {
-  url: string
+  url: string,
+  axios: AxiosStatic
 }
-export const baseApi = (props: baseApiProps) => {
-  const { url } = props
-
-  const common = () => {
-    return {
-      request: requestConfig()
-    }
-  }
-
+export const baseApi = ({ url, axios }: baseApiProps) => {
   function page<Response, Search>(
     { search }:
       { search?: Partial<Search> } = {}
   ) {
-    const { request } = common()
+    const q = $utils.queryString({ _paginate: true, ...search })
 
-    const q = $.queryString({ _paginate: true, ...search })
-
-    return request.get<Response>(url + q)
+    return axios.get<Response>(url + q)
   }
   function get<R, Search>(
     { search, params }:
       { search?: Partial<Search>, params?: Record<string, string | number> } = {}
   ) {
-    const { request } = common()
+    const q = $utils.queryString({ ...search, ...params })
 
-    const q = $.queryString({ ...search, ...params })
-
-    return request.get<R>(url + q)
+    return axios.get<R>(url + q)
   }
   function id<R>({ id }: { id: number }) {
-    const { request } = common()
-
-    return request.get<R>(`${url}/${id}`)
+    return axios.get<R>(`${url}/${id}`)
   }
   function post<R, F>({ form }: { form: F }) {
-    const { request } = common()
-
-    return request.post<R>(url, form)
+    return axios.post<R>(url, form)
   }
   function put<R, F>({ id, form }: { id: number, form: F }) {
-    const { request } = common()
+    url += `/${id}`
 
-    return request.put<R>(`${url}/${id}`, form)
+    return axios.put<R>(url, form)
   }
   function remove<R>({ id }: { id: number }) {
-    const { request } = common()
+    url += `/${id}`
 
-    return request.delete<R>(`${url}/${id}`)
+    return axios.delete<R>(url)
   }
   function enabled<R>({ id }: { id: number }) {
-    const { request } = common()
+    url += `/${id}/enabled`
 
-    return request.get<R>(`${url}/${id}/enabled`)
+    return axios.get<R>(url)
   }
   function disabled<R>({ id }: { id: number }) {
-    const { request } = common()
+    url += `/${id}/disabled`
 
-    return request.get<R>(`${url}/${id}/disabled`)
+    return axios.get<R>(url)
   }
 
   return { page, get, id, post, put, remove, enabled, disabled }

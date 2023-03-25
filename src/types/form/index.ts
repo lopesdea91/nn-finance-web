@@ -1,7 +1,7 @@
-import { FinanceOriginShort } from "../entities/finance-origin"
-import { FinanceType } from "../entities/finance-type"
-import { FinanceWalletShort } from "../entities/finance-wallet"
-import { Enable } from "../enum"
+import { FinanceOriginShort } from "@/types/entities/finance-origin"
+import { FinanceType } from "@/types/entities/finance-type"
+import { FinanceWalletShort } from "@/types/entities/finance-wallet"
+import { Enable } from "@/types/enum"
 
 export interface FinanceOriginFormFields {
   id: number | null

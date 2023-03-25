@@ -35,9 +35,9 @@ export const SelectionTag = (props: Props) => {
   const [tagChecked, setTagChecked] = useState<FinanceTagShort[]>(props.value);
 
   const tagIsChecked = (id: number): boolean => {
-    return tagChecked.map(el => el.id).includes(id)
+    return tagChecked?.map(el => el.id).includes(id)
   }
-  const handleToggle = (item: FinanceTagShort) => () => {
+  const handleToggle = (item: FinanceTagShort) => {
     const findItem = !!tagChecked.find(el => el.id === item.id);
 
     const newTagChecked = [...tagChecked];
@@ -67,8 +67,9 @@ export const SelectionTag = (props: Props) => {
     <div>
       {props.tags.length === 0 ? null :
         <TagChecked>
-          {tagChecked.map(el => <TagCheckedItem key={el.id}>{el.description}</TagCheckedItem>)}
-          {tagChecked.length ? null : (
+          {tagChecked?.map(el => <TagCheckedItem key={el.id}>{el.description}</TagCheckedItem>)}
+
+          {tagChecked?.length ? null : (
             <TagCheckedItem>Selecione uma tag</TagCheckedItem>
           )}
         </TagChecked>
@@ -80,7 +81,7 @@ export const SelectionTag = (props: Props) => {
             key={item.id}
             label={item.description}
             variant={tagIsChecked(item.id) ? 'filled' : 'outlined'}
-            onClick={handleToggle(item)}
+            onClick={() => handleToggle(item)}
             disabled={props.disabled}
           />
         ))}

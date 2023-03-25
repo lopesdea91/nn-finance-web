@@ -25,12 +25,13 @@ export interface FinanceItem {
 export interface FinanceItemShort {
 }
 export interface FinanceItemSearch {
-  _total?: number
-  _limit?: _limitApi
-  _q?: string
-  page?: number
-  enable?: Enable
-  status_id?: FinanceStatusId
+  // _total?: number
+  // lastPage?: number
+  _q: string
+  _limit: _limitApi
+  page: number
+  enable: Enable
+  status_id: FinanceStatusId
   type_id: FinanceTypeId | null
   origin_id: number | null
   wallet_id: number | null

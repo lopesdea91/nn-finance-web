@@ -15,12 +15,11 @@ export interface FinanceOriginShort {
   description: string
 }
 export interface FinanceOriginSearch {
-  _total: number
-  _limit: _limitApi
   _q: string
+  _limit: _limitApi
   page: number
   enable: Enable
-  type_id: number[]
+  type_id: number[] | null
   wallet_id: number | null
   parent_id: number | null
 }

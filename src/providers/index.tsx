@@ -1,9 +1,12 @@
-import { AppThemeProvider } from './AppThemeProvider'
-import { AppStoreProvider } from './AppStoreProvider'
-import { AppThemeModeProvider } from './AppThemeModeProvider'
 import { useState } from 'react';
+import { AppStoreProvider } from './AppStoreProvider'
+import { AppThemeProvider } from './AppThemeProvider'
+import { AppThemeModeProvider } from './AppThemeModeProvider'
 
-export const AppProvider = ({ children }: { children: React.ReactNode }) => {
+type Props = {
+  children: React.ReactNode
+}
+export const AppProvider = ({ children }: Props) => {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
 
   const toggleThemeMode = () => {
@@ -11,12 +14,12 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AppThemeModeProvider toggleThemeMode={toggleThemeMode}>
-      <AppThemeProvider mode={mode}>
-        <AppStoreProvider>
+    <AppStoreProvider>
+      <AppThemeModeProvider toggleThemeMode={toggleThemeMode}>
+        <AppThemeProvider mode={mode}>
           {children}
-        </AppStoreProvider>
-      </AppThemeProvider>
-    </AppThemeModeProvider>
+        </AppThemeProvider>
+      </AppThemeModeProvider>
+    </AppStoreProvider>
   )
 }

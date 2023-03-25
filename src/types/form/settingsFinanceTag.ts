@@ -1,5 +1,5 @@
-import { Enable, FinanceTypeId } from "../enum"
-import { FinanceTagSearch } from "../entities/finance-tag"
+import { Enable, FinanceTypeId } from "@/types/enum"
+import { FinanceTagSearch } from "@/types/entities/finance-tag"
 
 // form
 export interface FinanceTagFormFields {

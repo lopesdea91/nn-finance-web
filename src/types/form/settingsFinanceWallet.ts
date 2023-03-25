@@ -1,5 +1,5 @@
-import { Enable } from "../enum"
-import { FinanceWalletSearch } from "../entities/finance-wallet"
+import { Enable } from "@/types/enum"
+import { FinanceWalletSearch } from "@/types/entities/finance-wallet"
 
 // form
 export interface FinanceWalletFormFields {

@@ -1,6 +1,4 @@
-'use client'
-
-import { actionsAuthSlice } from '@/store/features/auth/authSlice'
+import { actionsAuthSlice } from '@/store/features/auth'
 import { useAppDispatch, useAppSelector } from '@/store/hook'
 import { User } from "@/types/system"
 

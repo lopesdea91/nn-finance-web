@@ -59,4 +59,6 @@ export const AppDropdown = React.forwardRef<AppDropdownHandle, AppDropdownProps>
       </Menu>
     </>
   )
-})  
+})
+
+AppDropdown.displayName = 'AppDropdown'

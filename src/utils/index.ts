@@ -1,11 +1,27 @@
 import { convertObjectToString } from './convertObjectToString'
-import { nextBaseUrl, nextKeyToken } from './env'
-import { getLocalStorageItem, setLocalStorageItem, getToken, setToken } from './localStorage'
+import { getLocalStorageItem, setLocalStorageItem, } from './localStorage'
 import { parseItemToOption } from './parseItemToOption'
+import { parseQueryUrlForm } from './parseQueryUrlForm'
 
-export const $ = {
+import { $env } from './env'
+import { $cookie } from './cookie'
+import { $table } from './table'
+
+// export const $ = {
+//   queryString: convertObjectToString,
+//   getLocalStorageItem, setLocalStorageItem,
+//   parseItemToOption,
+// }
+
+export const $utils = {
   queryString: convertObjectToString,
-  nextBaseUrl, nextKeyToken,
-  getLocalStorageItem, setLocalStorageItem, getToken, setToken,
+  getLocalStorageItem, setLocalStorageItem,
   parseItemToOption,
+  parseQueryUrlForm
+}
+
+export {
+  $env,
+  $cookie,
+  $table
 }

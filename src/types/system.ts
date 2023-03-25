@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from 'next'
 import { IconNames } from "@/components/base/icon/AppIcon"
 
 export interface User {
@@ -14,3 +15,4 @@ export interface SectionMenuLinks {
   title: string
   child: SectionMenuLinksItem[]
 }
+export interface ContextSSR extends GetServerSidePropsContext { }

@@ -1,15 +1,14 @@
 import { useStoreSystem } from '@/hooks/useStoreSystem'
-import React from 'react'
 import { Container, Header, Main, Menu } from './styled'
 
 export default function LayoutPrivate({ children }: { children: React.ReactNode }) {
-  const { systemState } = useStoreSystem()
+  const { menu, loading } = useStoreSystem()
 
   return (
-    <Container status={systemState.menu}>
+    <Container status={menu}>
       <Menu />
       <Header />
-      <Main loading={systemState.loading}>
+      <Main loading={loading}>
         {children}
       </Main>
     </Container>

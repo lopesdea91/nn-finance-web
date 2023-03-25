@@ -1,4 +1,3 @@
-// import { User } from '../system'
 import { FinanceWallet, FinanceWalletShort } from './finance-wallet'
 import { FinanceOrigin } from './finance-origin'
 import { FinanceTag } from './finance-tag'
@@ -15,18 +14,4 @@ export interface FinanceDataResponse {
   "type": FinanceType[],
   "status": FinanceStatus[],
   "originType": FinanceOriginType[]
-}
-
-export interface FinanceConsolidateMonthBalance {
-  available: number,
-  estimate: number,
-  expense: { value: number },
-  revenue: { value: number }
-}
-
-export interface FinanceConsolidateMonthResponse {
-  balance: FinanceConsolidateMonthBalance
-  invoice: []
-  origin: []
-  tag: []
 }

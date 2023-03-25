@@ -1,4 +1,4 @@
-import { actionsSystemSlice } from '@/store/features/system/systemSlice'
+import { actionsSystemSlice } from '@/store/features/system'
 import { useAppDispatch, useAppSelector } from '@/store/hook'
 
 export const useStoreSystem = () => {
@@ -28,21 +28,26 @@ export const useStoreSystem = () => {
   }
 
   // loading
-  const dispatchLoadingStart = () => {
+  const loadingStart = () => {
     dispatch(actionsSystemSlice.setloading(true))
   }
-  const dispatchLoadingEnd = () => {
+  const loadingEnd = () => {
     dispatch(actionsSystemSlice.setloading(false))
   }
 
   return {
     systemState,
+    ...systemState,
+    // isLoading,
+    // period: '',
+    // walletPanelId: null,
+    // loading: false
     dispatchSetPeriod,
     dispatchSetWalletPanelId,
     dispatchToggleMenu,
     dispatchOpenMenu,
     dispatchCloseMenu,
-    dispatchLoadingStart,
-    dispatchLoadingEnd
+    loadingStart,
+    loadingEnd
   }
 }

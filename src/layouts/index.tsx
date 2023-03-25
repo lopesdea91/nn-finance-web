@@ -5,33 +5,27 @@ import Loading from '@/layouts/Loading'
 import { useStorePrepare } from '@/hooks/useStorePrepare'
 import { LayoutType } from '@/types/layout'
 
-type Props = {
+type LayoutProps = {
   children: React.ReactNode
-  layout: LayoutType | undefined
+  layout?: LayoutType
 }
 
-export default function Layout({ children, layout }: Props) {
+export function Layouts(layout: LayoutType = 'private') {
+  const Layouts = {
+    private: LayoutPrivate,
+    public: LayoutPublic
+  }
+  return Layouts[layout] || LayoutPublic
+}
+
+export const Layout = ({ children, layout }: LayoutProps) => {
   const { isPending } = useStorePrepare()
 
   if (isPending) {
     return <Loading fullPage />
   }
 
-  if (!layout) {
-    layout = 'private'
-  }
+  const LayoutSelected = Layouts(layout)
 
-  if (layout === 'private') {
-    return (
-      <LayoutPrivate>
-        {children}
-      </LayoutPrivate>
-    )
-  }
-
-  return (
-    <LayoutPublic>
-      {children}
-    </LayoutPublic>
-  )
+  return <LayoutSelected>{children}</LayoutSelected>
 }

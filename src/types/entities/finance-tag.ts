@@ -17,7 +17,6 @@ export interface FinanceTagShort {
   type_id: number
 }
 export interface FinanceTagSearch {
-  _total: number
   _limit: _limitApi
   _q: string
   page: number

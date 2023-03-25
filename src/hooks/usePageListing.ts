@@ -3,6 +3,7 @@ import { DependencyList, useEffect, useState } from "react"
 import { useStoreSystem } from "./useStoreSystem";
 
 interface Props<D, S> {
+	initialItems?: D[]
 	search: S,
 	request: <D, S>(args?: {
 		search?: Partial<S>;
@@ -17,11 +18,11 @@ interface Props<D, S> {
 }
 
 export const usePageListing = <D, S>(props: Props<D, S>, deps: DependencyList = []) => {
-	const { systemState: { loading }, dispatchLoadingStart, dispatchLoadingEnd } = useStoreSystem()
-	const [items, setItems] = useState<D[]>([])
+	const { systemState: { loading }, loadingStart, loadingEnd } = useStoreSystem()
+	const [items, setItems] = useState<D[]>(props.initialItems || [])
 
 	async function getItems(searchMerge: Partial<S> = {}) {
-		dispatchLoadingStart()
+		loadingStart()
 
 		try {
 			const { data, status } = await props.request<D, S>({
@@ -50,14 +51,14 @@ export const usePageListing = <D, S>(props: Props<D, S>, deps: DependencyList = 
 			console.log('... error', error);
 
 		} finally {
-			dispatchLoadingEnd()
+			loadingEnd()
 		}
 	}
 
-	useEffect(() => {
-		getItems()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [...deps])
+	// useEffect(() => {
+	// 	getItems()
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [...deps])
 
 	return {
 		items,

@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+
+  ::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    background: #dee2e6;
+  }
+}
+
+body {
+  background: #f3f4f6;
+}
+
+:where(html, body) {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+:where(body, #root) {
+  margin: 0;
+  padding: 0;
+}
+
+:where(ul, li) {
+  list-style: none;
+  list-style-type: none;
+}

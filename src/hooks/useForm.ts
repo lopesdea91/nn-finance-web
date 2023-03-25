@@ -93,17 +93,7 @@ export const useSignInForm = () => {
   }, {})
 }
 
-export const useSettingsFinanceWalletForm = () => {
-  return useForm<FinanceWalletFormFields>({
-    id: null,
-    description: '',
-    json: {},
-    enable: 1,
-    panel: 0
-  }, {})
-}
-
-export const useSettingsFinanceOriginForm = () => {
+export const useSettingsFinanceOriginForm = ({ initialFields }: { initialFields?: Partial<FinanceOriginFormFields> } = {}) => {
   const { systemState } = useStoreSystem()
 
   return useForm<FinanceOriginFormFields>({
@@ -116,10 +106,11 @@ export const useSettingsFinanceOriginForm = () => {
     // wallet?: null,
     parentId: null,
     // parent: null,
+    ...initialFields
   }, {})
 }
 
-export const useSettingsFinanceTagForm = () => {
+export const useSettingsFinanceTagForm = ({ initialFields }: { initialFields?: Partial<FinanceTagFormFields> } = {}) => {
   const { systemState } = useStoreSystem()
 
   return useForm<FinanceTagFormFields>({
@@ -127,7 +118,8 @@ export const useSettingsFinanceTagForm = () => {
     description: '',
     enable: 1,
     typeId: null,
-    walletId: systemState.walletPanelId
+    walletId: systemState.walletPanelId,
+    ...initialFields
   }, {})
 }
 

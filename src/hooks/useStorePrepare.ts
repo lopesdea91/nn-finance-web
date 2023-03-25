@@ -4,7 +4,19 @@ import { api } from '@/services/api'
 import { useStoreAuth } from '@/hooks/useStoreAuth'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { useStoreFinance } from '@/hooks/useStoreFinance'
-import { $ } from '@/utils'
+import { $cookie } from '@/utils'
+
+const routesPublic = [
+  // '/auth/sign-in',
+  '/auth/sign-up',
+  '/auth/sign-out',
+  '/teste/teste1',
+  '/teste/teste2',
+  '/teste/teste3',
+  '/teste/teste4',
+  '/teste/teste5',
+  '/teste/teste6',
+]
 
 export const useStorePrepare = () => {
   const { authState, dispatchSetUser } = useStoreAuth()
@@ -13,49 +25,91 @@ export const useStorePrepare = () => {
   const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
   const router = useRouter()
 
+  async function handler() {
+    if (routesPublic.includes(router.asPath)) {
+      setTimeout(() => setIsPending(false), 250)
+      return
+    }
+
+    if (!$cookie.get({ key: 'token' })) {
+      if (!routesPublic.includes(router.asPath)) router.push('/auth/sign-in')
+      setTimeout(() => setIsPending(false), 250)
+      return
+    }
+
+    try {
+      const userResult = await api.user().data()
+
+      const financeResult = await api.finance().data()
+
+      const { period, walletPanelId } = $cookie.all<{ period: string, walletPanelId: number }>()
+
+      $cookie.set({
+        key: 'data_user',
+        value: JSON.stringify({
+          id: userResult.data.user.id,
+          name: userResult.data.user.name,
+        }),
+        options: {
+          path: '/'
+        },
+        keyCrypto: true,
+        valueCrypto: true
+      })
+
+      !period && $cookie.set({
+        key: 'period',
+        value: userResult.data.period,
+        options: {
+          path: '/'
+        },
+        // keyCrypto: true,
+        // valueCrypto: true
+      })
+
+      dispatchSetUser(userResult.data.user)
+      dispatchSetPeriod(period || userResult.data.period)
+
+      dispatchSetWalletPanelId(walletPanelId || financeResult.data.wallet_panel.id)
+      dispatchSetFinanceWallet(financeResult.data.wallet)
+      dispatchSetFinanceOrigin(financeResult.data.origin)
+      dispatchSetFinanceTag(financeResult.data.tag)
+      dispatchSetFinanceList({
+        originType: financeResult.data.originType,
+        status: financeResult.data.status,
+        type: financeResult.data.type,
+      })
+
+      !walletPanelId && $cookie.set({
+        key: 'walletPanelId',
+        value: String(financeResult.data.wallet_panel.id),
+        options: {
+          path: '/'
+        },
+        // keyCrypto: true,
+        // valueCrypto: true
+      })
+
+      // if (!routesPublic.includes(router.asPath)) {
+      //   router.push('/panel/finance')
+      // }
+
+    } catch (error) {
+      console.log('onSubmit - error', error)
+      if (!routesPublic.includes(router.asPath)) router.push('/auth/sign-in')
+    } finally {
+      if (router.asPath === '/auth/sign-in')
+        router.push('/panel/finance')
+
+      setTimeout(() => setIsPending(false), 250)
+    }
+  }
+
   useEffect(() => {
-    if (!isPending) {
-      return
+    if (!authState.user.id || !isPending) {
+      handler()
     }
 
-    const tokenEmpty = !$.getToken()
-
-    if (tokenEmpty) {
-      setIsPending(false)
-      router.push('/auth/sign-in')
-      return
-    }
-
-    async function handler() {
-      try {
-        const userResult = await api.user.data()
-
-        const financeResult = await api.finance.data()
-
-        dispatchSetUser(userResult.data.user)
-        dispatchSetPeriod(userResult.data.period)
-        dispatchSetWalletPanelId(financeResult.data.wallet_panel.id)
-        dispatchSetFinanceWallet(financeResult.data.wallet)
-        dispatchSetFinanceOrigin(financeResult.data.origin)
-        dispatchSetFinanceTag(financeResult.data.tag)
-        dispatchSetFinanceList({
-          originType: financeResult.data.originType,
-          status: financeResult.data.status,
-          type: financeResult.data.type,
-        })
-
-        if (router.route === '/auth/sign-in') {
-          router.push('/panel/finance')
-        }
-
-      } catch (error) {
-        console.log('onSubmit - error', error)
-      } finally {
-        setTimeout(() => setIsPending(false), 1000)
-      }
-    }
-
-    handler()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

@@ -1,6 +1,6 @@
-import { FinanceItemRepeat } from "../entities/finance-item"
-import { FinanceTagShort } from "../entities/finance-tag"
-import { Enable, FinanceStatusId, FinanceTypeId } from "../enum"
+import { FinanceItemRepeat } from "@/types/entities/finance-item"
+import { FinanceTagShort } from "@/types/entities/finance-tag"
+import { Enable, FinanceStatusId, FinanceTypeId } from "@/types/enum"
 
 // form
 export interface FinanceItemFormFields {
@@ -21,7 +21,7 @@ export interface FinanceItemFormFieldsPost {
   date: string
   sort: number
   enable: Enable
-  obs: string
+  obs?: string
   origin_id: number
   status_id: FinanceStatusId
   tag_ids: number[]
@@ -34,7 +34,7 @@ export interface FinanceItemFormFieldsPut {
   date: string
   sort: number
   enable: Enable
-  obs: string
+  obs?: string
   origin_id: number
   status_id: FinanceStatusId
   tag_ids: number[]
