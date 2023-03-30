@@ -1,37 +1,20 @@
 
-import Link from "next/link"
 import styled from "styled-components"
-import { Grid } from "@mui/material"
-import { AppText } from "@/components/base"
+import Link from "next/link"
 
-export const Container = styled(Grid)``
-
-export const Section = styled(Grid)`
-  margin-bottom: 1rem;
-`
-
-export const SectionTitle = styled(p => <AppText variant="h6" {...p} />)``
-
-export const SectionLinks = styled.div`
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr));
-
-  @media (min-width: 426px){
-    grid-template-columns: repeat( auto-fit, minmax(125px, 180px));
-  }
-`
-export const SectionLink = styled.span`
+export const SectionLink = styled(Link)`
+  display: block;
+  max-width: max-content;
   margin: 0.25rem;
-  padding: 1rem;
-  text-decoration: none;
+  padding: 0.35rem 0.875rem;
   color: #757575;
+  text-decoration: none;
   transition: all 0.2s ease-in-out;
-  background: linear-gradient(0deg, #eeeeee, #fafafa);
   
   &:hover{
-      color: #212121;
-      background: #e0e0e0;
-  }
+    color: #212121;
+    text-decoration: underline;
+  } 
 `
 
 
