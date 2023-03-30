@@ -1,4 +1,3 @@
-import { LoadingThunkType } from "@/types/enum"
 import { systemStateSlice } from "./initialState"
 
 export default {
@@ -13,5 +12,8 @@ export default {
   },
   setloading(state: systemStateSlice, action: { payload: boolean }) {
     state.loading = action.payload
+  },
+  setloadingPage(state: systemStateSlice, action: { payload: boolean }) {
+    state.loadingPage = action.payload
   },
 }
