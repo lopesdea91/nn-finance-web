@@ -7,6 +7,7 @@ const Container = styled.div`
   padding: 0.5rem 0.5rem 0;
   box-shadow: 2px 4px 6px -1px rgb(0 0 0 / 0.2);
   border: 1px solid rgb(0 0 0 / 0.2);
+  cursor: pointer;
 `
 const Title = styled(p => <AppText variant="body1" {...p} />)`
   min-height: 25px;
@@ -41,13 +42,14 @@ const Value = styled(p => <AppText variant="body1" {...p} />)`
 `
 
 interface Props {
-  title: string,
-  prefix?: string,
-  value: string | number | React.ReactNode,
+  title: string
+  prefix?: string
+  value: string | number
+  onClick?: () => void
 }
-export const BalanceItem = ({ title, value, prefix }: Props) => {
+export const BalanceItem = ({ title, value, prefix, ...rest }: Props) => {
   return (
-    <Container>
+    <Container {...rest}>
       <Title title={title}>{title}</Title>
       <Value data-prefix={prefix}>{value}</Value>
     </Container >

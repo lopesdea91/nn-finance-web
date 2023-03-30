@@ -31,7 +31,7 @@ export interface FinanceItemSearch {
   _limit: _limitApi
   page: number
   enable: Enable
-  status_id: FinanceStatusId
+  status_id: FinanceStatusId | null
   type_id: FinanceTypeId | null
   origin_id: number | null
   wallet_id: number | null

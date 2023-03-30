@@ -76,7 +76,7 @@ const all = <T>({ ctx }: getAll = {}) => {
 
   return cookie as T
 }
-const getUser = ({ ctx }: getUserProps) => {
+const getUser = ({ ctx }: getUserProps = {}) => {
   return get<{
     id: number,
     name: string

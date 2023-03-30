@@ -74,7 +74,7 @@ export const BaseTable = (props: BaseTableProps) => {
 						<TableRow>
 							<TablePagination
 								labelRowsPerPage=''
-								rowsPerPageOptions={[15, 25, 50]}
+								rowsPerPageOptions={[15, 30, 50]}
 								colSpan={props.columnsCount}
 								count={props.search.total}
 								rowsPerPage={props.search.limit}

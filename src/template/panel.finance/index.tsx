@@ -1,14 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { BalanceCard, BalanceItem } from '@/components'
+import { BalanceCard, BalanceItem, BalanceItemDisplayNumber } from '@/components'
 import { AppText, AppSkeleton } from '@/components/base'
 import { $cookie } from '@/utils'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { ContextSSR } from '@/types/system'
-import { FinanceWalletConsolidateMonth } from '@/types/entities/finance-wallet'
+import { FinanceWalletConsolidateMonth, FinanceWalletConsolidateMonthStatus } from '@/types/entities/finance-wallet'
 import { useAppDispatch, useAppSelector } from '@/store/hook'
 import { pagePanelFinanceSetData } from '@/store/feturesPage/panel.finance'
 import { api } from '@/services/api'
+import { pageFinanceExtractSetSearch } from '@/store/feturesPage/finance.extract'
+import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
+import { FinanceStatusId, FinanceTypeId } from '@/types/enum'
 let render = 0
 type Props = {
   unauthenticated: boolean
@@ -28,6 +31,10 @@ export const PanelFinancePage = (props: Props) => {
   const dispatch = useAppDispatch()
 
   const { dataPage } = useAppSelector(e => e.pagePanelFinance)
+  const { search } = useAppSelector(e => e.pageFinanceExtract)
+
+  const user = $cookie.getUser()
+  const searchKeyFinanceExtract = `financeExtract.${user.id}`
 
   const getItems = async () => {
     loadingStart()
@@ -43,6 +50,28 @@ export const PanelFinancePage = (props: Props) => {
     dispatch(pagePanelFinanceSetData(data))
   }
 
+  const handleClick = (values: Partial<FinanceExtractFormSearchFields>) => {
+    const newSearch: FinanceExtractFormSearchFields = {
+      ...search,
+      ...values,
+      page: 1,
+      enable: 1,
+      _q: '',
+      _limit: 30,
+      type_preveiw: 'extract'
+    }
+
+    $cookie.setSearchPage({
+      searchKey: searchKeyFinanceExtract,
+      value: JSON.stringify(newSearch)
+    })
+
+    dispatch(pageFinanceExtractSetSearch(newSearch))
+
+    router.push('/finance/extract')
+  }
+
+
   useEffect(() => {
     if (isMounted.current) {
       getItems()
@@ -57,72 +86,97 @@ export const PanelFinancePage = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [period, walletPanelId])
 
-  const balances = loading
-    ? [
-      { title: 'Receita', value: <AppSkeleton width="50%" /> },
-      { title: 'Despesa', value: <AppSkeleton width="50%" /> },
-      { title: 'Disponivel', value: <AppSkeleton width="50%" /> },
-      { title: 'Estimado', value: <AppSkeleton width="50%" /> }
-    ]
-    : [
-      { title: 'Receita', value: dataPage.balance.revenue.value },
-      { title: 'Despesa', value: dataPage.balance.expense.value },
-      { title: 'Disponivel', value: dataPage.balance.available },
-      { title: 'Estimado', value: dataPage.balance.estimate }
-    ]
+  const balances = [
+    { title: 'Receita', value: dataPage.balance.revenue.value, type_id: 1 },
+    { title: 'Despesa', value: dataPage.balance.expense.value, type_id: 2 },
+    { title: 'Disponivel', value: dataPage.balance.available },
+    { title: 'Estimado', value: dataPage.balance.estimate, status_id: 3 }
+  ]
 
   const origins = loading
     ? [
-      { id: `${render}1`, description: '', value: <AppSkeleton width="50%" />, },
-      { id: `${render}2`, description: '', value: <AppSkeleton width="50%" />, },
+      { id: '', description: '', sum: <AppSkeleton width="50%" />, },
+      { id: '', description: '', sum: <AppSkeleton width="50%" />, },
     ]
     : dataPage.origin
 
   const tags = loading
     ? [
-      { tag_key: `${render}3`, description: '', value: <AppSkeleton width="50%" />, },
-      { tag_key: `${render}4`, description: '', value: <AppSkeleton width="50%" />, },
+      { tag_description: '', sum: <AppSkeleton width="50%" />, },
+      { tag_description: '', sum: <AppSkeleton width="50%" />, },
     ]
     : dataPage.tag
 
-
   return (
     <>
+      <BalanceCard>
+        {dataPage.status.map((item, i) => (
+          <BalanceItemDisplayNumber
+            key={`${render}-${i}-status`}
+            desc={item.description}
+            num={item.count}
+            onClick={() => handleClick({
+              tag_ids: [],
+              status_id: item.status_id,
+              type_id: item.type_id,
+            })}
+          />
+        ))}
+      </BalanceCard>
+
       <AppText variant='h5'>Balanço</AppText>
       <BalanceCard>
-        {balances.map(({ title, value }) => (
+        {balances.map((item, i) => (
           <BalanceItem
-            key={title}
-            title={title}
-            value={value}
+            key={`${render}-${i}-balances`}
+            title={item.title}
+            value={item.value}
+            onClick={() => handleClick({
+              origin_id: null,
+              tag_ids: [],
+              status_id: item.status_id as FinanceStatusId || null,
+              type_id: item?.type_id as FinanceTypeId || null,
+            })}
           />
         ))}
       </BalanceCard>
 
       <AppText variant='h5'>Origens</AppText>
       <BalanceCard>
-        {origins.map(origin => (
+        {dataPage.origin.map((item, i) => (
           <BalanceItem
-            key={origin.id}
-            title={origin.description}
-            value={origin.value}
+            key={`${render}-${i}-origins`}
+            title={item.description}
+            value={item.sum}
             prefix="R$"
+            onClick={() => handleClick({
+              origin_id: item.id,
+              tag_ids: [],
+              status_id: null,
+              type_id: null,
+            })}
           />
         ))}
       </BalanceCard>
 
       <AppText variant='h5'>Tags</AppText>
       <BalanceCard>
-        {tags.map(tag => (
+        {dataPage.tag.map((item, i) => (
           <BalanceItem
-            key={tag.tag_key}
-            title={tag.description}
-            value={tag.value}
+            key={`${render}-${i}-tags`}
+            title={item.tag_description}
+            value={item.sum}
             prefix="R$"
+            onClick={() => handleClick({
+              origin_id: null,
+              tag_ids: item.tag_ids,
+              status_id: null,
+              type_id: null,
+            })}
           />
         ))}
       </BalanceCard>
-    </ >
+    </>
   )
 }
 

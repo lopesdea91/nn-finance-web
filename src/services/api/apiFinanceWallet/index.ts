@@ -219,9 +219,10 @@ export const apiFinanceWallet = (props: AxiosConfigProps = {}) => {
           expense: { value: '0' },
           revenue: { value: '0' }
         },
-        invoice: [],
+        status: [],
+        tag: [],
         origin: [],
-        tag: []
+        invoice: [],
       }
 
       try {
@@ -237,17 +238,21 @@ export const apiFinanceWallet = (props: AxiosConfigProps = {}) => {
           result.data.balance.revenue.value = Number(result.data.balance.revenue.value).toFixed(2)
 
           data.balance = result.data.balance
-          data.invoice = result.data.invoice
-          data.origin = result.data.origin.map(el => {
-            el.value = Number(el.value).toFixed(2)
-            return el
-          })
-          data.tag = result.data.tag.map(el => {
-            const n = Number(el.value).toFixed(2)
-            el.value = el.type === 1 ? n : `-${n}`
+          data.status = result.data.status.map(el => {
 
             return el
           })
+          data.tag = result.data.tag.map(el => {
+            const n = Number(el.sum).toFixed(2)
+            el.sum = el.type_id === 1 ? n : `-${n}`
+
+            return el
+          })
+          data.origin = result.data.origin.map(el => {
+            el.sum = Number(el.sum).toFixed(2)
+            return el
+          })
+          data.invoice = result.data.invoice
         }
       }
       catch (err) {
