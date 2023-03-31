@@ -8,6 +8,8 @@ export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
+  cursor: progress;
   
   ${({ fullPage }) => fullPage && {
     minHeight: '100vh'

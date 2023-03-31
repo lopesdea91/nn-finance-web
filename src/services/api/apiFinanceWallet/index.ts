@@ -1,5 +1,5 @@
 import { axiosConfig, AxiosConfigProps } from "@/services/api/config/index"
-import { FinanceWallet, FinanceWalletSearch, FinanceWalletConsolidateMonth, FinanceWalletConsolidateMonthPayload, FinanceWalletConsolidateMonthResponse } from "@/types/entities/finance-wallet"
+import { FinanceWallet, FinanceWalletSearch, FinanceWalletConsolidateMonth, FinanceWalletConsolidateMonthPayload, FinanceWalletConsolidateMonthResponse, FinanceWalletPeriodsDataPayload, FinanceWalletPeriodsData, FinanceWalletPeriodsDataResponse, FinanceWalletProcessConsolidateMonthPayload, FinanceWalletProcessConsolidateMonthResponse } from "@/types/entities/finance-wallet"
 import { FinanceWalletFormFieldsPost, FinanceWalletFormFieldsPut } from "@/types/form/settingsFinanceWallet"
 import { $utils } from "@/utils"
 import { ApiPageResponse } from ".."
@@ -253,6 +253,57 @@ export const apiFinanceWallet = (props: AxiosConfigProps = {}) => {
             return el
           })
           data.invoice = result.data.invoice
+        }
+      }
+      catch (err) {
+        error = err
+      }
+
+      return { error, code, status, data }
+    },
+    processConsolidateMonth: async ({ form }: FinanceWalletProcessConsolidateMonthPayload) => {
+      url += '/consolidate-month'
+
+      let error = null
+      let code = 200
+      let status = false
+      let data: FinanceWalletProcessConsolidateMonthResponse = {
+        message: ''
+      }
+
+      try {
+        const result = await axios.post<FinanceWalletProcessConsolidateMonthResponse>(url, form)
+
+        code = result.status
+        status = true
+
+        if (result.status === 200) {
+          data.message
+        }
+      }
+      catch (err) {
+        error = err
+      }
+
+      return { error, code, status, data }
+    },
+    periodsData: async ({ wallet_id, format }: FinanceWalletPeriodsDataPayload) => {
+      url += '/periods-data'
+      url += $utils.queryString({ wallet_id, format })
+
+      let error = null
+      let code = 200
+      let status = false
+      let data: FinanceWalletPeriodsData[] = []
+
+      try {
+        const result = await axios.get<FinanceWalletPeriodsDataResponse>(url)
+
+        code = result.status
+        status = true
+
+        if (result.status === 200) {
+          data = result.data.items
         }
       }
       catch (err) {

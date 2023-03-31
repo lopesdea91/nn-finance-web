@@ -9,8 +9,10 @@ import { FinanceWalletFormFields } from '@/types/form/settingsFinanceWallet'
 import { ContextSSR } from '@/types/system'
 import { $utils } from '@/utils'
 import { useAppDispatch } from '@/store/hook'
-import { FinanceWallet } from '@/types/entities/finance-wallet'
+import { FinanceWallet, FinanceWalletPeriodsData } from '@/types/entities/finance-wallet'
 import { Form } from './components/Form'
+import { ConsolidateLabels } from './components/ConsolidateLabels'
+import { ConsolidateLabel } from './components/ConsolidateLabel'
 
 const sortDataGet = (a: FinanceWallet, b: FinanceWallet) => {
   return a.description < b.description ? -1 : a.description > b.description ? 1 : 0
@@ -27,6 +29,7 @@ const defaultFields: FinanceWalletFormFields = {
 type Props = {
   unauthenticated: boolean
   data: FinanceWalletFormFields
+  periodsData: FinanceWalletPeriodsData[]
 }
 export const SettingsFinanceWalletIdPage = (props: Props) => {
   const { loading, loadingStart, loadingEnd } = useStoreSystem()
@@ -119,14 +122,12 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
       }
     }
   }
-
-  useEffect(() => {
-
-  }, [])
+  // const teste = () => {
+  // const resultPeriodData = await api.financeWallet().periodsData({ wallet_id: Number(ctx.query.id), format: 'group-periods' })
+  // }
 
   return (
     <>
-      {JSON.stringify(loading)}
       <AppTitle
         variant="h5" mb={2}
         contentEnd={
@@ -174,45 +175,60 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
         onSubmit={handleSubmit}
         onChangeField={onChangeField}
       />
+
+      <AppTitle
+        variant="h5" mb={2}
+      // contentEnd={
+      //   <AppButtonGroup>
+      //     <AppButtonIcon variant="save"
+      //       onClick={() => teste()}
+      //       disabled={loading}
+      //     />
+      //   </AppButtonGroup>
+      // }
+      >
+        Consolidar Dados
+      </AppTitle>
+
+      <ConsolidateLabels>
+        {props.periodsData.map(el => (
+          <ConsolidateLabel key={el.year} {...el} />
+        ))}
+      </ConsolidateLabels>
     </>
   )
 }
 
 export const SettingsFinanceWalletIdServerSideProps = async (ctx: ContextSSR) => {
-  let data: FinanceWalletFormFields = defaultFields
-
   const isNew = ctx.query.id === 'new'
   if (isNew) {
     return {
       props: {
         unauthenticated: false,
-        data
+        data: defaultFields,
+        periodsData: []
       }
     }
   }
 
-  const result = await api.financeWallet({ ctx }).id({ id: Number(ctx.query.id) })
+  const resultId = await api.financeWallet({ ctx }).id({ id: Number(ctx.query.id) })
 
-  if (!result.data)
+  const resultPeriodData = await api.financeWallet({ ctx }).periodsData({ wallet_id: Number(ctx.query.id), format: 'group-periods' })
+
+  if (!resultId.status || !resultPeriodData.status)
     return {
       props: {
         unauthenticated: false,
-        data
+        data: defaultFields,
+        periodsData: []
       }
     }
 
-  data = {
-    id: result.data?.id,
-    description: result.data?.description,
-    enable: result.data?.enable,
-    panel: result.data?.panel,
-    json: result.data?.json,
-  }
-
   return {
     props: {
-      unauthenticated: result.code === 401,
-      data
+      unauthenticated: [resultId.code, resultPeriodData.code].includes(401),
+      data: resultId.data,
+      periodsData: resultPeriodData.data
     }
   }
 }

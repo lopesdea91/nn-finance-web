@@ -88,7 +88,7 @@ export const PanelFinancePage = (props: Props) => {
 
   const balances = [
     { title: 'Receita', value: dataPage.balance.revenue.value, type_id: 1 },
-    { title: 'Despesa', value: dataPage.balance.expense.value, type_id: 2 },
+    { title: 'Despesa', value: `-${dataPage.balance.expense.value}`, type_id: 2 },
     { title: 'Disponivel', value: dataPage.balance.available },
     { title: 'Estimado', value: dataPage.balance.estimate, status_id: 3 }
   ]
@@ -124,7 +124,7 @@ export const PanelFinancePage = (props: Props) => {
         ))}
       </BalanceCard>
 
-      <AppText variant='h5'>Balanço</AppText>
+      <AppText variant='h5'>Resumo</AppText>
       <BalanceCard>
         {balances.map((item, i) => (
           <BalanceItem

@@ -66,3 +66,29 @@ export interface FinanceWalletConsolidateMonthPayload {
   period: string
   wallet_id: number
 }
+
+export interface FinanceWalletProcessConsolidateMonthResponse {
+  message: string
+}
+export interface FinanceWalletProcessConsolidateMonthPayload {
+  form: {
+    period: string
+    wallet_id: number
+  }
+}
+
+
+export interface FinanceWalletPeriodsData {
+  year: string,
+  months: {
+    period: string
+    label: string
+  }[]
+}
+export interface FinanceWalletPeriodsDataResponse {
+  items: FinanceWalletPeriodsData[]
+}
+export interface FinanceWalletPeriodsDataPayload {
+  wallet_id: number
+  format: 'group-periods'
+}

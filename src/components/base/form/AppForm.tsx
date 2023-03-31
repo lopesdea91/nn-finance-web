@@ -16,7 +16,7 @@ export const AppForm = ({ children, onSubmit, containersx }: Props) => {
   }
 
   return (
-    <Box sx={{ mb: 1, ...containersx }}>
+    <Box sx={{ mb: 3, ...containersx }}>
       <form onSubmit={handleSubmit}>
         {children}
       </form>
