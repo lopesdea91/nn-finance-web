@@ -1,5 +1,6 @@
 import featureAuth from '../features/auth'
 import featureSystem from '../features/system'
+import featureLayout from '../features/layout'
 import featureFinance from '../features/finance'
 import featurePageFinanceExtract from '../feturesPage/finance.extract'
 import featurePagePanelFinance from '../feturesPage/panel.finance'
@@ -10,6 +11,7 @@ import featurePageSettingsFinanceTag from '../feturesPage/settings.financeTag'
 export const reducers = {
   auth: featureAuth,
   system: featureSystem,
+  layout: featureLayout,
   finance: featureFinance,
   pageFinanceExtract: featurePageFinanceExtract,
   pagePanelFinance: featurePagePanelFinance,
