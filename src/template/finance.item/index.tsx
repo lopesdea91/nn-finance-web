@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { useForm } from '@/hooks/useForm'
-import { FinanceItem } from '@/types/entities/finance-item'
 import { api } from '@/services/api'
 import { FinanceItemFormFields } from '@/types/form/financeItem'
 import { AppButtonGroup, AppButtonIcon, AppDivider, AppTitle } from '@/components/base'
@@ -12,6 +11,7 @@ import { ContextSSR } from '@/types/system'
 import { $utils } from '@/utils'
 import { FinanceTagShort } from '@/types/entities/finance-tag'
 import { Form } from './components/Form'
+import { useAppSelector } from '@/store/hook'
 
 const formDefault: FinanceItemFormFields = {
   id: null,
@@ -34,7 +34,10 @@ type Props = {
 export const FinanceItemPage = (pros: Props) => {
   const isMounted = useRef<boolean>(false)
   const router = useRouter()
-  const { systemState, loadingStart, loadingEnd } = useStoreSystem()
+  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { systemState } = useAppSelector((e) => ({
+    systemState: e.system
+  }))
 
   const { fields, errors, onChangeField, onResetFields, onClearFields, setFields, confirmDoDelete, toggleConfirmDoDelete } = useForm<FinanceItemFormFields>({
     ...formDefault,
@@ -45,13 +48,13 @@ export const FinanceItemPage = (pros: Props) => {
   const queryData = $utils.parseQueryUrlForm({ id: router.query.id, copy: router.query.copy })
 
   const handleSubmit = async () => {
-    loadingStart()
+    loadingPageStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingEnd()
+    loadingPageEnd()
 
     if (status) {
       setFields({
@@ -111,7 +114,7 @@ export const FinanceItemPage = (pros: Props) => {
       return
     }
 
-    loadingStart()
+    loadingPageStart()
 
     const { status } = await api.financeItem().remove({
       id: Number(fields.id)
@@ -127,7 +130,7 @@ export const FinanceItemPage = (pros: Props) => {
       return
     }
 
-    loadingEnd()
+    loadingPageEnd()
   }
 
   const title = useMemo(() => {
@@ -136,7 +139,7 @@ export const FinanceItemPage = (pros: Props) => {
   }, [fields.id])
 
   async function getData() {
-    loadingStart()
+    loadingPageStart()
 
     const { data } = await api.financeItem().id({ id: queryData.id })
 
@@ -154,7 +157,7 @@ export const FinanceItemPage = (pros: Props) => {
       wallet_id: data?.wallet.id,
     })
 
-    loadingEnd()
+    loadingPageEnd()
   }
 
   useEffect(() => {

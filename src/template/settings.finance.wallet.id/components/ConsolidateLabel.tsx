@@ -1,6 +1,7 @@
 import { AppButton, AppText } from '@/components/base'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { api } from '@/services/api'
+import { useAppSelector } from '@/store/hook'
 import { FinanceWalletPeriodsData } from '@/types/entities/finance-wallet'
 import React from 'react'
 import styled from 'styled-components'
@@ -8,19 +9,22 @@ import styled from 'styled-components'
 interface ConsolidateLabelProps extends FinanceWalletPeriodsData { };
 
 export const ConsolidateLabel = ({ year, months }: ConsolidateLabelProps) => {
-  const { loading, loadingStart, loadingEnd, walletPanelId } = useStoreSystem()
+  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
 
   const consolidationMonth = async (period: string) => {
-    loadingStart()
+    loadingPageStart()
 
     await api.financeWallet().processConsolidateMonth({
       form: {
         period,
-        wallet_id: Number(walletPanelId)
+        wallet_id: Number(systemState.walletPanelId)
       }
     })
 
-    loadingEnd()
+    loadingPageEnd()
   }
 
   return (
@@ -30,7 +34,7 @@ export const ConsolidateLabel = ({ year, months }: ConsolidateLabelProps) => {
       <Months>
         {months.map(month => (
           <AppButton
-            disabled={loading}
+            disabled={systemState.loading}
             type="button"
             onClick={() => consolidationMonth(month.period)}
           >

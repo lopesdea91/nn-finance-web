@@ -38,7 +38,7 @@ export const SettingsFinanceOriginPage = (props: PageProps) => {
   }
 
   const isMounted = useRef(false)
-  const { loading, loadingStart, loadingEnd } = useStoreSystem()
+  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
   const state = useAppSelector(e => e.pageSettingsFinanceOrigin)
 
@@ -61,7 +61,7 @@ export const SettingsFinanceOriginPage = (props: PageProps) => {
     dispatch(pageSettingsFinanceOriginSetSearch(searchDefault))
   }
   const getItems = async (args: { search?: Partial<FinanceOriginSearch> } = {}) => {
-    loadingStart()
+    loadingPageStart()
 
     const { data } = await api.financeOrigin().page({
       search: {
@@ -70,7 +70,7 @@ export const SettingsFinanceOriginPage = (props: PageProps) => {
       }
     })
 
-    loadingEnd()
+    loadingPageEnd()
 
     dispatch(pageSettingsFinanceOriginSetList(data))
   }

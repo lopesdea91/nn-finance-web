@@ -1,11 +1,10 @@
 import { FormEvent, useState } from "react";
 import { SignInFieldsForm } from '@/types/form/signIn'
 import { FinanceOriginFormFields } from "@/types/form/settingsFinanceOrigin";
-import { FinanceWalletFormFields } from "@/types/form/settingsFinanceWallet";
 import { FinanceTagFormFields } from "@/types/form/settingsFinanceTag";
 import { FinanceItemFormFields } from "@/types/form/financeItem";
-import { useStoreSystem } from "./useStoreSystem";
 import dayjs from "dayjs";
+import { useAppSelector } from "@/store/hook";
 
 export type FieldError = {
   required: boolean
@@ -94,7 +93,9 @@ export const useSignInForm = () => {
 }
 
 export const useSettingsFinanceOriginForm = ({ initialFields }: { initialFields?: Partial<FinanceOriginFormFields> } = {}) => {
-  const { systemState } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
 
   return useForm<FinanceOriginFormFields>({
     id: null,
@@ -111,7 +112,9 @@ export const useSettingsFinanceOriginForm = ({ initialFields }: { initialFields?
 }
 
 export const useSettingsFinanceTagForm = ({ initialFields }: { initialFields?: Partial<FinanceTagFormFields> } = {}) => {
-  const { systemState } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
 
   return useForm<FinanceTagFormFields>({
     id: null,
@@ -124,7 +127,9 @@ export const useSettingsFinanceTagForm = ({ initialFields }: { initialFields?: P
 }
 
 export const useFinanceItemForm = () => {
-  const { systemState } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
 
   return useForm<FinanceItemFormFields>({
     id: null,

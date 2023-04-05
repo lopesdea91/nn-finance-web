@@ -35,7 +35,7 @@ export const SettingsFinanceWalletPage = (props: PageProps) => {
   }
 
   const isMounted = useRef(false)
-  const { loading, loadingStart, loadingEnd } = useStoreSystem()
+  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
   const state = useAppSelector(e => e.pageSettingsFinanceWallet)
 
@@ -57,7 +57,7 @@ export const SettingsFinanceWalletPage = (props: PageProps) => {
     dispatch(pageSettingsFinanceWalletSetSearch(searchDefault))
   }
   const getItems = async (args: { search?: Partial<FinanceWalletSearch> } = {}) => {
-    loadingStart()
+    loadingPageStart()
 
     const { data } = await api.financeWallet().page({
       search: {
@@ -66,7 +66,7 @@ export const SettingsFinanceWalletPage = (props: PageProps) => {
       }
     })
 
-    loadingEnd()
+    loadingPageEnd()
 
     dispatch(pageSettingsFinanceWalletSetList(data))
   }

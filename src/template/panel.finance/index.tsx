@@ -27,7 +27,7 @@ export const PanelFinancePage = (props: Props) => {
 
   const isMounted = useRef(false)
   render++
-  const { loading, period, walletPanelId, loadingStart, loadingEnd } = useStoreSystem()
+  const { loading, period, walletPanelId, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
 
   const { dataPage } = useAppSelector(e => e.pagePanelFinance)
@@ -37,7 +37,7 @@ export const PanelFinancePage = (props: Props) => {
   const searchKeyFinanceExtract = `financeExtract.${user.id}`
 
   const getItems = async () => {
-    loadingStart()
+    loadingPageStart()
 
     const { code, data } = await api.financeWallet()
       .consolidateMonth({
@@ -45,7 +45,7 @@ export const PanelFinancePage = (props: Props) => {
         wallet_id: Number(walletPanelId)
       })
 
-    loadingEnd()
+    loadingPageEnd()
 
     dispatch(pagePanelFinanceSetData(data))
   }

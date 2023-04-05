@@ -11,7 +11,7 @@ import { initialCookie } from "@/utils/cookieEstructure"
 
 export const SignInForm = () => {
   const { dispatchSetUser } = useStoreAuth()
-  const { dispatchSetPeriod, dispatchSetWalletPanelId } = useStoreSystem()
+  const { setPeriod, setWalletPanelId } = useStoreSystem()
   const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
   const { fields, onChangeField } = useSignInForm()
 
@@ -34,7 +34,7 @@ export const SignInForm = () => {
       // get data-user api
       const userResult = await api.user().data()
       dispatchSetUser(userResult.data.user)
-      dispatchSetPeriod(userResult.data.period)
+      setPeriod(userResult.data.period)
 
       $cookie.set({
         key: 'data_user',
@@ -61,7 +61,7 @@ export const SignInForm = () => {
 
       // get data-finance api
       const financeResult = await api.finance().data()
-      dispatchSetWalletPanelId(financeResult.data.wallet_panel.id)
+      setWalletPanelId(financeResult.data.wallet_panel.id)
       dispatchSetFinanceWallet(financeResult.data.wallet)
       dispatchSetFinanceOrigin(financeResult.data.origin)
       dispatchSetFinanceTag(financeResult.data.tag)

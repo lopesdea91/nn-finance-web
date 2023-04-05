@@ -8,15 +8,19 @@ import {
   MenuBrand,
   MenuLinkContainer, MenuLinkSection, MenuLinkTitle, MenuLinkItem, MenuLinkIcon, MenuLinkText,
   MenuFooter, MenuFooterItem, MenuFooterItemIcon,
-} from './Menu.styled'
+} from './styled'
 import { SectionMenuLinks } from '@/types/system'
+import { useAppSelector } from '@/store/hook'
 
 
 const useHandleMenuLink = () => {
-  const { systemState, dispatchToggleMenu } = useStoreSystem()
+  const { toggleMenu } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
 
   const handleMenuLink = () => {
-    systemState.menu && dispatchToggleMenu()
+    systemState.menu && toggleMenu()
   }
 
   return handleMenuLink
@@ -86,11 +90,15 @@ const Footer = () => {
 }
 
 export default function Menu() {
-  const { systemState, dispatchCloseMenu } = useStoreSystem()
+  const { closeMenu } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
+
   const isDesktop = useMediaQuery('(min-width: 426px)')
 
   useEffect(() => {
-    dispatchCloseMenu()
+    closeMenu()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop])
 

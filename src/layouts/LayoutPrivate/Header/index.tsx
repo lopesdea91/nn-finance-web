@@ -1,12 +1,15 @@
 import React from 'react'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
-import { HeaderBtn, Container, InputPeriod, InputsWrapper, SelectWallet } from './Header.styled'
-import { useStoreFinance } from '@/hooks/useStoreFinance'
+import { HeaderBtn, Container, InputPeriod, InputsWrapper, SelectWallet } from './styled'
 import { $cookie } from '@/utils'
+import { useAppSelector } from '@/store/hook'
 
 export default function Header() {
-  const { systemState, dispatchSetPeriod, dispatchSetWalletPanelId, dispatchToggleMenu } = useStoreSystem()
-  const { financeState } = useStoreFinance()
+  const { setPeriod, setWalletPanelId, toggleMenu } = useStoreSystem()
+  const { systemState, financeState } = useAppSelector((e) => ({
+    systemState: e.system,
+    financeState: e.finance
+  }))
 
   async function handlePeriod(period: string) {
     $cookie.set({
@@ -15,7 +18,7 @@ export default function Header() {
       options: { path: '/' },
     })
 
-    dispatchSetPeriod(period)
+    setPeriod(period)
   }
   function handleWalletPanelId(walletPanelId: number) {
     $cookie.set({
@@ -24,7 +27,7 @@ export default function Header() {
       options: { path: '/' },
     })
 
-    dispatchSetWalletPanelId(walletPanelId)
+    setWalletPanelId(walletPanelId)
   }
 
   return (
@@ -44,7 +47,7 @@ export default function Header() {
           onChange={(e) => handleWalletPanelId(Number(e.target.value))}
         />
       </InputsWrapper>
-      <HeaderBtn onClick={() => dispatchToggleMenu()} variant="menu" />
+      <HeaderBtn onClick={() => toggleMenu()} variant="menu" />
     </Container>
   )
 }

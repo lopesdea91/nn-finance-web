@@ -1,12 +1,13 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { actionsSystemSlice } from '@/store/features/system'
-import { useAppDispatch } from '@/store/hook'
+import { useAppDispatch, useAppSelector } from '@/store/hook'
 import { Container, Header, Main, Menu } from './styled'
 
 export default function LayoutPrivate({ children }: { children: React.ReactNode }) {
-  const { menu } = useStoreSystem()
+  const { menu } = useAppSelector((e) => ({
+    ...e.system
+  }))
 
   const router = useRouter()
   const dispatch = useAppDispatch()

@@ -9,11 +9,7 @@ import {
 // import { SectionMenuLinks } from '@/types/system'
 
 // const useHandleMenuLink = () => {
-//   const { systemState, dispatchToggleMenu } = useStoreSystem()
-
 //   const handleMenuLink = () => {
-//     systemState.menu && dispatchToggleMenu()
-//   }
 
 //   return handleMenuLink
 // }

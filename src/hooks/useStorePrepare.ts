@@ -20,7 +20,7 @@ const routesPublic = [
 
 export const useStorePrepare = () => {
   const { authState, dispatchSetUser } = useStoreAuth()
-  const { dispatchSetPeriod, dispatchSetWalletPanelId } = useStoreSystem()
+  const { setPeriod, setWalletPanelId } = useStoreSystem()
   const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
   const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
   const router = useRouter()
@@ -68,9 +68,9 @@ export const useStorePrepare = () => {
       })
 
       dispatchSetUser(userResult.data.user)
-      dispatchSetPeriod(period || userResult.data.period)
+      setPeriod(period || userResult.data.period)
 
-      dispatchSetWalletPanelId(walletPanelId || financeResult.data.wallet_panel.id)
+      setWalletPanelId(walletPanelId || financeResult.data.wallet_panel.id)
       dispatchSetFinanceWallet(financeResult.data.wallet)
       dispatchSetFinanceOrigin(financeResult.data.origin)
       dispatchSetFinanceTag(financeResult.data.tag)

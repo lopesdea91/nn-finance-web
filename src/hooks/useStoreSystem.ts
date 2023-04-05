@@ -7,47 +7,41 @@ export const useStoreSystem = () => {
   const systemState = useAppSelector(e => e.system)
 
   // Period
-  const dispatchSetPeriod = (value: string) => {
+  const setPeriod = (value: string) => {
     dispatch(actionsSystemSlice.setPeriod(value))
   }
 
   // WalletPanel
-  const dispatchSetWalletPanelId = (value: number) => {
+  const setWalletPanelId = (value: number) => {
     dispatch(actionsSystemSlice.setWalletPanelId(value))
   }
 
   // Menu
-  const dispatchToggleMenu = () => {
+  const toggleMenu = () => {
     dispatch(actionsSystemSlice.setMenu(!systemState.menu))
   }
-  const dispatchOpenMenu = () => {
+  const openMenu = () => {
     dispatch(actionsSystemSlice.setMenu(true))
   }
-  const dispatchCloseMenu = () => {
+  const closeMenu = () => {
     dispatch(actionsSystemSlice.setMenu(false))
   }
 
   // loading
-  const loadingStart = () => {
+  const loadingPageStart = () => {
     dispatch(actionsSystemSlice.setloading(true))
   }
-  const loadingEnd = () => {
+  const loadingPageEnd = () => {
     dispatch(actionsSystemSlice.setloading(false))
   }
 
   return {
-    systemState,
-    ...systemState,
-    // isLoading,
-    // period: '',
-    // walletPanelId: null,
-    // loading: false
-    dispatchSetPeriod,
-    dispatchSetWalletPanelId,
-    dispatchToggleMenu,
-    dispatchOpenMenu,
-    dispatchCloseMenu,
-    loadingStart,
-    loadingEnd
+    setPeriod,
+    setWalletPanelId,
+    toggleMenu,
+    openMenu,
+    closeMenu,
+    loadingPageStart,
+    loadingPageEnd
   }
 }

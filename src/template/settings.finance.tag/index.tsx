@@ -37,7 +37,7 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
   }
 
   const isMounted = useRef(false)
-  const { loading, loadingStart, loadingEnd } = useStoreSystem()
+  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
   const state = useAppSelector(e => e.pageSettingsFinanceTag)
 
@@ -59,7 +59,7 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
     dispatch(pageSettingsFinanceTagSetSearch(searchDefault))
   }
   const getItems = async (args: { search?: Partial<FinanceTagSearch> } = {}) => {
-    loadingStart()
+    loadingPageStart()
 
     const { data } = await api.financeTag().page({
       search: {
@@ -68,7 +68,7 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
       }
     })
 
-    loadingEnd()
+    loadingPageEnd()
 
     dispatch(pageSettingsFinanceTagSetList(data))
   }

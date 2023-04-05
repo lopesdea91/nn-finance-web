@@ -32,7 +32,7 @@ type Props = {
   periodsData: FinanceWalletPeriodsData[]
 }
 export const SettingsFinanceWalletIdPage = (props: Props) => {
-  const { loading, loadingStart, loadingEnd } = useStoreSystem()
+  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const { fields, errors, onChangeField, onResetFields, onClearFields } = useForm<FinanceWalletFormFields>(
     props.data,
     {
@@ -46,13 +46,13 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
   const queryData = $utils.parseQueryUrlForm({ id: router.query.id, copy: router.query.copy })
 
   const handleSubmit = async () => {
-    loadingStart()
+    loadingPageStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingEnd()
+    loadingPageEnd()
 
     if (!status) {
       // toast.addToast({

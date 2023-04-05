@@ -41,7 +41,7 @@ export const FinanceExtractPage = (props: Props) => {
   }
 
   const isMounted = useRef(false)
-  const { period, walletPanelId, loadingStart, loadingEnd } = useStoreSystem()
+  const { period, walletPanelId, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
   const state = useAppSelector(e => e.pageFinanceExtract)
 
@@ -63,7 +63,7 @@ export const FinanceExtractPage = (props: Props) => {
     dispatch(pageFinanceExtractSetSearch(searchDefault))
   }
   const getItems = async (args: { search?: Partial<FinanceExtractFormSearchFields> } = {}) => {
-    loadingStart()
+    loadingPageStart()
 
     const { data } = await api.financeItem().page({
       search: {
@@ -72,7 +72,7 @@ export const FinanceExtractPage = (props: Props) => {
       }
     })
 
-    loadingEnd()
+    loadingPageEnd()
 
     dispatch(pageFinanceExtractSetList(data))
   }

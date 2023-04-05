@@ -1,14 +1,11 @@
 import styled from "styled-components";
-import Header from "./Header/Header";
-import Main from "./Main/Main";
-import Menu from "./Menu/Menu";
+import Header from "./Header";
+import Main from "./Main";
+import { MainTitle } from "./MainTitle";
+import Menu from "./Menu";
 
-interface MenuContainerProps {
-  status: boolean
-}
-
-export const Container = styled.div<MenuContainerProps>`
+const Container = styled.div<{ status: boolean }>`
   ${({ status }) => status && { overflow: 'hidden' }};
 `
 
-export { Header, Main, Menu }
+export { Container, MainTitle, Header, Main, Menu }

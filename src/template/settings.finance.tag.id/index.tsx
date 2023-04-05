@@ -33,7 +33,7 @@ type PageProps = {
   data: FinanceTagFormFields
 }
 export const SettingsFinanceTagIdPage = (props: PageProps) => {
-  const { loading, loadingStart, loadingEnd } = useStoreSystem()
+  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
   const { fields, errors, onChangeField, onResetFields, onClearFields, setFields } = useForm(
     props.data,
     {}
@@ -45,13 +45,13 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
   const queryData = $utils.parseQueryUrlForm({ id: route.query.id, copy: route.query.copy })
 
   const handleSubmit = async () => {
-    loadingStart()
+    loadingPageStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingEnd()
+    loadingPageEnd()
 
     if (!status) {
       // toast.addToast({
