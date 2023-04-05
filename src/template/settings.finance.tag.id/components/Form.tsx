@@ -1,9 +1,9 @@
 import { AppColumn, AppColumns, AppForm, AppInput, AppSelect } from "../../../components/base"
 import { FieldError } from "@/hooks/useForm"
-import { useStoreFinance } from "@/hooks/useStoreFinance"
 import { Enable, FinanceTypeId } from "@/types/enum"
 import { FinanceTagFormFields } from "@/types/form/settingsFinanceTag"
 import { $utils } from "@/utils"
+import { useAppSelector } from "@/store/hook"
 
 interface Props {
   isLoading: boolean
@@ -14,7 +14,9 @@ interface Props {
 }
 
 export const Form = (props: Props) => {
-  const { financeState } = useStoreFinance()
+  const { financeState } = useAppSelector(e => ({
+    financeState: e.finance
+  }))
 
   return (
     <AppForm onSubmit={props.onSubmit}>

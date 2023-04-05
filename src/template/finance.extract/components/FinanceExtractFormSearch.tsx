@@ -1,9 +1,9 @@
 import React from 'react'
 import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect } from '@/components/base'
-import { useStoreFinance } from '@/hooks/useStoreFinance'
 import { Enable, FinanceExtractTypePreveiw, FinanceStatusId, FinanceTypeId, LoadingThunkType } from '@/types/enum'
 import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
 import { $utils } from '@/utils'
+import { useAppSelector } from '@/store/hook'
 
 interface Props {
   loading: LoadingThunkType
@@ -14,7 +14,9 @@ interface Props {
 }
 
 export const FinanceExtractFormSearch = (props: Props) => {
-  const { financeState } = useStoreFinance()
+  const { financeState } = useAppSelector(e => ({
+    financeState: e.finance
+  }))
 
   const optionsTag = props.search.type_id
     ? financeState.tag.filter(el => el.type.id === props.search.type_id)

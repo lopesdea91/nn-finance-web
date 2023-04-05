@@ -11,7 +11,7 @@ import { $cookie } from "@/utils"
 export const SignInForm = () => {
   const { setUser } = useStoreAuth()
   const { setPeriod, setWalletPanelId } = useStoreSystem()
-  const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
+  const { setFinanceWallet, setFinanceOrigin, setFinanceTag, setFinanceList } = useStoreFinance()
   const { fields, onChangeField } = useSignInForm()
 
   const onSubmit = async () => {
@@ -61,10 +61,10 @@ export const SignInForm = () => {
       // get data-finance api
       const financeResult = await api.finance().data()
       setWalletPanelId(financeResult.data.wallet_panel.id)
-      dispatchSetFinanceWallet(financeResult.data.wallet)
-      dispatchSetFinanceOrigin(financeResult.data.origin)
-      dispatchSetFinanceTag(financeResult.data.tag)
-      dispatchSetFinanceList({
+      setFinanceWallet(financeResult.data.wallet)
+      setFinanceOrigin(financeResult.data.origin)
+      setFinanceTag(financeResult.data.tag)
+      setFinanceList({
         originType: financeResult.data.originType,
         status: financeResult.data.status,
         type: financeResult.data.type,

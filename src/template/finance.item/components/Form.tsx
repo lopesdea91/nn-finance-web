@@ -1,11 +1,11 @@
 import { useMediaQuery } from "@mui/material"
-import { AppColumn, AppColumns, AppForm, AppInput, AppSelect, AppInputDate, AppText, AppRadio, AppSwitch } from "../../../components/base"
+import { AppColumn, AppColumns, AppForm, AppInput, AppSelect, AppInputDate, AppRadio, AppSwitch } from "../../../components/base"
 import { FieldError } from "@/hooks/useForm"
 import { Enable, FinanceStatusId, FinanceTypeId } from "@/types/enum"
 import { FinanceItemFormFields } from "@/types/form/financeItem"
-import { useStoreFinance } from "@/hooks/useStoreFinance"
 import { $utils } from "@/utils"
 import { SelectionTag } from "../../../components/SelectionTag"
+import { useAppSelector } from "@/store/hook"
 
 interface Props {
   isLoading: boolean
@@ -16,7 +16,9 @@ interface Props {
 }
 
 export const Form = (props: Props) => {
-  const { financeState } = useStoreFinance()
+  const { financeState } = useAppSelector(e => ({
+    financeState: e.finance
+  }))
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const tags = financeState.tag.filter(el => el.type.id === Number(props.fields.type_id)).map((el) => ({

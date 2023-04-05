@@ -12,12 +12,4 @@ const slice = createSlice({
 
 export default slice.reducer
 
-export const {
-  setWallet,
-  setWalletSearch,
-  setOrigin,
-  setOriginSearch,
-  setTag,
-  setTagSearch,
-  setListFinance,
-} = slice.actions
+export const actionsFinanceSlice = slice.actions

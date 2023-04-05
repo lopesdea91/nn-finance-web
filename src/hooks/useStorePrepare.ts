@@ -25,7 +25,7 @@ export const useStorePrepare = () => {
   }))
   const { setUser } = useStoreAuth()
   const { setPeriod, setWalletPanelId } = useStoreSystem()
-  const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
+  const { setFinanceWallet, setFinanceOrigin, setFinanceTag, setFinanceList } = useStoreFinance()
   const router = useRouter()
   const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
 
@@ -75,10 +75,10 @@ export const useStorePrepare = () => {
       setPeriod(period || userResult.data.period)
 
       setWalletPanelId(walletPanelId || financeResult.data.wallet_panel.id)
-      dispatchSetFinanceWallet(financeResult.data.wallet)
-      dispatchSetFinanceOrigin(financeResult.data.origin)
-      dispatchSetFinanceTag(financeResult.data.tag)
-      dispatchSetFinanceList({
+      setFinanceWallet(financeResult.data.wallet)
+      setFinanceOrigin(financeResult.data.origin)
+      setFinanceTag(financeResult.data.tag)
+      setFinanceList({
         originType: financeResult.data.originType,
         status: financeResult.data.status,
         type: financeResult.data.type,

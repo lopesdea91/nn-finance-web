@@ -1,5 +1,5 @@
-import { setWallet, setOrigin, setTag, setListFinance } from '@/store/features/finance'
-import { useAppDispatch, useAppSelector } from "@/store/hook"
+import { actionsFinanceSlice } from '@/store/features/finance'
+import { useAppDispatch } from "@/store/hook"
 import { FinanceWallet } from '@/types/entities/finance-wallet'
 import { FinanceOrigin } from '@/types/entities/finance-origin'
 import { FinanceTag } from '@/types/entities/finance-tag'
@@ -10,33 +10,30 @@ import { FinanceStatus } from '@/types/entities/finance-status'
 export const useStoreFinance = () => {
   const dispatch = useAppDispatch()
 
-  const financeState = useAppSelector(state => state.finance)
-
-  const dispatchSetFinanceWallet = (value: FinanceWallet[]) => {
-    dispatch(setWallet(value))
+  const setFinanceWallet = (value: FinanceWallet[]) => {
+    dispatch(actionsFinanceSlice.setWallet(value))
   }
 
-  const dispatchSetFinanceOrigin = (value: FinanceOrigin[]) => {
-    dispatch(setOrigin(value))
+  const setFinanceOrigin = (value: FinanceOrigin[]) => {
+    dispatch(actionsFinanceSlice.setOrigin(value))
   }
 
-  const dispatchSetFinanceTag = (value: FinanceTag[]) => {
-    dispatch(setTag(value))
+  const setFinanceTag = (value: FinanceTag[]) => {
+    dispatch(actionsFinanceSlice.setTag(value))
   }
 
-  const dispatchSetFinanceList = (value: {
+  const setFinanceList = (value: {
     originType: FinanceOriginType[],
     type: FinanceType[],
     status: FinanceStatus[],
   }) => {
-    dispatch(setListFinance(value))
+    dispatch(actionsFinanceSlice.setListFinance(value))
   }
 
   return {
-    financeState,
-    dispatchSetFinanceWallet,
-    dispatchSetFinanceOrigin,
-    dispatchSetFinanceTag,
-    dispatchSetFinanceList,
+    setFinanceWallet,
+    setFinanceOrigin,
+    setFinanceTag,
+    setFinanceList,
   }
 }

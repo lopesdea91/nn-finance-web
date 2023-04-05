@@ -1,8 +1,8 @@
 import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect } from '../../../components/base'
-import { useStoreFinance } from '@/hooks/useStoreFinance'
 import { $utils } from '@/utils'
 import { Enable, FinanceTypeId } from '@/types/enum'
 import { FinanceTagFormSearchFields } from '@/types/form/settingsFinanceTag'
+import { useAppSelector } from '@/store/hook'
 
 interface Props {
   loading: boolean
@@ -13,7 +13,9 @@ interface Props {
 }
 
 export const FormSearch = (props: Props) => {
-  const { financeState } = useStoreFinance()
+  const { financeState } = useAppSelector(e => ({
+    financeState: e.finance
+  }))
 
   return (
     <AppForm onSubmit={() => props.getItems()}>
