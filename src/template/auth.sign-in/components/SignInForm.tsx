@@ -7,10 +7,9 @@ import { useStoreAuth } from '@/hooks/useStoreAuth'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { useStoreFinance } from '@/hooks/useStoreFinance'
 import { $cookie } from "@/utils"
-import { initialCookie } from "@/utils/cookieEstructure"
 
 export const SignInForm = () => {
-  const { dispatchSetUser } = useStoreAuth()
+  const { setUser } = useStoreAuth()
   const { setPeriod, setWalletPanelId } = useStoreSystem()
   const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
   const { fields, onChangeField } = useSignInForm()
@@ -33,7 +32,7 @@ export const SignInForm = () => {
 
       // get data-user api
       const userResult = await api.user().data()
-      dispatchSetUser(userResult.data.user)
+      setUser(userResult.data.user)
       setPeriod(userResult.data.period)
 
       $cookie.set({

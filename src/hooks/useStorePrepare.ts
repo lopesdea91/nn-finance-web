@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from "next/router"
 import { api } from '@/services/api'
 import { useStoreAuth } from '@/hooks/useStoreAuth'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { useStoreFinance } from '@/hooks/useStoreFinance'
 import { $cookie } from '@/utils'
+import { useAppSelector } from '@/store/hook'
 
 const routesPublic = [
   // '/auth/sign-in',
@@ -19,11 +20,14 @@ const routesPublic = [
 ]
 
 export const useStorePrepare = () => {
-  const { authState, dispatchSetUser } = useStoreAuth()
+  const { authState } = useAppSelector((e) => ({
+    authState: e.auth
+  }))
+  const { setUser } = useStoreAuth()
   const { setPeriod, setWalletPanelId } = useStoreSystem()
   const { dispatchSetFinanceWallet, dispatchSetFinanceOrigin, dispatchSetFinanceTag, dispatchSetFinanceList } = useStoreFinance()
-  const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
   const router = useRouter()
+  const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
 
   async function handler() {
     if (routesPublic.includes(router.asPath)) {
@@ -67,7 +71,7 @@ export const useStorePrepare = () => {
         // valueCrypto: true
       })
 
-      dispatchSetUser(userResult.data.user)
+      setUser(userResult.data.user)
       setPeriod(period || userResult.data.period)
 
       setWalletPanelId(walletPanelId || financeResult.data.wallet_panel.id)
