@@ -37,14 +37,17 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
   }
 
   const isMounted = useRef(false)
-  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { loadingStart, loadingEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
-  const state = useAppSelector(e => e.pageSettingsFinanceTag)
+  const { pageState, systemState } = useAppSelector(e => ({
+    pageState: e.pageSettingsFinanceTag,
+    systemState: e.system
+  }))
 
   const onChangeSearch = (values: Partial<FinanceTagSearch>) => {
     dispatch(pageSettingsFinanceTagSetSearch(values))
 
-    const searchCookie = { ...state.search, ...values }
+    const searchCookie = { ...pageState.search, ...values }
 
     $cookie.setSearchPage({
       searchKey: props.searchKey,
@@ -59,16 +62,16 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
     dispatch(pageSettingsFinanceTagSetSearch(searchDefault))
   }
   const getItems = async (args: { search?: Partial<FinanceTagSearch> } = {}) => {
-    loadingPageStart()
+    loadingStart()
 
     const { data } = await api.financeTag().page({
       search: {
-        ...state.search,
+        ...pageState.search,
         ...args.search,
       }
     })
 
-    loadingPageEnd()
+    loadingEnd()
 
     dispatch(pageSettingsFinanceTagSetList(data))
   }
@@ -99,6 +102,7 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
           <AppButtonIcon
             variant="new"
             onClick={() => Router.push(`/settings/finance/tag/new`)}
+            disabled={systemState.loading}
           />
         }
       >
@@ -108,22 +112,20 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
       <AppDivider />
 
       <FormSearch
-        loading={loading}
         getItems={getItems}
-        search={state.search}
+        search={pageState.search}
         onChangeSearch={onChangeSearch}
         resetSearch={resetSearch}
       />
 
       <Table
-        loading={loading}
         getItems={getItems}
-        items={state.items}
+        items={pageState.items}
         onChangeSearch={onChangeSearch}
         search={{
-          limit: Number(state.search._limit),
-          page: Number(state.search.page),
-          total: Number(state.total),
+          limit: Number(pageState.search._limit),
+          page: Number(pageState.search.page),
+          total: Number(pageState.total),
         }}
       />
     </>

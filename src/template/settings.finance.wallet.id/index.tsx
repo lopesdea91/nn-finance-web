@@ -4,11 +4,10 @@ import { AppButtonGroup, AppButtonIcon, AppDivider, AppTitle } from '@/component
 import { useForm } from '@/hooks/useForm'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { api } from '@/services/api'
-import { setWallet } from '@/store/features/finance'
+import { actionsFinanceSlice } from '@/store/features/finance'
 import { FinanceWalletFormFields } from '@/types/form/settingsFinanceWallet'
 import { ContextSSR } from '@/types/system'
-import { $utils } from '@/utils'
-import { useAppDispatch } from '@/store/hook'
+import { useAppDispatch, useAppSelector } from '@/store/hook'
 import { FinanceWallet, FinanceWalletPeriodsData } from '@/types/entities/finance-wallet'
 import { Form } from './components/Form'
 import { ConsolidateLabels } from './components/ConsolidateLabels'
@@ -32,7 +31,10 @@ type Props = {
   periodsData: FinanceWalletPeriodsData[]
 }
 export const SettingsFinanceWalletIdPage = (props: Props) => {
-  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
+  const { loadingStart, loadingEnd } = useStoreSystem()
   const { fields, errors, onChangeField, onResetFields, onClearFields } = useForm<FinanceWalletFormFields>(
     props.data,
     {
@@ -43,22 +45,20 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const queryData = $utils.parseQueryUrlForm({ id: router.query.id, copy: router.query.copy })
-
   const handleSubmit = async () => {
-    loadingPageStart()
+    loadingStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingPageEnd()
 
     if (!status) {
       // toast.addToast({
       //   message: 'algo de ruim aconteceu, tente novamente depois!',
       //   type: 'error'
       // })
+      loadingEnd()
       return;
     }
 
@@ -69,16 +69,14 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
     })
 
     if (data)
-      dispatch(setWallet(data.sort(sortDataGet)))
+      dispatch(actionsFinanceSlice.setWallet(data.sort(sortDataGet)))
 
     // toast.addToast({
     //   message: `Carteira ${id ? 'atualizada' : 'criada'} com sucesso!`,
     //   type: 'success'
     // })
 
-    if (!queryData.isNew) {
-      router.push('/settings/finance/wallet')
-    }
+    router.push('/settings/finance/wallet')
   }
   const handleCreate = async () => {
     return await api.financeWallet().post({
@@ -126,6 +124,12 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
   // const resultPeriodData = await api.financeWallet().periodsData({ wallet_id: Number(ctx.query.id), format: 'group-periods' })
   // }
 
+  useEffect(() => {
+    return () => {
+      loadingEnd()
+    }
+  }, [])
+
   return (
     <>
       <AppTitle
@@ -134,12 +138,12 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
           <AppButtonGroup>
             <AppButtonIcon variant="save"
               onClick={() => handleSubmit()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
             <AppButtonIcon
               variant="clean"
               onClick={() => onClearFields()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
             <AppButtonIcon
               color="error"
@@ -150,7 +154,7 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
             <AppButtonIcon
               variant="reset"
               onClick={() => onResetFields()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
           </AppButtonGroup>
         }
@@ -169,7 +173,6 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
       <AppDivider />
 
       <Form
-        isLoading={loading}
         fields={fields}
         errors={errors}
         onSubmit={handleSubmit}
@@ -182,7 +185,7 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
       //   <AppButtonGroup>
       //     <AppButtonIcon variant="save"
       //       onClick={() => teste()}
-      //       disabled={loading}
+      //       disabled={systemState.loading}
       //     />
       //   </AppButtonGroup>
       // }
@@ -191,8 +194,8 @@ export const SettingsFinanceWalletIdPage = (props: Props) => {
       </AppTitle>
 
       <ConsolidateLabels>
-        {props.periodsData.map(el => (
-          <ConsolidateLabel key={el.year} {...el} />
+        {props.periodsData.map((el, i) => (
+          <ConsolidateLabel key={`consolidate-month-${i}`} {...el} />
         ))}
       </ConsolidateLabels>
     </>

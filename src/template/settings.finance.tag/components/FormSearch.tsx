@@ -5,7 +5,6 @@ import { FinanceTagFormSearchFields } from '@/types/form/settingsFinanceTag'
 import { useAppSelector } from '@/store/hook'
 
 interface Props {
-  loading: boolean
   getItems: () => Promise<void>
   search: FinanceTagFormSearchFields
   onChangeSearch: (value: Partial<FinanceTagFormSearchFields>) => void
@@ -13,8 +12,9 @@ interface Props {
 }
 
 export const FormSearch = (props: Props) => {
-  const { financeState } = useAppSelector(e => ({
-    financeState: e.finance
+  const { financeState, systemState } = useAppSelector(e => ({
+    financeState: e.finance,
+    systemState: e.system
   }))
 
   return (
@@ -31,7 +31,7 @@ export const FormSearch = (props: Props) => {
               })
             }}
             options={financeState.wallet.map($utils.parseItemToOption)}
-            disabled={props.loading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 
@@ -46,7 +46,7 @@ export const FormSearch = (props: Props) => {
               })
             }}
             options={financeState.type.map($utils.parseItemToOption)}
-            disabled={props.loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -65,7 +65,7 @@ export const FormSearch = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={props.loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -79,7 +79,7 @@ export const FormSearch = (props: Props) => {
                 _q: e.target.value,
               })
             }}
-            disabled={props.loading}
+            disabled={systemState.loading}
           />
         </AppColumn>
       </AppColumns>

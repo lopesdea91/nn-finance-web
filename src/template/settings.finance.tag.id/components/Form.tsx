@@ -6,7 +6,6 @@ import { $utils } from "@/utils"
 import { useAppSelector } from "@/store/hook"
 
 interface Props {
-  isLoading: boolean
   fields: FinanceTagFormFields
   errors: Partial<Record<keyof FinanceTagFormFields, FieldError>>
   onSubmit: () => void
@@ -14,8 +13,9 @@ interface Props {
 }
 
 export const Form = (props: Props) => {
-  const { financeState } = useAppSelector(e => ({
-    financeState: e.finance
+  const { financeState, systemState } = useAppSelector(e => ({
+    financeState: e.finance,
+    systemState: e.system
   }))
 
   return (
@@ -31,7 +31,7 @@ export const Form = (props: Props) => {
               })
             }}
             options={financeState.wallet.map($utils.parseItemToOption)}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
       </AppColumns>
@@ -47,7 +47,7 @@ export const Form = (props: Props) => {
                 description: e.target.value,
               })
             }}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 
@@ -64,7 +64,7 @@ export const Form = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 
@@ -78,7 +78,7 @@ export const Form = (props: Props) => {
               })
             }}
             options={financeState.type.map($utils.parseItemToOption)}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 

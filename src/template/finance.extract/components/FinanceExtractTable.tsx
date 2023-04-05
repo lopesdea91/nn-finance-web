@@ -3,15 +3,15 @@ import { useRouter } from 'next/router'
 import { AppDropdown, AppDropdownItem, AppIcon, AppDivider } from '@/components/base'
 import { AppDropdownHandle } from '@/components/base/dropdown/AppDropdpwn'
 import { BaseTable, TCell, TRow } from '@/components/table/BaseTable'
-import { FinanceStatusId, LoadingThunkType, _limitApi } from '@/types/enum'
+import { FinanceStatusId, _limitApi } from '@/types/enum'
 import { FinanceItem } from '@/types/entities/finance-item'
 import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
 import { api } from '@/services/api'
 import { $table } from '@/utils'
+import { useAppSelector } from '@/store/hook'
 
 interface Props {
   items: FinanceItem[]
-  loading: LoadingThunkType
   getItems: (args?: { search?: Partial<FinanceExtractFormSearchFields> }) => Promise<void>
   search: {
     limit: number
@@ -22,9 +22,11 @@ interface Props {
 }
 
 export const FinanceExtractTable = (props: Props) => {
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
   const appDropdownRef = createRef<AppDropdownHandle>();
   const router = useRouter()
-  const loading = props.loading === 'pending'
 
   function handleChangePage(newPage: number) {
     props.onChangeSearch({ page: newPage })
@@ -78,28 +80,28 @@ export const FinanceExtractTable = (props: Props) => {
                 toggle={<AppIcon variant='ellipsisV' />}
                 menu={
                   <div>
-                    <AppDropdownItem disabled={loading} onClick={() => router.push(`/finance/item/${row.id}`)}>
+                    <AppDropdownItem disabled={systemState.loading} onClick={() => router.push(`/finance/item/${row.id}`)}>
                       <AppIcon variant='edit' /> Editar
                     </AppDropdownItem>
 
-                    <AppDropdownItem disabled={loading} onClick={() => router.push(`/finance/item/new?copy=${row.id}`)}>
+                    <AppDropdownItem disabled={systemState.loading} onClick={() => router.push(`/finance/item/new?copy=${row.id}`)}>
                       <AppIcon variant='copy' /> Copiar
                     </AppDropdownItem>
 
                     <AppDivider />
 
                     {$table.renderMenuItemFinanceStatus(row.status.id, [2, 3],
-                      <AppDropdownItem disabled={loading} onClick={() => handleStatus(row.id, 1)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleStatus(row.id, 1)}>
                         <AppIcon variant='circleCheck' /> Marcar Ok
                       </AppDropdownItem>
                     )}
                     {$table.renderMenuItemFinanceStatus(row.status.id, [1, 3],
-                      <AppDropdownItem disabled={loading} onClick={() => handleStatus(row.id, 2)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleStatus(row.id, 2)}>
                         <AppIcon variant='circleCheck' /> Marcar Pendente
                       </AppDropdownItem>
                     )}
                     {$table.renderMenuItemFinanceStatus(row.status.id, [1, 2],
-                      <AppDropdownItem disabled={loading} onClick={() => handleStatus(row.id, 3)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleStatus(row.id, 3)}>
                         <AppIcon variant='circleCheck' /> Marcar Talvez
                       </AppDropdownItem>
                     )}
@@ -107,12 +109,12 @@ export const FinanceExtractTable = (props: Props) => {
                     <AppDivider />
 
                     {$table.renderMenuItemFinanceEnable(row.enable, 1,
-                      <AppDropdownItem disabled={loading} onClick={() => handleItemEnable('enabled', row.id)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleItemEnable('enabled', row.id)}>
                         <AppIcon variant='circleCheck' /> Ativar
                       </AppDropdownItem>
                     )}
                     {$table.renderMenuItemFinanceEnable(row.enable, 0,
-                      <AppDropdownItem disabled={loading} onClick={() => handleItemEnable('disabled', row.id)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleItemEnable('disabled', row.id)}>
                         <AppIcon variant='circleCheck' /> Inativar
                       </AppDropdownItem>
                     )}

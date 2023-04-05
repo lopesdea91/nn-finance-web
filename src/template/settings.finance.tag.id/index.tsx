@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppButtonGroup, AppButtonIcon, AppDivider, AppTitle } from '@/components/base'
 import { useForm } from '@/hooks/useForm'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
@@ -8,9 +8,8 @@ import { FinanceTypeId } from '@/types/enum'
 import { FinanceTagFormFields } from '@/types/form/settingsFinanceTag'
 import { useRouter } from 'next/router'
 import { ContextSSR } from '@/types/system'
-import { $utils } from '@/utils'
-import { useAppDispatch } from '@/store/hook'
-import { setTag } from '@/store/features/finance'
+import { useAppDispatch, useAppSelector } from '@/store/hook'
+import { actionsFinanceSlice } from '@/store/features/finance'
 import { Form } from './components/Form'
 
 const sortDataGet = (a: FinanceTag, b: FinanceTag) => {
@@ -33,8 +32,12 @@ type PageProps = {
   data: FinanceTagFormFields
 }
 export const SettingsFinanceTagIdPage = (props: PageProps) => {
-  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
-  const { fields, errors, onChangeField, onResetFields, onClearFields, setFields } = useForm(
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
+
+  const { loadingStart, loadingEnd } = useStoreSystem()
+  const { fields, errors, onChangeField, onResetFields, onClearFields } = useForm(
     props.data,
     {}
   )
@@ -42,22 +45,20 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
   const route = useRouter()
   const dispatch = useAppDispatch()
 
-  const queryData = $utils.parseQueryUrlForm({ id: route.query.id, copy: route.query.copy })
-
   const handleSubmit = async () => {
-    loadingPageStart()
+    loadingStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingPageEnd()
 
     if (!status) {
       // toast.addToast({
       //   message: 'algo de ruim aconteceu, tente novamente depois!',
       //   type: 'error'
       // })
+      loadingEnd()
       return;
     }
 
@@ -68,16 +69,14 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
     })
 
     if (data)
-      dispatch(setTag(data.sort(sortDataGet)))
+      dispatch(actionsFinanceSlice.setTag(data.sort(sortDataGet)))
 
     // toast.addToast({
     //   message: `Carteira ${id ? 'atualizada' : 'criada'} com sucesso!`,
     //   type: 'success'
     // })
 
-    if (!queryData.isNew) {
-      route.push('/settings/finance/tag')
-    }
+    route.push('/settings/finance/tag')
   }
   const handleCreate = async () => {
     return await api.financeTag().post({
@@ -123,6 +122,12 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
     }
   }
 
+  useEffect(() => {
+    return () => {
+      loadingEnd()
+    }
+  }, [])
+
   return (
     <>
       <AppTitle
@@ -131,12 +136,12 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
           <AppButtonGroup>
             <AppButtonIcon variant="save"
               onClick={() => handleSubmit()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
             <AppButtonIcon
               variant="clean"
               onClick={() => onClearFields()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
             <AppButtonIcon
               color="error"
@@ -147,7 +152,7 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
             <AppButtonIcon
               variant="reset"
               onClick={() => onResetFields()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
           </AppButtonGroup>
         }
@@ -166,7 +171,6 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
       <AppDivider />
 
       <Form
-        isLoading={loading}
         fields={fields}
         errors={errors}
         onSubmit={handleSubmit}

@@ -29,9 +29,16 @@ export const useStoreSystem = () => {
 
   // loading
   const loadingPageStart = () => {
-    dispatch(actionsSystemSlice.setloading(true))
+    dispatch(actionsSystemSlice.setloadingPage(true))
   }
   const loadingPageEnd = () => {
+    dispatch(actionsSystemSlice.setloadingPage(false))
+  }
+
+  const loadingStart = () => {
+    dispatch(actionsSystemSlice.setloading(true))
+  }
+  const loadingEnd = () => {
     dispatch(actionsSystemSlice.setloading(false))
   }
 
@@ -42,6 +49,8 @@ export const useStoreSystem = () => {
     openMenu,
     closeMenu,
     loadingPageStart,
-    loadingPageEnd
+    loadingPageEnd,
+    loadingStart,
+    loadingEnd
   }
 }

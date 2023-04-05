@@ -1,12 +1,11 @@
 import React from 'react'
 import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect } from '@/components/base'
-import { Enable, FinanceExtractTypePreveiw, FinanceStatusId, FinanceTypeId, LoadingThunkType } from '@/types/enum'
+import { Enable, FinanceExtractTypePreveiw, FinanceStatusId, FinanceTypeId } from '@/types/enum'
 import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
 import { $utils } from '@/utils'
 import { useAppSelector } from '@/store/hook'
 
 interface Props {
-  loading: LoadingThunkType
   getItems: () => Promise<void>
   search: FinanceExtractFormSearchFields
   onChangeSearch: (value: Partial<FinanceExtractFormSearchFields>) => void
@@ -14,15 +13,14 @@ interface Props {
 }
 
 export const FinanceExtractFormSearch = (props: Props) => {
-  const { financeState } = useAppSelector(e => ({
-    financeState: e.finance
+  const { financeState, systemState } = useAppSelector(e => ({
+    financeState: e.finance,
+    systemState: e.system
   }))
 
   const optionsTag = props.search.type_id
     ? financeState.tag.filter(el => el.type.id === props.search.type_id)
     : financeState.tag
-
-  const loading = props.loading === 'pending'
 
   return (
     <AppForm onSubmit={() => props.getItems()}>
@@ -42,7 +40,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               { id: 'historic', description: 'Histórico' },
               { id: 'moviment', description: 'Movimentação' },
             ]}
-            disabled={loading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 
@@ -60,7 +58,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               { id: '1', description: 'Receita' },
               { id: '2', description: 'Despesa' },
             ]}
-            disabled={loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -77,7 +75,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               })
             }}
             options={optionsTag.map($utils.parseItemToOption)}
-            disabled={loading}
+            disabled={systemState.loading}
             multiple
           />
         </AppColumn>
@@ -97,7 +95,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               { id: '2', description: 'Pendente' },
               { id: '3', description: 'Talvez' },
             ]}
-            disabled={loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -112,7 +110,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               })
             }}
             options={financeState.origin.map($utils.parseItemToOption)}
-            disabled={loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -131,7 +129,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -148,7 +146,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
                 _q: e.target.value,
               })
             }}
-            disabled={loading}
+            disabled={systemState.loading}
           />
         </AppColumn>
       </AppColumns>

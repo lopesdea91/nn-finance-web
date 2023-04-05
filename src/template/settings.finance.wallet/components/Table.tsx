@@ -8,10 +8,10 @@ import { FinanceWallet } from '@/types/entities/finance-wallet'
 import { FinanceWalletFormSearchFields } from '@/types/form/settingsFinanceWallet'
 import { api } from '@/services/api'
 import { $table } from '@/utils'
+import { useAppSelector } from '@/store/hook'
 
 interface Props {
   items: FinanceWallet[]
-  loading: boolean
   getItems: (args?: { search?: Partial<FinanceWalletFormSearchFields> }) => Promise<void>
   search: {
     page: number
@@ -22,6 +22,9 @@ interface Props {
 }
 
 export const Table = (props: Props) => {
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
   const appDropdownRef = createRef<AppDropdownHandle>();
   const router = useRouter()
 
@@ -70,19 +73,19 @@ export const Table = (props: Props) => {
                 toggle={<AppIcon variant='ellipsisV' />}
                 menu={
                   <div>
-                    <AppDropdownItem disabled={props.loading} onClick={() => router.push(`/settings/finance/wallet/${row.id}`)}>
+                    <AppDropdownItem disabled={systemState.loading} onClick={() => router.push(`/settings/finance/wallet/${row.id}`)}>
                       <AppIcon variant='edit' /> Editar
                     </AppDropdownItem>
 
                     <AppDivider />
 
                     {$table.renderMenuItemFinanceEnable(row.enable, 1,
-                      <AppDropdownItem disabled={props.loading} onClick={() => handleItemEnable('enabled', row.id)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleItemEnable('enabled', row.id)}>
                         <AppIcon variant='circleCheck' /> Ativar
                       </AppDropdownItem>
                     )}
                     {$table.renderMenuItemFinanceEnable(row.enable, 0,
-                      <AppDropdownItem disabled={props.loading} onClick={() => handleItemEnable('disabled', row.id)}>
+                      <AppDropdownItem disabled={systemState.loading} onClick={() => handleItemEnable('disabled', row.id)}>
                         <AppIcon variant='circleCheck' /> Inativar
                       </AppDropdownItem>
                     )}

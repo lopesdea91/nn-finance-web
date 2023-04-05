@@ -8,7 +8,6 @@ import { SelectionTag } from "../../../components/SelectionTag"
 import { useAppSelector } from "@/store/hook"
 
 interface Props {
-  isLoading: boolean
   fields: FinanceItemFormFields
   errors: Partial<Record<keyof FinanceItemFormFields, FieldError>>
   onSubmit: () => void
@@ -16,9 +15,11 @@ interface Props {
 }
 
 export const Form = (props: Props) => {
-  const { financeState } = useAppSelector(e => ({
-    financeState: e.finance
+  const { financeState, systemState } = useAppSelector(e => ({
+    financeState: e.finance,
+    systemState: e.system
   }))
+
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   const tags = financeState.tag.filter(el => el.type.id === Number(props.fields.type_id)).map((el) => ({
@@ -68,7 +69,7 @@ export const Form = (props: Props) => {
               })
             }}
             options={financeState.wallet.map($utils.parseItemToOption)}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
 
@@ -82,7 +83,7 @@ export const Form = (props: Props) => {
               })
             }}
             options={financeState.origin.map($utils.parseItemToOption)}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
 
@@ -96,7 +97,7 @@ export const Form = (props: Props) => {
               })
             }}
             options={financeState.status.map($utils.parseItemToOption)}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
 
@@ -113,7 +114,7 @@ export const Form = (props: Props) => {
                 value: Number(e.target.value),
               })
             }}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
 
@@ -126,7 +127,7 @@ export const Form = (props: Props) => {
                 date: value
               })
             }}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
 
@@ -140,7 +141,7 @@ export const Form = (props: Props) => {
                 sort: Number(e.target.value),
               })
             }}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
       </AppColumns>
@@ -155,7 +156,7 @@ export const Form = (props: Props) => {
                 tag_ids: value
               })
             }}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
           />
         </AppColumn>
 
@@ -168,7 +169,7 @@ export const Form = (props: Props) => {
                 obs: e.target.value,
               })
             }}
-            disabled={props.isLoading || !props.fields.enable}
+            disabled={systemState.loading || !props.fields.enable}
             multiline
             rows={4}
           />

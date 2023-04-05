@@ -41,14 +41,17 @@ export const FinanceExtractPage = (props: Props) => {
   }
 
   const isMounted = useRef(false)
-  const { period, walletPanelId, loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
-  const state = useAppSelector(e => e.pageFinanceExtract)
+  const { pageState, systemState } = useAppSelector(e => ({
+    pageState: e.pageFinanceExtract,
+    systemState: e.system
+  }))
 
   const onChangeSearch = (values: Partial<FinanceExtractFormSearchFields>) => {
     dispatch(pageFinanceExtractSetSearch(values))
 
-    const searchCookie = { ...state.search, ...values }
+    const searchCookie = { ...pageState.search, ...values }
 
     $cookie.setSearchPage({
       searchKey: props.searchKey,
@@ -67,7 +70,7 @@ export const FinanceExtractPage = (props: Props) => {
 
     const { data } = await api.financeItem().page({
       search: {
-        ...state.search,
+        ...pageState.search,
         ...args.search
       }
     })
@@ -92,7 +95,7 @@ export const FinanceExtractPage = (props: Props) => {
     return () => {
       isMounted.current = true
     }
-  }, [period, walletPanelId])
+  }, [systemState.period, systemState.walletPanelId])
 
   return (
     <>
@@ -111,22 +114,20 @@ export const FinanceExtractPage = (props: Props) => {
       <AppDivider />
 
       <FinanceExtractFormSearch
-        loading={state.loading}
         getItems={getItems}
-        search={state.search}
+        search={pageState.search}
         onChangeSearch={onChangeSearch}
         resetSearch={resetSearch}
       />
 
       <FinanceExtractTable
-        loading={state.loading}
         getItems={getItems}
-        items={state.items}
+        items={pageState.items}
         onChangeSearch={onChangeSearch}
         search={{
-          limit: Number(state.search._limit),
-          page: Number(state.search.page),
-          total: Number(state.total),
+          limit: Number(pageState.search._limit),
+          page: Number(pageState.search.page),
+          total: Number(pageState.total),
         }}
       />
     </>

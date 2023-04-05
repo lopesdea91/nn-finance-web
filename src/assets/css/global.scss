@@ -19,6 +19,11 @@ body {
   background: #f3f4f6;
 }
 
+body,
+#__next {
+  height: 100vh;
+}
+
 :where(html, body) {
   margin: 0;
   padding: 0;

@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { AppButtonGroup, AppButtonIcon, AppDivider, AppTitle } from '@/components/base'
 import { useForm, } from '@/hooks/useForm'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { api } from '@/services/api'
 import { FinanceOriginFormFields } from '@/types/form/settingsFinanceOrigin'
-import { $utils } from '@/utils'
 import { ContextSSR } from '@/types/system'
-import { setOrigin } from '@/store/features/finance'
-import { useAppDispatch } from '@/store/hook'
+import { actionsFinanceSlice } from '@/store/features/finance'
+import { useAppDispatch, useAppSelector } from '@/store/hook'
 import { FinanceOrigin } from '@/types/entities/finance-origin'
 import { Form } from './components/Form'
 
@@ -33,7 +32,11 @@ type PageProps = {
   data: FinanceOriginFormFields
 }
 export const SettingsFinanceOriginIdPage = (props: PageProps) => {
-  const { loading, loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
+
+  const { loadingStart, loadingEnd } = useStoreSystem()
   const { fields, errors, onChangeField, onResetFields, onClearFields, setFields } = useForm(
     props.data,
     {}
@@ -42,22 +45,20 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const queryData = $utils.parseQueryUrlForm({ id: router.query.id, copy: router.query.copy })
-
   const handleSubmit = async () => {
-    loadingPageStart()
+    loadingStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingPageEnd()
 
     if (!status) {
       // toast.addToast({
       //   message: 'algo de ruim aconteceu, tente novamente depois!',
       //   type: 'error'
       // })
+      loadingEnd()
       return;
     }
 
@@ -68,16 +69,14 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
     })
 
     if (data)
-      dispatch(setOrigin(data.sort(sortDataGet)))
+      dispatch(actionsFinanceSlice.setOrigin(data.sort(sortDataGet)))
 
     // toast.addToast({
     //   message: `Carteira ${id ? 'atualizada' : 'criada'} com sucesso!`,
     //   type: 'success'
     // })
 
-    if (!queryData.isNew) {
-      router.push('/settings/finance/origin')
-    }
+    router.push('/settings/finance/origin')
   }
   const handleCreate = async () => {
     return await api.financeOrigin().post({
@@ -125,6 +124,12 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
     }
   }
 
+  useEffect(() => {
+    return () => {
+      loadingEnd()
+    }
+  }, [])
+
   return (
     <>
       <AppTitle
@@ -133,12 +138,12 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
           <AppButtonGroup>
             <AppButtonIcon variant="save"
               onClick={() => handleSubmit()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
             <AppButtonIcon
               variant="clean"
               onClick={() => onClearFields()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
             <AppButtonIcon
               color="error"
@@ -149,7 +154,7 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
             <AppButtonIcon
               variant="reset"
               onClick={() => onResetFields()}
-              disabled={loading}
+              disabled={systemState.loading}
             />
           </AppButtonGroup>
         }
@@ -168,7 +173,6 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
       <AppDivider />
 
       <Form
-        isLoading={loading}
         fields={fields}
         errors={errors}
         onSubmit={handleSubmit}

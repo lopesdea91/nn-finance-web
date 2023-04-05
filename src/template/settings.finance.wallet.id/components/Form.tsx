@@ -2,9 +2,9 @@ import { AppColumn, AppColumns, AppForm, AppInput, AppSelect } from "../../../co
 import { FieldError } from "@/hooks/useForm"
 import { Enable } from "@/types/enum"
 import { FinanceWalletFormFields } from "@/types/form/settingsFinanceWallet"
+import { useAppSelector } from "@/store/hook"
 
 interface Props {
-  isLoading: boolean
   fields: FinanceWalletFormFields
   errors: Partial<Record<keyof FinanceWalletFormFields, FieldError>>
   onSubmit: () => void
@@ -12,6 +12,10 @@ interface Props {
 }
 
 export const Form = (props: Props) => {
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
+
   return (
     <AppForm onSubmit={props.onSubmit}>
       <AppColumns>
@@ -24,7 +28,7 @@ export const Form = (props: Props) => {
                 description: e.target.value,
               })
             }}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 
@@ -41,7 +45,7 @@ export const Form = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
 
@@ -58,7 +62,7 @@ export const Form = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={props.isLoading}
+            disabled={systemState.loading}
           />
         </AppColumn>
       </AppColumns>

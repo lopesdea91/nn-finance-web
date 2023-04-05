@@ -1,5 +1,3 @@
-export type LoadingThunkType = "idle" | "pending" | "succeeded" | "failed"
-
 export type _limitApi = 15 | 30 | 50
 
 export type Enable = 1 | 0

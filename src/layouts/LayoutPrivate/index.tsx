@@ -1,24 +1,20 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { actionsSystemSlice } from '@/store/features/system'
-import { useAppDispatch, useAppSelector } from '@/store/hook'
+import { useAppSelector } from '@/store/hook'
 import { Container, Header, Main, Menu } from './styled'
+import { useStoreSystem } from '@/hooks/useStoreSystem'
 
 export default function LayoutPrivate({ children }: { children: React.ReactNode }) {
-  const { menu } = useAppSelector((e) => ({
-    ...e.system
+  const { systemState } = useAppSelector((e) => ({
+    systemState: e.system
   }))
 
   const router = useRouter()
-  const dispatch = useAppDispatch()
-
-  const setLoading = (value: boolean) => {
-    dispatch(actionsSystemSlice.setloadingPage(value))
-  }
+  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
 
   useEffect(() => {
-    const handleStart = (url: string) => (url !== router.asPath) && setLoading(true)
-    const handleComplete = (url: string) => (url === router.asPath) && setLoading(false)
+    const handleStart = (url: string) => (url !== router.asPath) && loadingPageStart()
+    const handleComplete = (url: string) => (url === router.asPath) && loadingPageEnd()
 
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleComplete)
@@ -30,7 +26,7 @@ export default function LayoutPrivate({ children }: { children: React.ReactNode 
   })
 
   return (
-    <Container status={menu}>
+    <Container status={systemState.menu}>
       <Menu />
       <Header />
       <Main>

@@ -34,7 +34,7 @@ type Props = {
 export const FinanceItemPage = (pros: Props) => {
   const isMounted = useRef<boolean>(false)
   const router = useRouter()
-  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const { loadingStart, loadingEnd } = useStoreSystem()
   const { systemState } = useAppSelector((e) => ({
     systemState: e.system
   }))
@@ -48,20 +48,31 @@ export const FinanceItemPage = (pros: Props) => {
   const queryData = $utils.parseQueryUrlForm({ id: router.query.id, copy: router.query.copy })
 
   const handleSubmit = async () => {
-    loadingPageStart()
+    loadingStart()
 
     const id = !!fields.id
 
     const { status } = id ? await handleUpdate() : await handleCreate()
 
-    loadingPageEnd()
+    if (!status) {
+      loadingEnd()
+      return
+    }
 
-    if (status) {
+    if (queryData.isNew && !queryData.isCopy) {
       setFields({
         ...formDefault,
         date: dayjs().format('YYYY-MM-DD'),
         wallet_id: systemState.walletPanelId,
       })
+
+      // toast.addToast({
+      //   message: data.message,
+      //   type: status ? 'success' : 'danger'
+      // })
+
+      loadingEnd()
+      return
     }
 
     // toast.addToast({
@@ -69,9 +80,7 @@ export const FinanceItemPage = (pros: Props) => {
     //   type: status ? 'success' : 'danger'
     // })
 
-    if (queryData.isEdit || queryData.isCopy) {
-      router.push('/finance/extract')
-    }
+    router.push('/finance/extract')
   }
   const handleCreate = async () => {
     return await api.financeItem().post({
@@ -114,7 +123,7 @@ export const FinanceItemPage = (pros: Props) => {
       return
     }
 
-    loadingPageStart()
+    loadingStart()
 
     const { status } = await api.financeItem().remove({
       id: Number(fields.id)
@@ -130,7 +139,7 @@ export const FinanceItemPage = (pros: Props) => {
       return
     }
 
-    loadingPageEnd()
+    loadingEnd()
   }
 
   const title = useMemo(() => {
@@ -139,7 +148,7 @@ export const FinanceItemPage = (pros: Props) => {
   }, [fields.id])
 
   async function getData() {
-    loadingPageStart()
+    loadingStart()
 
     const { data } = await api.financeItem().id({ id: queryData.id })
 
@@ -157,7 +166,7 @@ export const FinanceItemPage = (pros: Props) => {
       wallet_id: data?.wallet.id,
     })
 
-    loadingPageEnd()
+    loadingEnd()
   }
 
   useEffect(() => {
@@ -170,6 +179,7 @@ export const FinanceItemPage = (pros: Props) => {
 
     return () => {
       isMounted.current = true
+      loadingEnd()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,7 +220,6 @@ export const FinanceItemPage = (pros: Props) => {
       <AppDivider />
 
       <Form
-        isLoading={systemState.loading}
         fields={fields}
         errors={errors}
         onSubmit={handleSubmit}

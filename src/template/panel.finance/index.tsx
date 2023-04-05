@@ -5,7 +5,7 @@ import { AppText, AppSkeleton } from '@/components/base'
 import { $cookie } from '@/utils'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { ContextSSR } from '@/types/system'
-import { FinanceWalletConsolidateMonth, FinanceWalletConsolidateMonthStatus } from '@/types/entities/finance-wallet'
+import { FinanceWalletConsolidateMonth } from '@/types/entities/finance-wallet'
 import { useAppDispatch, useAppSelector } from '@/store/hook'
 import { pagePanelFinanceSetData } from '@/store/feturesPage/panel.finance'
 import { api } from '@/services/api'
@@ -25,13 +25,16 @@ export const PanelFinancePage = (props: Props) => {
     return null
   }
 
-  const isMounted = useRef(false)
   render++
-  const { loading, period, walletPanelId, loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const isMounted = useRef(false)
+  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
   const dispatch = useAppDispatch()
 
-  const { dataPage } = useAppSelector(e => e.pagePanelFinance)
-  const { search } = useAppSelector(e => e.pageFinanceExtract)
+  const { pageState, pageExtract, systemState } = useAppSelector(e => ({
+    pageState: e.pagePanelFinance,
+    pageExtract: e.pageFinanceExtract,
+    systemState: e.system
+  }))
 
   const user = $cookie.getUser()
   const searchKeyFinanceExtract = `financeExtract.${user.id}`
@@ -39,10 +42,10 @@ export const PanelFinancePage = (props: Props) => {
   const getItems = async () => {
     loadingPageStart()
 
-    const { code, data } = await api.financeWallet()
+    const { data } = await api.financeWallet()
       .consolidateMonth({
-        period,
-        wallet_id: Number(walletPanelId)
+        period: systemState.period,
+        wallet_id: Number(systemState.walletPanelId)
       })
 
     loadingPageEnd()
@@ -52,7 +55,7 @@ export const PanelFinancePage = (props: Props) => {
 
   const handleClick = (values: Partial<FinanceExtractFormSearchFields>) => {
     const newSearch: FinanceExtractFormSearchFields = {
-      ...search,
+      ...pageExtract.search,
       ...values,
       page: 1,
       enable: 1,
@@ -71,7 +74,6 @@ export const PanelFinancePage = (props: Props) => {
     router.push('/finance/extract')
   }
 
-
   useEffect(() => {
     if (isMounted.current) {
       getItems()
@@ -84,33 +86,33 @@ export const PanelFinancePage = (props: Props) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [period, walletPanelId])
+  }, [systemState.period, systemState.walletPanelId])
 
   const balances = [
-    { title: 'Receita', value: dataPage.balance.revenue.value, type_id: 1 },
-    { title: 'Despesa', value: `-${dataPage.balance.expense.value}`, type_id: 2 },
-    { title: 'Disponivel', value: dataPage.balance.available },
-    { title: 'Estimado', value: dataPage.balance.estimate, status_id: 3 }
+    { title: 'Receita', value: pageState.dataPage.balance.revenue.value, type_id: 1 },
+    { title: 'Despesa', value: `-${pageState.dataPage.balance.expense.value}`, type_id: 2 },
+    { title: 'Disponivel', value: pageState.dataPage.balance.available },
+    { title: 'Estimado', value: pageState.dataPage.balance.estimate, status_id: 3 }
   ]
 
-  const origins = loading
+  const origins = systemState.loading
     ? [
       { id: '', description: '', sum: <AppSkeleton width="50%" />, },
       { id: '', description: '', sum: <AppSkeleton width="50%" />, },
     ]
-    : dataPage.origin
+    : pageState.dataPage.origin
 
-  const tags = loading
+  const tags = systemState.loading
     ? [
       { tag_description: '', sum: <AppSkeleton width="50%" />, },
       { tag_description: '', sum: <AppSkeleton width="50%" />, },
     ]
-    : dataPage.tag
+    : pageState.dataPage.tag
 
   return (
     <>
       <BalanceCard>
-        {dataPage.status.map((item, i) => (
+        {pageState.dataPage.status.map((item, i) => (
           <BalanceItemDisplayNumber
             key={`${render}-${i}-status`}
             desc={item.description}
@@ -143,7 +145,7 @@ export const PanelFinancePage = (props: Props) => {
 
       <AppText variant='h5'>Origens</AppText>
       <BalanceCard>
-        {dataPage.origin.map((item, i) => (
+        {pageState.dataPage.origin.map((item, i) => (
           <BalanceItem
             key={`${render}-${i}-origins`}
             title={item.description}
@@ -161,7 +163,7 @@ export const PanelFinancePage = (props: Props) => {
 
       <AppText variant='h5'>Tags</AppText>
       <BalanceCard>
-        {dataPage.tag.map((item, i) => (
+        {pageState.dataPage.tag.map((item, i) => (
           <BalanceItem
             key={`${render}-${i}-tags`}
             title={item.tag_description}

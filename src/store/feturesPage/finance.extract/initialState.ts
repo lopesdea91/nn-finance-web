@@ -1,5 +1,4 @@
 import { FinanceItem } from "@/types/entities/finance-item"
-import { LoadingThunkType } from "@/types/enum"
 import { FinanceExtractFormSearchFields } from "@/types/form/financeExtract"
 
 export interface financeExtractState {
@@ -7,7 +6,6 @@ export interface financeExtractState {
   items: FinanceItem[]
   total: number
   lastPage: number
-  loading: LoadingThunkType
 }
 const state: financeExtractState = {
   search: {
@@ -26,7 +24,6 @@ const state: financeExtractState = {
   items: [],
   total: 0,
   lastPage: 0,
-  loading: 'idle'
 }
 
 export default state

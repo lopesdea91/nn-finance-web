@@ -1,9 +1,9 @@
 import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect } from '../../../components/base'
 import { Enable } from '@/types/enum'
 import { FinanceWalletFormSearchFields } from '@/types/form/settingsFinanceWallet'
+import { useAppSelector } from '@/store/hook'
 
 interface Props {
-  loading: boolean
   getItems: () => Promise<void>
   search: FinanceWalletFormSearchFields
   onChangeSearch: (value: Partial<FinanceWalletFormSearchFields>) => void
@@ -11,6 +11,9 @@ interface Props {
 }
 
 export const FormSearch = (props: Props) => {
+  const { systemState } = useAppSelector(e => ({
+    systemState: e.system
+  }))
 
   return (
     <AppForm onSubmit={() => props.getItems()}>
@@ -29,7 +32,7 @@ export const FormSearch = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={props.loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -48,7 +51,7 @@ export const FormSearch = (props: Props) => {
               { id: '1', description: 'Ativo' },
               { id: '0', description: 'Inativo' },
             ]}
-            disabled={props.loading}
+            disabled={systemState.loading}
             optionEmpty
           />
         </AppColumn>
@@ -63,7 +66,7 @@ export const FormSearch = (props: Props) => {
                 _q: e.target.value,
               })
             }}
-            disabled={props.loading}
+            disabled={systemState.loading}
           />
         </AppColumn>
       </AppColumns>
