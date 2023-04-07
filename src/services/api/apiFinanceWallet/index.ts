@@ -216,13 +216,14 @@ export const apiFinanceWallet = (props: AxiosConfigProps = {}) => {
         balance: {
           available: '0',
           estimate: '0',
-          expense: { value: '0' },
-          revenue: { value: '0' }
+          expense: '0',
+          revenue: '0'
         },
-        status: [],
-        tag: [],
-        origin: [],
+        composition: [],
+        originTransactional: [],
         invoice: [],
+        tag: [],
+        status: [],
       }
 
       try {
@@ -234,25 +235,25 @@ export const apiFinanceWallet = (props: AxiosConfigProps = {}) => {
         if (result.status === 200) {
           result.data.balance.available = Number(result.data.balance.available).toFixed(2)
           result.data.balance.estimate = Number(result.data.balance.estimate).toFixed(2)
-          result.data.balance.expense.value = Number(result.data.balance.expense.value).toFixed(2)
-          result.data.balance.revenue.value = Number(result.data.balance.revenue.value).toFixed(2)
+          result.data.balance.expense = Number(result.data.balance.expense).toFixed(2)
+          result.data.balance.revenue = Number(result.data.balance.revenue).toFixed(2)
 
           data.balance = result.data.balance
-          data.status = result.data.status.map(el => {
-
+          data.composition = result.data.composition
+          data.originTransactional = result.data.originTransactional.map(el => {
+            el.sum = Number(el.sum).toFixed(2)
             return el
           })
+          data.invoice = result.data.invoice
           data.tag = result.data.tag.map(el => {
             const n = Number(el.sum).toFixed(2)
             el.sum = el.type_id === 1 ? n : `-${n}`
 
             return el
           })
-          data.origin = result.data.origin.map(el => {
-            el.sum = Number(el.sum).toFixed(2)
+          data.status = result.data.status.map(el => {
             return el
           })
-          data.invoice = result.data.invoice
         }
       }
       catch (err) {

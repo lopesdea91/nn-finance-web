@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { BalanceCard, BalanceItem, BalanceItemDisplayNumber } from '@/components'
-import { AppText, AppSkeleton } from '@/components/base'
+import { AppText } from '@/components/base'
 import { $cookie } from '@/utils'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { ContextSSR } from '@/types/system'
@@ -89,25 +89,11 @@ export const PanelFinancePage = (props: Props) => {
   }, [systemState.period, systemState.walletPanelId])
 
   const balances = [
-    { title: 'Receita', value: pageState.dataPage.balance.revenue.value, type_id: 1 },
-    { title: 'Despesa', value: `-${pageState.dataPage.balance.expense.value}`, type_id: 2 },
+    { title: 'Receita', value: pageState.dataPage.balance.revenue, type_id: 1 },
+    { title: 'Despesa', value: `-${pageState.dataPage.balance.expense}`, type_id: 2 },
     { title: 'Disponivel', value: pageState.dataPage.balance.available },
     { title: 'Estimado', value: pageState.dataPage.balance.estimate, status_id: 3 }
   ]
-
-  const origins = systemState.loading
-    ? [
-      { id: '', description: '', sum: <AppSkeleton width="50%" />, },
-      { id: '', description: '', sum: <AppSkeleton width="50%" />, },
-    ]
-    : pageState.dataPage.origin
-
-  const tags = systemState.loading
-    ? [
-      { tag_description: '', sum: <AppSkeleton width="50%" />, },
-      { tag_description: '', sum: <AppSkeleton width="50%" />, },
-    ]
-    : pageState.dataPage.tag
 
   return (
     <>
@@ -145,7 +131,7 @@ export const PanelFinancePage = (props: Props) => {
 
       <AppText variant='h5'>Origens</AppText>
       <BalanceCard>
-        {pageState.dataPage.origin.map((item, i) => (
+        {pageState.dataPage.originTransactional.map((item, i) => (
           <BalanceItem
             key={`${render}-${i}-origins`}
             title={item.description}

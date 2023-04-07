@@ -23,9 +23,10 @@ export interface FinanceWalletSearch {
 export interface FinanceWalletConsolidateMonthBalance {
   available: string
   estimate: string
-  expense: { value: string }
-  revenue: { value: string }
+  expense: string
+  revenue: string
 }
+export interface FinanceWalletConsolidateMonthComposition { }
 export interface FinanceWalletConsolidateMonthStatus {
   description: string
   count: string
@@ -42,25 +43,30 @@ export interface FinanceWalletConsolidateMonthTag {
   // description: string
   // type: FinanceTypeId
 }
-export interface FinanceWalletConsolidateMonthOrigin {
+export interface FinanceWalletConsolidateMonthOriginTransactional {
   id: number
   description: string
   sum: string
+  revenue: string
+  expense: string
+  average: string
 }
 
 export interface FinanceWalletConsolidateMonth {
   balance: FinanceWalletConsolidateMonthBalance
-  status: FinanceWalletConsolidateMonthStatus[]
-  tag: FinanceWalletConsolidateMonthTag[]
-  origin: FinanceWalletConsolidateMonthOrigin[]
+  composition: FinanceWalletConsolidateMonthComposition[]
+  originTransactional: FinanceWalletConsolidateMonthOriginTransactional[]
   invoice: []
+  tag: FinanceWalletConsolidateMonthTag[]
+  status: FinanceWalletConsolidateMonthStatus[]
 }
 export interface FinanceWalletConsolidateMonthResponse {
   balance: FinanceWalletConsolidateMonthBalance
-  status: FinanceWalletConsolidateMonthStatus[]
-  tag: FinanceWalletConsolidateMonthTag[]
-  origin: FinanceWalletConsolidateMonthOrigin[]
+  composition: FinanceWalletConsolidateMonthComposition[]
+  originTransactional: FinanceWalletConsolidateMonthOriginTransactional[]
   invoice: []
+  tag: FinanceWalletConsolidateMonthTag[]
+  status: FinanceWalletConsolidateMonthStatus[]
 }
 export interface FinanceWalletConsolidateMonthPayload {
   period: string

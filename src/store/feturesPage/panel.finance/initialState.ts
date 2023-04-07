@@ -9,13 +9,14 @@ const initialState: IState = {
     balance: {
       available: '0',
       estimate: '0',
-      expense: { value: '0' },
-      revenue: { value: '0' }
+      expense: '0',
+      revenue: '0'
     },
-    status: [],
-    tag: [],
-    origin: [],
+    composition: [],
+    originTransactional: [],
     invoice: [],
+    tag: [],
+    status: [],
   },
 }
 
