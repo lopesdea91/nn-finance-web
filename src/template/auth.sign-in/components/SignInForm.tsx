@@ -80,10 +80,6 @@ export const SignInForm = () => {
         // valueCrypto: true
       })
 
-      // initialCookie({
-      //   user_id: Number(userResult.data.user.id)
-      // })
-
       Router.push('/panel/finance')
     } catch (error) {
       console.log('... error', error);

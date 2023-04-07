@@ -1,5 +1,4 @@
 import { convertObjectToString } from './convertObjectToString'
-import { getLocalStorageItem, setLocalStorageItem, } from './localStorage'
 import { parseItemToOption } from './parseItemToOption'
 import { parseQueryUrlForm } from './parseQueryUrlForm'
 
@@ -9,13 +8,11 @@ import { $table } from './table'
 
 // export const $ = {
 //   queryString: convertObjectToString,
-//   getLocalStorageItem, setLocalStorageItem,
 //   parseItemToOption,
 // }
 
 export const $utils = {
   queryString: convertObjectToString,
-  getLocalStorageItem, setLocalStorageItem,
   parseItemToOption,
   parseQueryUrlForm
 }
