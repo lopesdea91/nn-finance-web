@@ -77,10 +77,8 @@ export interface FinanceWalletProcessConsolidateMonthResponse {
   message: string
 }
 export interface FinanceWalletProcessConsolidateMonthPayload {
-  form: {
-    period: string
-    wallet_id: number
-  }
+  period: string
+  wallet_id: number
 }
 
 

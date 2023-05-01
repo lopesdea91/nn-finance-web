@@ -1,8 +1,9 @@
-import { Divider } from '@mui/material'
+import { Divider, DividerProps } from '@mui/material'
 
-export const AppDivider = () => {
+
+export const AppDivider = (props: DividerProps) => {
   return (
-    <Divider sx={{ my: 1 }} />
+    <Divider sx={{ my: 1 }} {...props} />
   )
 }
 

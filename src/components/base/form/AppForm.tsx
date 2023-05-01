@@ -1,27 +1,23 @@
-import { Theme } from "@mui/material"
-import { Box, SxProps } from "@mui/system"
 import React from "react"
+import { Box, BoxProps } from "@mui/system"
 
 type Props = {
   children: React.ReactNode
-  onSubmit: () => void
-  containersx?: SxProps<{}>
+  onSubmit: HTMLFormElement['onSubmit']
+  sx?: BoxProps['sx']
+  id?: HTMLFormElement['id']
 }
-
-export const AppForm = ({ children, onSubmit, containersx }: Props) => {
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    onSubmit()
-  }
-
+const AppForm = ({ children, onSubmit, sx, ...rest }: Props) => {
   return (
-    <Box sx={{ mb: 3, ...containersx }}>
-      <form onSubmit={handleSubmit}>
+    <Box sx={{ mb: 3, ...sx }}>
+      <form onSubmit={onSubmit} {...rest}>
         {children}
       </form>
     </Box>
   )
 }
 
-export default AppForm
+AppForm.displayName = 'AppForm'
+
+export { AppForm }
+

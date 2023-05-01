@@ -1,3 +1,4 @@
+import { ButtonProps } from '@mui/material';
 import styled from 'styled-components';
 import { AppIcon, IconNames } from "../icon/AppIcon"
 import { AppButton } from './AppButton';
@@ -5,9 +6,12 @@ import { AppButton } from './AppButton';
 type Props = {
   variant: IconNames
   onClick?: () => void
-  disabled?: boolean
-  color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   text?: string
+  disabled?: ButtonProps['disabled']
+  color?: ButtonProps['color']
+  form?: ButtonProps['form']
+  type?: ButtonProps['type']
+  title?: ButtonProps['title']
 }
 
 export const AppButtonStyled = styled(AppButton)`

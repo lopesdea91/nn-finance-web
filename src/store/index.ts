@@ -1,8 +1,12 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
-import { reducers } from './reducer';
+import { reducer } from './reducer';
 
 export const store = configureStore({
-  reducer: reducers,
+  reducer: reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })
 
 export type AppStore = ReturnType<typeof store['getState']>;

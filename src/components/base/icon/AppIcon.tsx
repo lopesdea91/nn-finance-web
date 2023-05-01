@@ -2,9 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   IconDefinition,
   faBars, faGear, faHouse, faCashRegister, faReceipt, faArrowRightFromBracket, faCreditCard, faSave,
-  faRemove, faRotateBack, faEdit, faSearch, faPlus, faBroom, faWallet, faCalendarDays, faArrowLeft, faArrowRight,
-  faX, faEllipsisV, faTrashCan,
-  faSpinner
+  faRemove, faRotateBack, faEdit, faSearch, faPlus, faBroom, faCalendarDays,
+  faEllipsisV, faTrashCan,
+  faSpinner,
+  faArrowsRotate,
+  faArrowLeft,
+  faArrowRight,
+  faFilter,
 } from '@fortawesome/free-solid-svg-icons'
 import { faCopy, faCircleCheck } from '@fortawesome/free-regular-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -29,6 +33,10 @@ export type IconNames = 'menu'
   | 'copy'
   | 'circleCheck'
   | 'trash'
+  | 'sync'
+  | 'arrowLeft'
+  | 'arrowRight'
+  | 'filterList'
 // | "wallet"
 // | "arrowLeft"
 // | "arrowRight"
@@ -61,10 +69,12 @@ export const AppIcon = ({ variant, ...rest }: Props) => {
     ellipsisV: faEllipsisV,
     copy: faCopy,
     circleCheck: faCircleCheck,
-    trash: faTrashCan
+    trash: faTrashCan,
+    sync: faArrowsRotate,
     // wallet: faWallet,
-    // arrowLeft: faArrowLeft,
-    // arrowRight: faArrowRight,
+    arrowLeft: faArrowLeft,
+    arrowRight: faArrowRight,
+    filterList: faFilter
     // close: faX
   }
   const selected = variants[variant]

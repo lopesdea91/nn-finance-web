@@ -1,6 +1,6 @@
 import { systemStateSlice } from "./initialState"
 
-export default {
+const reducers = {
   setPeriod(state: systemStateSlice, action: { payload: string }) {
     state.period = action.payload
   },
@@ -17,3 +17,5 @@ export default {
     state.loadingPage = action.payload
   },
 }
+
+export default reducers

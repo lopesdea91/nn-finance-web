@@ -5,9 +5,9 @@ import { FinanceWalletSearch } from "@/types/entities/finance-wallet"
 export interface FinanceWalletFormFields {
   id: number | null,
   description: string,
-  json: Record<string, string>,
   enable: Enable,
   panel: Enable
+  // json: Record<string, string>,
 }
 export interface FinanceWalletFormFieldsPost {
   // id: number | null,
@@ -19,9 +19,9 @@ export interface FinanceWalletFormFieldsPost {
 export interface FinanceWalletFormFieldsPut {
   // id: number | null,
   description: string,
-  json: string,
   enable: Enable,
   panel: Enable
+  // json: string,
 }
 
 // formSearch

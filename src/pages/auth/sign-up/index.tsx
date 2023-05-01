@@ -1,3 +1,3 @@
-import { AuthSignUpPage } from '@/template/auth.sign-up'
+import { AuthSignUpPage } from '@/@core/presentation/auth.sign-up'
 
 export default AuthSignUpPage

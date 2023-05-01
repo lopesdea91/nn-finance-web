@@ -1,77 +1,62 @@
+import styled from '@emotion/styled'
+import React from 'react'
+import { Table, TableHead, TableBody, TableCell, TableContainer, TableRow, TableFooter, TablePagination } from '@mui/material'
 import { _limitApi } from '@/types/enum'
-import { Table, TableHead, TableBody, TableCell, TableContainer, TableRow, TableFooter, TablePagination, Paper } from '@mui/material'
-
-type BaseTableTH = string[]
+import { Pagination } from './Pagination'
+import { useMediaQuerys } from '@/hooks'
 
 type BaseTableProps = {
-	children: React.ReactNode
-	headerEditId?: boolean
-	headerTexts: BaseTableTH
-	bodyItemsLength: number
-	columnsCount: number
-	search: {
+	contentHeader: React.ReactNode
+	contentBody: React.ReactNode
+	bodyItemsLength?: number
+	columnsCount?: number
+	search?: {
 		limit: number
 		page: number
 		total: number
 	}
-	changePage: (n: number) => void
-	changePerPage: (n: _limitApi) => void
+	changePage?: (n: number) => void
+	changePerPage?: (n: _limitApi) => void
+	responsive?: boolean
 }
-
-export {
-	TableCell as TCell,
-	TableRow as TRow,
-}
-
-export const BaseTable = (props: BaseTableProps) => {
-
-	function handleChangePage(
-		event: React.MouseEvent<HTMLButtonElement> | null,
-		newPage: number,
-	) {
+const BaseTable = (props: BaseTableProps) => {
+	function handleChangePage(event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) {
 		newPage++
 
-		props.changePage(newPage)
+		!!props.changePage && props.changePage(newPage)
 	}
-
 	function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
 		const newLimit = +Number(event.target.value)
 
-		props.changePerPage(newLimit as _limitApi)
+		!!props.changePerPage && props.changePerPage(newLimit as _limitApi)
 	}
 
 	return (
-		<TableContainer component={Paper} sx={{ t: 2, mb: 1 }}>
+		<TableContainerStyled sx={{ pt: 1 }} data-testid="table" className={props.responsive ? '--table-responsive' : ''}>
 			<Table size='small'>
 				<TableHead>
-					<TableRow>
-						{props.headerEditId &&
-							<TableCell component="th" sx={{ py: 1, px: 0 }}></TableCell>
-						}
-						{props.headerTexts.map(t => (
-							<TableCell key={t} component="th" sx={{ py: 1, px: 0 }}>{t}</TableCell>
-						))}
-						{/* <TableCell component="th" sx={{ py: 1, px: 0 }}>Status</TableCell> */}
-						{/* <TableCell component="th" sx={{ py: 1, px: 0 }}>Painel</TableCell> */}
-					</TableRow>
+					<TRow>
+						{props.contentHeader}
+					</TRow>
 				</TableHead>
 
 				<TableBody>
-					{props.bodyItemsLength > 0
-						? props.children
+					{!props?.bodyItemsLength && props.contentBody}
+
+					{!!props?.bodyItemsLength && (props?.bodyItemsLength > 0
+						? props.contentBody
 						: (
-							<TableRow style={{ height: 30 }}>
-								<TableCell colSpan={props.columnsCount}>
+							<TRow style={{ height: 30 }}>
+								<TCell colSpan={props.columnsCount}>
 									Lista vazia
-								</TableCell>
-							</TableRow>
-						)
-					}
+								</TCell>
+							</TRow>
+						))}
 				</TableBody>
 
-				{(props?.search && !!props.search.total && !!props.search.page) &&
+				{(props.changePage && props.changePerPage) && (props?.search && !!props.search.total && !!props.search.page) &&
 					<TableFooter>
-						<TableRow>
+						<TRow>
 							<TablePagination
 								labelRowsPerPage=''
 								rowsPerPageOptions={[15, 30, 50]}
@@ -85,15 +70,57 @@ export const BaseTable = (props: BaseTableProps) => {
 								}}
 								onPageChange={handleChangePage}
 								onRowsPerPageChange={handleChangeRowsPerPage}
-							// ActionsComponent={(
-							//   <>
-							//     <div>Oi</div>
-							//   </>
-							// )}
 							/>
-						</TableRow>
+						</TRow>
 					</TableFooter>}
 			</Table>
-		</TableContainer>
+		</TableContainerStyled>
 	)
+}
+const TableContainerStyled = styled(TableContainer)`
+	&.MuiTableContainer-root {
+		box-shadow: inset 0px 0px 4px 0px rgba(0, 0, 0, 0.15);
+	}
+	&.--table-responsive {
+		@media(max-width: 426px) {
+			.MuiTableCell-root {
+				border-color: transparent
+			}
+		}
+	}
+`
+const RowResponsive = ({
+	previewMobile, previewDesktop
+}: {
+	previewMobile: React.ReactNode, previewDesktop: React.ReactNode
+}) => {
+
+	const { minTable } = useMediaQuerys()
+
+	return (
+		<TRow>
+			{minTable ? previewDesktop : previewMobile}
+		</TRow>
+	)
+
+}
+const TRow = styled(TableRow)`
+`
+const TCell = styled(TableCell)`
+	@media(max-width: 426px) {
+		padding-top: 0;
+	}
+`
+export {
+	BaseTable,
+	TCell,
+	TRow,
+}
+
+export const Table2 = {
+	Container: BaseTable,
+	Row: TRow,
+	Cell: TCell,
+	RowResponsive,
+	Pagination: Pagination
 }

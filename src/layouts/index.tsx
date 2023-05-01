@@ -1,20 +1,25 @@
 import React from 'react'
-import { Loading } from '@/components/layout/Loading'
 import LayoutPrivate from '@/layouts/LayoutPrivate'
 import LayoutPublic from '@/layouts/LayoutPublic'
 import { useStorePrepare } from '@/hooks/useStorePrepare'
 import { LayoutType } from '@/types/layout'
+import { Loading } from './components'
 
 type LayoutProps = {
   children: React.ReactNode
   layout?: LayoutType
 }
 export function Layouts(layout: LayoutType = 'private') {
-  const Layouts = {
+  const layouts = {
     private: LayoutPrivate,
-    public: LayoutPublic
+    public: LayoutPublic,
+    default: LayoutPublic,
   }
-  return Layouts[layout] || LayoutPublic
+
+  if (!layouts[layout])
+    return layouts.default
+
+  return layouts[layout]
 }
 
 export const Layout = ({ children, layout }: LayoutProps) => {

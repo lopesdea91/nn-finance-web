@@ -1,13 +1,8 @@
-import { createContext, useContext } from "react";
-
-const ThemeModeContext = createContext({
-  toggleThemeMode: () => { }
-});
+import { useContext } from "react";
+import { themeModeContext } from "@/context/themeModeContext";
 
 export const useThemeMode = () => {
-  const { toggleThemeMode } = useContext(ThemeModeContext);
+  const { toggleThemeMode } = useContext(themeModeContext);
 
   return { toggleThemeMode }
 }
-
-export const ThemeModeProvider = ThemeModeContext.Provider

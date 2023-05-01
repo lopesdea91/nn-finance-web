@@ -1,21 +1,23 @@
-import featureAuth from '../features/auth'
-import featureSystem from '../features/system'
-import featureLayout from '../features/layout'
-import featureFinance from '../features/finance'
-import featurePageFinanceExtract from '../feturesPage/finance.extract'
-import featurePagePanelFinance from '../feturesPage/panel.finance'
-import featurePageSettingsFinanceWallet from '../feturesPage/settings.financeWallet'
-import featurePageSettingsFinanceOrigin from '../feturesPage/settings.financeOrigin'
-import featurePageSettingsFinanceTag from '../feturesPage/settings.financeTag'
+import { authSlice } from '../features/auth'
+import { systemSlice } from '../features/system'
+import { layoutSlice } from '../features/layout'
+import { financeSlice } from '../features/finance'
+import { pageFinanceExtractSlice } from '../feturesPage/finance.extract'
+import { pagePanelFinanceSlice } from '../feturesPage/panel.finance'
+import { pageSettingsFinanceWalletSlice } from '../feturesPage/settings.financeWallet'
+import { pageSettingsFinanceWalletIdSlice } from '../feturesPage/settingsFinanceWalletId'
+import { pageSettingsFinanceOriginSlice } from '../feturesPage/settings.financeOrigin'
+import { pageSettingsFinanceTagSlice } from '../feturesPage/settings.financeTag'
 
-export const reducers = {
-  auth: featureAuth,
-  system: featureSystem,
-  layout: featureLayout,
-  finance: featureFinance,
-  pageFinanceExtract: featurePageFinanceExtract,
-  pagePanelFinance: featurePagePanelFinance,
-  pageSettingsFinanceWallet: featurePageSettingsFinanceWallet,
-  pageSettingsFinanceOrigin: featurePageSettingsFinanceOrigin,
-  pageSettingsFinanceTag: featurePageSettingsFinanceTag,
+export const reducer = {
+  [authSlice.name]: authSlice.reducer,
+  [systemSlice.name]: systemSlice.reducer,
+  [layoutSlice.name]: layoutSlice.reducer,
+  [financeSlice.name]: financeSlice.reducer,
+  [pageFinanceExtractSlice.name]: pageFinanceExtractSlice.reducer,
+  [pagePanelFinanceSlice.name]: pagePanelFinanceSlice.reducer,
+  [pageSettingsFinanceWalletSlice.name]: pageSettingsFinanceWalletSlice.reducer,
+  [pageSettingsFinanceWalletIdSlice.name]: pageSettingsFinanceWalletIdSlice.reducer,
+  [pageSettingsFinanceOriginSlice.name]: pageSettingsFinanceOriginSlice.reducer,
+  [pageSettingsFinanceTagSlice.name]: pageSettingsFinanceTagSlice.reducer,
 }

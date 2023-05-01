@@ -1,29 +1,45 @@
 import { FormControl, TextField, TextFieldProps } from '@mui/material'
 
-type Props = TextFieldProps & {
-  label?: string
-  text?: string
-  error?: string | undefined
-  value: string | number | undefined
+type Props = {
+  labelProps: {
+    label?: string
+  }
+  inputProps: {
+    error?: string
+    type?: HTMLInputElement['type']
+    value?: HTMLInputElement['value']
+    disabled?: HTMLInputElement['disabled']
+    onChange?: TextFieldProps['onChange']
+    step?: HTMLInputElement['step']
+  }
+  multiline?: TextFieldProps['multiline']
+  rows?: TextFieldProps['rows']
 }
-
-export const AppInput = ({ label, text, error, ...rest }: Props) => {
+const AppInput = (props: Props) => {
+  const { labelProps, inputProps, ...restProps } = props
+  const { error, ...restInput } = inputProps
 
   return (
-    <FormControl fullWidth error={!!error} sx={{ pt: 0.25 }}>
+    <FormControl fullWidth error={!!error} sx={{ py: 0.15 }}>
       <TextField
+        inputProps={{
+          'data-testid': 'app-input',
+        }}
         className="shadow-sm"
         type="text"
-        label={label}
+        label={labelProps.label}
         fullWidth
         error={!!error}
         helperText={error}
         size='small'
-        {...rest}
+        {...restInput}
+        {...restProps}
       />
-
     </FormControl>
   )
-};
+}
 
-export default AppInput 
+AppInput.displayName = 'AppInput'
+
+export { AppInput }
+

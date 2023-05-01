@@ -1,12 +1,11 @@
-import { FinanceWallet, FinanceWalletShort } from './finance-wallet'
-import { FinanceOrigin } from './finance-origin'
-import { FinanceTag } from './finance-tag'
-import { FinanceType } from './finance-type'
-import { FinanceStatus } from './finance-status'
-import { FinanceOriginType } from './finance-originType'
+import { FinanceOrigin } from "@/types/entities/finance-origin"
+import { FinanceOriginType } from "@/types/entities/finance-originType"
+import { FinanceStatus } from "@/types/entities/finance-status"
+import { FinanceTag } from "@/types/entities/finance-tag"
+import { FinanceType } from "@/types/entities/finance-type"
+import { FinanceWallet, FinanceWalletShort } from "@/types/entities/finance-wallet"
 
 export interface FinanceDataResponse {
-  // "user": User,
   "wallet_panel": FinanceWalletShort,
   "wallet": FinanceWallet[],
   "origin": FinanceOrigin[],

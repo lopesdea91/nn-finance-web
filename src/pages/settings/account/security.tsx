@@ -1,3 +1,3 @@
-import { SettingsAccountSecutiry } from '@/template/settings.account.security'
+import { SettingsAccountSecutiry } from '@/@core/presentation/settings.account.security'
 
 export default SettingsAccountSecutiry

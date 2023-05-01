@@ -1,29 +1,33 @@
-import { FormControlLabel, Switch, SwitchProps } from '@mui/material'
 import React from 'react'
+import { FormControlLabel, FormControlLabelProps, Switch } from '@mui/material'
 
-type Props = SwitchProps & {
+type Props = {
   label?: string
-  error?: string | undefined | any
   value: boolean
-  onChange: (id: number) => void
+  onChange: (id: string) => void
+  error?: string | undefined | any
   disabled?: boolean
+  labelPlacement?: FormControlLabelProps['labelPlacement']
 }
-
-export const AppSwitch = (props: Props) => {
+const AppSwitch = (props: Props) => {
+  const { label, error, value, onChange, ...rest } = props
 
   return (
     <FormControlLabel
-      sx={{
-        minHeight: 40
-      }}
+      sx={{ minHeight: 40 }}
+      label={label}
+      {...rest}
       control={
         <Switch
           size="small"
-          checked={props.value}
-          onChange={() => props.onChange(props.value ? 0 : 1)}
+          checked={value}
+          onChange={() => onChange(value ? '0' : '1')}
         />
       }
-      label={props.label}
     />
   )
 }
+
+AppSwitch.displayName = 'AppSwitch'
+
+export { AppSwitch }

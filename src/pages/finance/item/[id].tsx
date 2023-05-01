@@ -1,4 +1,4 @@
-import { FinanceItemGetServerSideProps, FinanceItemPage } from '@/template/finance.item'
+import { FinanceItemGetServerSideProps, FinanceItemPage } from '@/@core/presentation/finance.item'
 
 export default FinanceItemPage
 

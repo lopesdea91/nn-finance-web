@@ -1,7 +1,7 @@
 import React from 'react';
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Layout } from "@/layouts";
-import { AppProvider } from "@/providers";
+import { AppProvider } from "@/config/providers";
 import { AppPropsLayout } from '@/types/layout';
 
 import '@fortawesome/fontawesome-svg-core/styles.css'

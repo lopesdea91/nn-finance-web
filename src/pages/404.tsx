@@ -1,3 +1,3 @@
-import { NotFoundPage } from "@/template/404";
+import { NotFoundPage } from "@/@core/presentation/404";
 
 export default NotFoundPage

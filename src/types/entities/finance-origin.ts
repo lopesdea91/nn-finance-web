@@ -7,8 +7,11 @@ export interface FinanceOrigin {
   description: string
   enable: Enable
   type: FinanceType
+  typeId: number | null
   wallet: FinanceWalletShort
+  walletId: number | null
   parent: FinanceOriginShort | null
+  parentId: number | null
 }
 export interface FinanceOriginShort {
   id: number

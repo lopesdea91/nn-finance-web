@@ -1,4 +1,4 @@
-import { SettingsFinanceWalletIdPage, SettingsFinanceWalletIdServerSideProps } from '@/template/settings.finance.wallet.id'
+import { SettingsFinanceWalletIdPage, SettingsFinanceWalletIdServerSideProps } from '@/@core/presentation/settings.finance.wallet.id'
 
 export default SettingsFinanceWalletIdPage
 

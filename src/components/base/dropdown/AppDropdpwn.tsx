@@ -1,13 +1,17 @@
-import React, { useImperativeHandle, useState } from 'react'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { Menu, MenuItem } from '@mui/material'
 import AppButton from '../button/AppButton'
+
+export type AppDropdownHandle = {
+  handleClose: () => void
+}
 
 type AppDropdownItemProps = {
   children: React.ReactNode
   onClick?: () => void
   disabled?: boolean
 }
-export const AppDropdownItem = (props: AppDropdownItemProps) => {
+const AppDropdownItem = (props: AppDropdownItemProps) => {
   return (
     <MenuItem
       sx={{ gap: 0.5, alignItems: 'center' }}
@@ -15,14 +19,14 @@ export const AppDropdownItem = (props: AppDropdownItemProps) => {
     >{props.children}</MenuItem>
   )
 }
-export type AppDropdownHandle = {
-  handleClose: () => void
-}
+AppDropdownItem.displayName = 'AppDropdownItem'
+
+
 type AppDropdownProps = {
   toggle: React.ReactNode
   menu: React.ReactNode
 }
-export const AppDropdown = React.forwardRef<AppDropdownHandle, AppDropdownProps>(({ menu, toggle }, ref) => {
+const AppDropdownContainer = forwardRef(({ menu, toggle }: AppDropdownProps, ref) => {  // <AppDropdownHandle, AppDropdownProps>
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -33,7 +37,11 @@ export const AppDropdown = React.forwardRef<AppDropdownHandle, AppDropdownProps>
     setAnchorEl(null);
   };
 
-  useImperativeHandle(ref, () => ({ handleClose }))
+  useImperativeHandle(ref, () => ({
+    handleClose: () => {
+      handleClose()
+    }
+  }))
 
   return (
     <>
@@ -43,6 +51,12 @@ export const AppDropdown = React.forwardRef<AppDropdownHandle, AppDropdownProps>
         // aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         variant="text"
+        sx={{
+          p: 0,
+          '&.MuiButton-root': {
+            minWidth: '2.5rem'
+          }
+        }}
       >
         {toggle}
       </AppButton>
@@ -60,5 +74,10 @@ export const AppDropdown = React.forwardRef<AppDropdownHandle, AppDropdownProps>
     </>
   )
 })
+AppDropdownContainer.displayName = 'AppDropdownContainer'
 
-AppDropdown.displayName = 'AppDropdown'
+export const AppDropdown = {
+  Container: AppDropdownContainer,
+  Item: AppDropdownItem,
+}
+

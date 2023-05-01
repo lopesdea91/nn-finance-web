@@ -1,4 +1,4 @@
-import { SettingsFinanceTagPage, SettingsFinanceTagServerSideProps, } from '@/template/settings.finance.tag'
+import { SettingsFinanceTagPage, SettingsFinanceTagServerSideProps, } from '@/@core/presentation/settings.finance.tag'
 
 export default SettingsFinanceTagPage
 

@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useAppSelector } from '@/store/hook'
-import { Container, Header, Main, Menu } from './styled'
-import { useStoreSystem } from '@/hooks/useStoreSystem'
+import { SystemStore, useAppSelector } from '@/store/hook'
+import { Container, Header, Main, Menu, Toast } from './components'
 
 export default function LayoutPrivate({ children }: { children: React.ReactNode }) {
   const { systemState } = useAppSelector((e) => ({
@@ -10,11 +9,11 @@ export default function LayoutPrivate({ children }: { children: React.ReactNode 
   }))
 
   const router = useRouter()
-  const { loadingPageStart, loadingPageEnd } = useStoreSystem()
+  const systemStore = SystemStore()
 
   useEffect(() => {
-    const handleStart = (url: string) => (url !== router.asPath) && loadingPageStart()
-    const handleComplete = (url: string) => (url === router.asPath) && loadingPageEnd()
+    const handleStart = (url: string) => (url !== router.asPath) && systemStore.loadingPageStart()
+    const handleComplete = (url: string) => (url === router.asPath) && systemStore.loadingPageEnd()
 
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleComplete)
@@ -27,6 +26,7 @@ export default function LayoutPrivate({ children }: { children: React.ReactNode 
 
   return (
     <Container status={systemState.menu}>
+      <Toast />
       <Menu />
       <Header />
       <Main>

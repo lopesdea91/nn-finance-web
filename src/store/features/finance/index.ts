@@ -4,12 +4,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import initialState from './initialState'
 import reducers from './reducers'
 
-const slice = createSlice({
+export const financeSlice = createSlice({
   name: 'finance',
   initialState,
   reducers,
 })
 
-export default slice.reducer
-
-export const actionsFinanceSlice = slice.actions
+export const actionsFinance = financeSlice.actions

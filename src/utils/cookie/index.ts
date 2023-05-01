@@ -39,6 +39,9 @@ type getPeriodProps = {
 type getWalletPanelIdProps = {
   ctx?: Pick<NextPageContext, "req"> | { req: NextApiRequest; } | null | undefined
 }
+type getTokenProps = {
+  ctx?: Pick<NextPageContext, "req"> | { req: NextApiRequest; } | null | undefined
+}
 
 const set = ({ ctx, key, value, options, keyCrypto, valueCrypto }: setProps) => {
   // if (keyCrypto) {
@@ -121,8 +124,11 @@ const getWalletPanelId = ({ ctx }: getWalletPanelIdProps = {}) => {
     key: 'walletPanelId'
   })
 }
+const getToken = ({ ctx }: getTokenProps = {}) => {
+  return get<string>({ ctx, key: 'token' })
+}
 
 export const $cookie = {
   all, get, set,
-  getUser, getSearchPage, setSearchPage, getPeriod, getWalletPanelId
+  getUser, getSearchPage, setSearchPage, getPeriod, getWalletPanelId, getToken
 }

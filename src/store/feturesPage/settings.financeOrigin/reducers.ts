@@ -3,7 +3,7 @@ import { settingsFinanceOriginState } from "./initialState"
 
 type S = settingsFinanceOriginState
 
-export default {
+const reducers = {
   setSearch(state: S, action: { payload: Partial<FinanceOriginSearch> }) {
     state.search = {
       ...state.search,
@@ -16,3 +16,5 @@ export default {
     state.lastPage = action.payload.lastPage
   }
 }
+
+export default reducers

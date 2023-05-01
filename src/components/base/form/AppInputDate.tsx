@@ -13,8 +13,7 @@ type Props = {
   onChange: (args: string) => void
   disabled?: boolean
 }
-
-export const AppInputDate = (props: Props) => {
+const AppInputDate = (props: Props) => {
   const [value, setValue] = useState<Dayjs | null>(
     props.value ? dayjs(`${props.value}T00:00:00`) : dayjs()
   );
@@ -37,3 +36,8 @@ export const AppInputDate = (props: Props) => {
     </LocalizationProvider>
   )
 }
+
+AppInputDate.displayName = 'AppInputDate'
+
+export { AppInputDate }
+

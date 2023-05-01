@@ -1,3 +1,3 @@
-import { AuthSignOutPage } from "@/template/auth.sign-out";
+import { AuthSignOutPage } from "@/@core/presentation/auth.sign-out";
 
 export default AuthSignOutPage

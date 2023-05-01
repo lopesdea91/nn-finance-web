@@ -1,0 +1,14 @@
+import React from 'react'
+import { MenuContainer } from './MenuDesktop.styled'
+
+type MenuDesktopProps = {
+  children: React.ReactNode
+}
+export default function MenuDesktop({ children }: MenuDesktopProps) {
+
+  return (
+    <MenuContainer>
+      {children}
+    </MenuContainer>
+  )
+}

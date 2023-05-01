@@ -9,7 +9,7 @@ import { FinanceTagFormSearchFields } from '@/types/form/settingsFinanceTag'
 import { FinanceWalletFormSearchFields } from '@/types/form/settingsFinanceWallet'
 import { financeStateSlice } from "./initialState"
 
-export default {
+const reducers = {
   // Wallet
   setWallet(state: financeStateSlice, action: { payload: FinanceWallet[] }) {
     state.wallet = action.payload
@@ -31,16 +31,18 @@ export default {
   setTagSearch(state: financeStateSlice, action: { payload: FinanceTagFormSearchFields }) {
     state.tagSearch = action.payload
   },
-  // List
-  setListFinance(state: financeStateSlice, action: {
-    payload: {
-      originType: FinanceOriginType[],
-      type: FinanceType[],
-      status: FinanceStatus[],
-    }
-  }) {
-    state.originType = action.payload.originType
-    state.type = action.payload.type
-    state.status = action.payload.status
+  // OriginType
+  setOriginType(state: financeStateSlice, action: { payload: FinanceOriginType[] }) {
+    state.originType = action.payload
+  },
+  // Type
+  setType(state: financeStateSlice, action: { payload: FinanceType[] }) {
+    state.type = action.payload
+  },
+  // Status
+  setStatus(state: financeStateSlice, action: { payload: FinanceStatus[] }) {
+    state.status = action.payload
   }
 }
+
+export default reducers

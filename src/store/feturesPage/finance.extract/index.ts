@@ -3,15 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import initialState from './initialState'
 import reducers from './reducers'
 
-const slice = createSlice({
+export const pageFinanceExtractSlice = createSlice({
   name: 'pageFinanceExtract',
   initialState,
   reducers,
 })
 
-export default slice.reducer
-
-export const {
-  setList: pageFinanceExtractSetList,
-  setSearch: pageFinanceExtractSetSearch
-} = slice.actions
+export const actionsPageFinanceExtract = pageFinanceExtractSlice.actions

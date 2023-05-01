@@ -43,7 +43,6 @@ const initialState: financeStateSlice = {
   },
   wallet: [],
   walletSearch: {
-    _total: 0,
     _limit: 15,
     _q: '',
     page: 1,
@@ -52,11 +51,9 @@ const initialState: financeStateSlice = {
   },
   origin: [],
   originSearch: {
-    _total: 0,
     _limit: 15,
     _q: '',
     page: 1,
-    lastPage: 0,
     enable: 1,
     type_id: [],
     wallet_id: null,
@@ -64,11 +61,9 @@ const initialState: financeStateSlice = {
   },
   tag: [],
   tagSearch: {
-    _total: 0,
     _limit: 15,
     _q: '',
     page: 1,
-    lastPage: 0,
     enable: 1,
     type_id: 1,
     wallet_id: null

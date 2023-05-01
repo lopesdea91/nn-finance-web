@@ -12,3 +12,11 @@ export type AppPropsLayout = AppProps & {
 }
 
 export type ThemeModes = 'light' | 'dark'
+
+export type ToastType = 'success' | 'error'
+
+export type Toast = {
+  id: string
+  msg: string
+  type: ToastType
+}

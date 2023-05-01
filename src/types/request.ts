@@ -1,3 +1,13 @@
+import { _limitApi } from "./enum"
+
+export type PageResponse<D> = {
+    items: D[]
+    limit: _limitApi
+    total: number
+    lastPage: number
+    page: number
+}
+
 export interface PageProps<T> {
     search?: T
 }

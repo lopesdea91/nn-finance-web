@@ -1,12 +1,9 @@
 import { FinanceWallet, FinanceWalletSearch } from "@/types/entities/finance-wallet"
 import { settingsFinanceWalletState } from "./initialState"
 
-export default {
-  setSearch(state: settingsFinanceWalletState, action: { payload: Partial<FinanceWalletSearch> }) {
-    state.search = {
-      ...state.search,
-      ...action.payload
-    }
+const reducers = {
+  setSearch(state: settingsFinanceWalletState, action: { payload: FinanceWalletSearch }) {
+    state.search = action.payload
   },
   setList(state: settingsFinanceWalletState, action: { payload: { items: FinanceWallet[], total: number, lastPage: number } }) {
     state.items = action.payload.items
@@ -14,3 +11,5 @@ export default {
     state.lastPage = action.payload.lastPage
   }
 }
+
+export default reducers

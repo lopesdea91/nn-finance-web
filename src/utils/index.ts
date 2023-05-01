@@ -3,7 +3,7 @@ import { parseItemToOption } from './parseItemToOption'
 import { parseQueryUrlForm } from './parseQueryUrlForm'
 
 import { $env } from './env'
-import { $cookie } from './cookie'
+export * from './cookie'
 import { $table } from './table'
 
 // export const $ = {
@@ -19,6 +19,5 @@ export const $utils = {
 
 export {
   $env,
-  $cookie,
   $table
 }

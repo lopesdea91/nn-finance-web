@@ -1,3 +1,3 @@
-import { AuthSignInPage } from "@/template/auth.sign-in";
+import { AuthSignInPage } from "@/@core/presentation/auth.sign-in";
 
 export default AuthSignInPage

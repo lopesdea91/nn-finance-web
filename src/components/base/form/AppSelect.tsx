@@ -1,3 +1,4 @@
+import React from 'react'
 import { Select, SelectProps, MenuItem, InputLabel, FormControl, FormHelperText } from '@mui/material'
 
 type Options = { id: number | string, description: string }
@@ -9,8 +10,8 @@ type Props = SelectProps & {
   optionEmpty?: boolean
   options: Options[]
 }
-
-export const AppSelect = ({ label, text, error, options, optionEmpty, ...rest }: Props) => {
+const AppSelect = React.forwardRef((props: Props, ref) => {
+  const { label, text, error, options, optionEmpty, ...rest } = props
   return (
     <FormControl fullWidth error={!!error}>
       {label &&
@@ -18,10 +19,14 @@ export const AppSelect = ({ label, text, error, options, optionEmpty, ...rest }:
       }
 
       <Select
+        inputProps={{
+          'data-testid': 'app-select'
+        }}
         labelId={label || "simple-select-label"}
         label={label}
         error={!!error}
         size='small'
+        ref={ref}
         {...rest}
       >
         {optionEmpty && <MenuItem value="">Selecione</MenuItem>}
@@ -30,11 +35,13 @@ export const AppSelect = ({ label, text, error, options, optionEmpty, ...rest }:
         ))}
       </Select>
 
-      {!error &&
+      {error &&
         <FormHelperText>{error}</FormHelperText>
       }
     </FormControl >
   )
-}
+})
 
-export default AppSelect
+AppSelect.displayName = 'AppSelect'
+
+export { AppSelect }
