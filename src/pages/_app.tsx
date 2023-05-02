@@ -10,6 +10,7 @@ import '../assets/css/app.scss'
 config.autoAddCss = false
 
 function App({ Component, pageProps }: AppPropsLayout) {
+
   return (
     <AppProvider>
       <Layout layout={Component.layout}>

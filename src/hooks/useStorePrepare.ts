@@ -22,12 +22,8 @@ export const useStorePrepare = () => {
   const financeStore = FinanceStore()
   const systemStore = SystemStore()
 
-  const { authState } = useAppSelector((e) => ({
-    authState: e.auth
-  }))
   const router = useRouter()
-  const [isPending, setIsPending] = useState<boolean>(() => !authState.user.id)
-
+  const [isPending, setIsPending] = useState<boolean>(() => !authStore.state.user.id)
 
   async function userData() {
     const userResult = await http.user.data()
@@ -83,9 +79,10 @@ export const useStorePrepare = () => {
   }
 
   useEffect(() => {
-    if (!authState.user.id || !isPending) {
+    if (!authStore.state.user.id || !isPending) {
       handler()
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

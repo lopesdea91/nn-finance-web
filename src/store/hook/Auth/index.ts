@@ -1,10 +1,12 @@
-import { useAppDispatch } from "@/store/hook"
+import { useAppDispatch, useAppSelector } from "@/store/hook"
 import { actionsAuthSlice } from "@/store/features/auth"
 import { User } from "@/types/system"
 import { $cookie } from "@/utils"
 
 export const AuthStore = () => {
   const dispatch = useAppDispatch()
+
+  const state = useAppSelector((e) => e.auth)
 
   const setUser = (value: User) => {
     $cookie.set({
@@ -24,6 +26,7 @@ export const AuthStore = () => {
   }
 
   return {
+    state,
     setUser
   }
 }
