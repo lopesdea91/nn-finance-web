@@ -5,6 +5,7 @@ type Props = {
   variant: TypographyProps['variant']
   sx?: TypographyProps['sx']
   onClick?: TypographyProps['onClick']
+  className?: TypographyProps['className']
 }
 export const AppText = ({ children, ...rest }: Props) => {
   return <Typography {...rest}>{children}</Typography>

@@ -1,31 +1,66 @@
-import { cookiesName } from "@/constants"
+import { $memory } from "@/@core/infra/memory"
 import { actionsPageFinanceExtract } from "@/store/feturesPage/finance.extract"
+import { ReducerPayloadProps } from "@/store/feturesPage/finance.extract/reducers"
 import { useAppDispatch, useAppSelector } from "@/store/hook"
-import { FinanceItem } from "@/types/entities/finance-item"
-import { FinanceExtractFormSearchFields } from "@/types/form/financeExtract"
-import { $cookie } from "@/utils"
 
 export const PageFinanceExtractStore = () => {
   const dispatch = useAppDispatch()
   const state = useAppSelector(e => e.pageFinanceExtract)
 
-  function setList(values: { items: FinanceItem[], total: number, lastPage: number }) {
-    dispatch(actionsPageFinanceExtract.setList(values))
-  }
-
-  function setSearch(values: Partial<FinanceExtractFormSearchFields>) {
-    const newSearch = {
-      ...state.search,
+  function setFormSearch(values: Partial<ReducerPayloadProps['setFormSearch']>) {
+    const newSearch: ReducerPayloadProps['setFormSearch'] = {
+      ...state.formSearch,
       ...values,
     }
 
-    $cookie.setSearchPage({
-      searchKey: cookiesName.financeExtractSearch,
-      value: JSON.stringify(newSearch)
-    })
+    $memory.cookie.set('financeExtractFormSearch', JSON.stringify(newSearch))
 
-    dispatch(actionsPageFinanceExtract.setSearch(newSearch))
+    dispatch(actionsPageFinanceExtract.setFormSearch(newSearch))
   }
 
-  return { state, setList, setSearch }
+  function setTable(values: ReducerPayloadProps['setTable']) {
+    $memory.cookie.set('financeExtractTable', JSON.stringify({
+      items: [],
+      limit: values.limit,
+      total: values.total,
+      page: values.page
+    }))
+
+    dispatch(actionsPageFinanceExtract.setTable({
+      items: values.items,
+      limit: values.limit,
+      total: values.total,
+      page: values.page
+    }))
+  }
+
+  function setTablePage(value: ReducerPayloadProps['setTable']['page']) {
+    $memory.cookie.set('financeExtractTable', JSON.stringify({
+      items: [],
+      limit: state.table.limit,
+      total: state.table.total,
+      page: value
+    }))
+
+    dispatch(actionsPageFinanceExtract.setTablePage(value))
+  }
+
+  function setTableLimit(value: ReducerPayloadProps['setTable']['limit']) {
+    $memory.cookie.set('financeExtractTable', JSON.stringify({
+      items: [],
+      limit: value,
+      total: state.table.total,
+      page: state.table.page
+    }))
+
+    dispatch(actionsPageFinanceExtract.setTableLimit(value))
+  }
+
+  return {
+    state,
+    setFormSearch,
+    setTable,
+    setTablePage,
+    setTableLimit,
+  }
 }

@@ -26,11 +26,13 @@ export const SettingsFinanceTagIdMethods = () => {
       wallet_id: Number(fields.walletId),
     }
 
-    const { error } = !!id
+    const result = !!id
       ? await handleUpdate(id, form)
       : await handleCreate(form)
 
-    if (!!error) {
+    // toast
+
+    if (!result.error) {
       systemStore.loadingEnd()
       return
     }
@@ -38,16 +40,16 @@ export const SettingsFinanceTagIdMethods = () => {
     const resultGet = await http.financeTag.get({
       enable: 1
     })
-    !!resultGet.data && financeStore.setTag(resultGet.data.sort(sortDataGet))
+
+    if (resultGet.error) {
+      // toast
+    } else {
+      financeStore.setTag(
+        (resultGet.data as FinanceTag[]).sort(sortDataGet)
+      )
+    }
 
     systemStore.loadingEnd()
-
-    // toast.addToast({
-    //   message: `Tag ${id ? 'atualizada' : 'criada'} com sucesso!`,
-    //   type: 'success'
-    // })
-
-    router.push('/settings/finance/tag')
   }
   const handleCreate = async (fields: FinanceTagFormFieldsPost) => {
     return await http.financeTag.post(

@@ -15,7 +15,10 @@ export const Pagination = (props: Props) => {
 
   const lastPage = useMemo(() => {
     return Math.ceil(search.total / search.limit)
-  }, [search.total, search.limit])
+  }, [search.total, search.limit, search.page])
+
+  const btnPreviousDisabled = search.page === 1
+  const btnNextDisabled = lastPage === 0 || lastPage === search.page
 
   return (
     <Box
@@ -43,12 +46,12 @@ export const Pagination = (props: Props) => {
       <AppButtonGroup>
         <AppButtonIcon
           variant='arrowLeft'
-          disabled={search.page === 1}
+          disabled={btnPreviousDisabled}
           onClick={() => handleChangePage(search.page - 1)}
         />
         <AppButtonIcon
           variant='arrowRight'
-          disabled={search.page === lastPage}
+          disabled={btnNextDisabled}
           onClick={() => handleChangePage(search.page + 1)}
         />
       </AppButtonGroup>

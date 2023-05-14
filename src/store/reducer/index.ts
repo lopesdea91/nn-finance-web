@@ -5,7 +5,6 @@ import { financeSlice } from '../features/finance'
 import { pageFinanceExtractSlice } from '../feturesPage/finance.extract'
 import { pagePanelFinanceSlice } from '../feturesPage/panel.finance'
 import { pageSettingsFinanceWalletSlice } from '../feturesPage/settings.financeWallet'
-import { pageSettingsFinanceWalletIdSlice } from '../feturesPage/settingsFinanceWalletId'
 import { pageSettingsFinanceOriginSlice } from '../feturesPage/settings.financeOrigin'
 import { pageSettingsFinanceTagSlice } from '../feturesPage/settings.financeTag'
 
@@ -17,7 +16,6 @@ export const reducer = {
   [pageFinanceExtractSlice.name]: pageFinanceExtractSlice.reducer,
   [pagePanelFinanceSlice.name]: pagePanelFinanceSlice.reducer,
   [pageSettingsFinanceWalletSlice.name]: pageSettingsFinanceWalletSlice.reducer,
-  [pageSettingsFinanceWalletIdSlice.name]: pageSettingsFinanceWalletIdSlice.reducer,
   [pageSettingsFinanceOriginSlice.name]: pageSettingsFinanceOriginSlice.reducer,
   [pageSettingsFinanceTagSlice.name]: pageSettingsFinanceTagSlice.reducer,
 }

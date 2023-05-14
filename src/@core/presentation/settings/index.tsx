@@ -1,6 +1,6 @@
 import { AppColumn, AppColumns, AppDivider, AppText } from '@/components/base'
 import { useTitlePage } from '@/hooks'
-import { Section } from '@/layouts/LayoutPrivate/components'
+import { Page, Section } from '@/layouts/LayoutPrivate/components'
 import { SectionLink } from './styled'
 
 export const SettingsPage = () => {
@@ -16,7 +16,7 @@ export const SettingsPage = () => {
     { label: 'Tag', desc: 'Cadastro e edição', href: '/settings/finance/tag' },
   ]
   return (
-    <>
+    <Page>
       <Section>
         <AppText variant="h5">Conta</AppText>
         <AppDivider sx={{ mb: 0 }} />
@@ -50,6 +50,6 @@ export const SettingsPage = () => {
           ))}
         </AppColumns>
       </Section>
-    </>
+    </Page>
   )
 }

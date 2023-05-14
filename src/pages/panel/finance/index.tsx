@@ -1,24 +1,5 @@
-import { LayoutStore } from '@/store/hook'
-import React from 'react'
+import { PanelFinanceGetServerSideProps, PanelFinancePage } from "@/@core/presentation/panel.finance"
 
-export default function index() {
+export default PanelFinancePage
 
-  const layoutStore = LayoutStore()
-
-  function add() {
-    const id = `${(new Date).getTime()}`
-    const msg = `msg ${id}`
-
-    layoutStore.addTost([
-      { id, msg, type: 'success' }
-    ])
-  }
-
-  return (
-    <div>
-      teste
-
-      <button onClick={add}>add toas</button>
-    </div>
-  )
-}
+export const getServerSideProps = PanelFinanceGetServerSideProps

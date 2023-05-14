@@ -1,23 +1,21 @@
-import { FinanceWallet } from "@/types/entities/finance-wallet"
-import { FinanceWalletFormSearchFields } from "@/types/form/settingsFinanceWallet"
+import { IPageSettingsFinanceWalletFormSearch, IPageSettingsFinanceWalletTable } from "@/types/pages/SettingsFinanceWallet"
 
 export interface settingsFinanceWalletState {
-  search: FinanceWalletFormSearchFields
-  items: FinanceWallet[]
-  total: number
-  lastPage: number
+  formSearch: IPageSettingsFinanceWalletFormSearch
+  table: IPageSettingsFinanceWalletTable
 }
 const state: settingsFinanceWalletState = {
-  search: {
-    _q: '',
-    _limit: 15,
-    page: 0,
+  formSearch: {
+    query: '',
     enable: 1,
     panel: 1,
   },
-  items: [],
-  total: 0,
-  lastPage: 0,
+  table: {
+    items: [],
+    total: 0,
+    page: 0,
+    limit: 15,
+  }
 }
 
 export default state

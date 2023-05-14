@@ -1,45 +1,38 @@
-import React, { createContext, createRef, useContext } from 'react'
+import { createContext, createRef, useContext } from 'react'
 import { useRouter } from 'next/router'
+import { http } from '@/@core/infra/http'
 import { AppDivider, AppDropdown, AppDropdownHandle, AppIcon, Table2 } from '@/components'
-import { FinanceTagFormSearchFields } from '@/types/form/settingsFinanceTag'
 import { _limitApi } from '@/types/enum'
 import { FinanceTag } from '@/types/entities/finance-tag'
+import { PageSettingsFinanceTagStore, SystemStore } from '@/store/hook'
 import { $table } from '@/utils'
-import { SystemStore } from '@/store/hook'
-import { http } from '@/@core/infra/http'
+import { SettingsFinanceTagMethods } from '../index.methods'
 
-interface Props {
-  items: FinanceTag[]
-  getItems: (args?: { search?: Partial<FinanceTagFormSearchFields> }) => Promise<void>
-  search: {
-    limit: number
-    page: number
-    total: number
-  }
-  onChangeSearch: (value: Partial<FinanceTagFormSearchFields>) => void
-}
+export const Table = () => {
+  const pageSettingsFinanceTagStore = PageSettingsFinanceTagStore()
+  const { table } = pageSettingsFinanceTagStore.state
 
-export const Table = (props: Props) => {
   const tableMenuRef = createRef<AppDropdownHandle>();
 
-  function handleChangePage(newPage: number) {
-    props.onChangeSearch({ page: newPage })
+  const { getItems, onChangePage, onChangeLimit } = SettingsFinanceTagMethods()
 
-    props.getItems({ search: { page: newPage } })
+  const handleChangePage = (newPage: number) => {
+    onChangePage(newPage)
+    getItems({ page: newPage })
   }
-  function handleChangeRowsPerPage(newLimit: _limitApi) {
-    props.onChangeSearch({ _limit: newLimit })
-
-    props.getItems({ search: { _limit: newLimit } })
+  const handleChangeRowsPerPage = (newLimit: _limitApi) => {
+    onChangePage(1)
+    onChangeLimit(newLimit)
+    getItems({ limit: newLimit, page: 1 })
   }
-  async function handleItemEnable(atcion: 'enabled' | 'disabled', id: number) {
+  const handleItemEnable = async (atcion: 'enabled' | 'disabled', id: number) => {
     atcion === 'enabled'
       ? await http.financeTag.enabled(id)
       : await http.financeTag.disabled(id)
 
     tableMenuRef.current?.handleClose()
 
-    await props.getItems()
+    await getItems()
   }
 
   return (
@@ -49,12 +42,12 @@ export const Table = (props: Props) => {
     }}
     >
       <Table2.Container
-        bodyItemsLength={props.items.length}
+        bodyItemsLength={table.items.length}
         columnsCount={6}
         search={{
-          'limit': props.search.limit,
-          'page': props.search.page,
-          'total': props.search.total,
+          'limit': table.limit,
+          'page': table.page,
+          'total': table.total,
         }}
         contentHeader={(
           <>
@@ -66,7 +59,7 @@ export const Table = (props: Props) => {
           </>
         )}
         contentBody={
-          props.items.map((row: FinanceTag) => (
+          table.items.map((row: FinanceTag) => (
             <Table2.Row key={row.id}>
               <Table2.Cell sx={{ width: 35, p: 0 }}>
                 <TableMenu row={row} />
@@ -86,16 +79,15 @@ export const Table = (props: Props) => {
         }
       />
 
-      < Table2.Pagination
+      <Table2.Pagination
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         search={{
-          limit: props.search.limit,
-          page: props.search.page,
-          total: props.search.total
+          limit: table.limit,
+          page: table.page,
+          total: table.total
         }}
       />
-
     </contextLocal.Provider >
   )
 }

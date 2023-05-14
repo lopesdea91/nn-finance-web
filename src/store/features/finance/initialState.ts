@@ -4,7 +4,6 @@ import { FinanceStatus } from "@/types/entities/finance-status"
 import { FinanceTag } from "@/types/entities/finance-tag"
 import { FinanceType } from "@/types/entities/finance-type"
 import { FinanceWallet } from "@/types/entities/finance-wallet"
-import { FinanceExtractFormSearchFields } from "@/types/form/financeExtract"
 import { FinanceOriginFormSearchFields } from "@/types/form/settingsFinanceOrigin"
 import { FinanceTagFormSearchFields } from "@/types/form/settingsFinanceTag"
 import { FinanceWalletFormSearchFields } from "@/types/form/settingsFinanceWallet"
@@ -24,23 +23,10 @@ export interface financeStateSlice {
   type: FinanceType[]
   status: FinanceStatus[]
   // extract
-  extractSearch: FinanceExtractFormSearchFields
 }
 
 const initialState: financeStateSlice = {
-  extractSearch: {
-    type_preveiw: 'extract',
-    period: '',
-    _limit: 15,
-    _q: '',
-    page: 1,
-    enable: 1,
-    status_id: 1,
-    type_id: null,
-    origin_id: null,
-    tag_ids: null,
-    wallet_id: null
-  },
+  /** wallet */
   wallet: [],
   walletSearch: {
     _limit: 15,
@@ -49,6 +35,7 @@ const initialState: financeStateSlice = {
     enable: 1,
     panel: 1,
   },
+  /** origin */
   origin: [],
   originSearch: {
     _limit: 15,
@@ -59,6 +46,7 @@ const initialState: financeStateSlice = {
     wallet_id: null,
     parent_id: null,
   },
+  /** tag */
   tag: [],
   tagSearch: {
     _limit: 15,
@@ -68,6 +56,7 @@ const initialState: financeStateSlice = {
     type_id: 1,
     wallet_id: null
   },
+  /** lists */
   originType: [],
   type: [],
   status: [],

@@ -3,38 +3,28 @@ import Router, { useRouter } from 'next/router'
 import { AppButtonIcon, AppTitle } from "@/components/base";
 import { PageFinanceExtractStore, SystemStore } from '@/store/hook';
 import { FinanceItem } from '@/types/entities/finance-item';
-import { FinanceExtractFormSearchFields } from "@/types/form/financeExtract";
 import { ContextSSR } from '@/types/system';
-import { $cookie } from '@/utils';
+import { http } from '@/@core/infra/http';
+import { Page, Section } from '@/layouts/LayoutPrivate/components';
+import { useTitlePage } from '@/hooks';
+import { IPageFinanceExtractFormSearch, IPageFinanceExtractTable } from '@/types/pages/FinanceExtract';
+import { FinanceTypeId } from '@/types/enum';
 import { FinanceExtractFormSearch } from "./components/FinanceExtractFormSearch";
 import { FinanceExtractTable } from './components/FinanceExtractTable';
-import { ApiPageResponse } from '@/services/api';
 import { FinanceExtractMethods } from './index.methods';
-import { http } from '@/@core/infra/http';
-import { Section } from '@/layouts/LayoutPrivate/components';
-import { cookiesName } from '@/constants';
-import { useTitlePage } from '@/hooks';
+import { $memory } from '@/@core/infra/memory';
 
-const searchDefault: FinanceExtractFormSearchFields = {
-  _limit: 15,
-  _q: '',
-  page: 1,
-  enable: 1,
-  status_id: null,
-  type_id: null,
-  origin_id: null,
-  wallet_id: null,
-  tag_ids: [],
-  period: '',
-  type_preveiw: 'extract'
-}
+interface Pessoa { id: number }
 
-type Props = {
+type PageProps = {
   unauthenticated: boolean
-  data: ApiPageResponse<FinanceItem>
-  search: Partial<FinanceExtractFormSearchFields>
+  formSearch: IPageFinanceExtractFormSearch
+  table: IPageFinanceExtractTable & {
+    items: FinanceItem[],
+    total: number
+  }
 }
-export const FinanceExtractPage = (props: Props) => {
+export const FinanceExtractPage = (props: PageProps) => {
   useTitlePage('Finança extrato')
 
   const isMounted = useRef(false)
@@ -42,25 +32,28 @@ export const FinanceExtractPage = (props: Props) => {
   const systemStore = SystemStore()
   const pageFinanceExtractStore = PageFinanceExtractStore()
 
-  const { getItems, onChangeSearch, resetSearch } = FinanceExtractMethods()
+  const { getItems } = FinanceExtractMethods()
 
   useEffect(() => {
     if (isMounted.current) {
-      getItems()
+      getItems({
+        period: systemStore.state.period,
+        wallet_id: systemStore.state.walletPanelId
+      })
     } else {
-      pageFinanceExtractStore.setSearch(props.search)
+      pageFinanceExtractStore.setFormSearch(props.formSearch)
 
-      pageFinanceExtractStore.setList({
-        items: props.data.items,
-        total: props.data.total,
-        lastPage: props.data.lastPage,
+      pageFinanceExtractStore.setTable({
+        items: props.table.items,
+        total: props.table.total,
+        page: props.table.page,
+        limit: props.table.limit,
       })
     }
+
     return () => {
       isMounted.current = true
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemStore.state.period, systemStore.state.walletPanelId])
 
   if (props.unauthenticated) {
@@ -69,7 +62,7 @@ export const FinanceExtractPage = (props: Props) => {
   }
 
   return (
-    <>
+    <Page>
       <AppTitle
         variant="h5"
         contentEnd={
@@ -83,52 +76,61 @@ export const FinanceExtractPage = (props: Props) => {
       </AppTitle>
 
       <Section className='listing'>
-        <FinanceExtractFormSearch
-          getItems={getItems}
-          search={pageFinanceExtractStore.state.search}
-          onChangeSearch={onChangeSearch}
-          resetSearch={resetSearch}
-        />
+        <FinanceExtractFormSearch />
 
-        <FinanceExtractTable
-          getItems={getItems}
-          items={pageFinanceExtractStore.state.items}
-          onChangeSearch={onChangeSearch}
-          search={{
-            limit: Number(pageFinanceExtractStore.state.search._limit),
-            page: Number(pageFinanceExtractStore.state.search.page),
-            total: Number(pageFinanceExtractStore.state.total),
-          }}
-        />
+        <FinanceExtractTable />
       </Section>
-    </>
+    </Page>
   )
 }
 
 export const FinanceExtractGetServerSideProps = async (ctx: ContextSSR) => {
-  const period = $cookie.getPeriod({ ctx })
-  const walletPanelId = $cookie.getWalletPanelId({ ctx })
+  $memory.cookie.setContext(ctx)
 
-  const searchCookie = $cookie.getSearchPage<FinanceExtractFormSearchFields>({ ctx, searchKey: cookiesName.financeExtractSearch })
-
-  const search: Partial<FinanceExtractFormSearchFields> = {
-    ...searchDefault,
-    ...searchCookie,
-    period,
-    wallet_id: walletPanelId
-  }
-
-  const token = $cookie.getToken({ ctx })
+  const period = $memory.cookie.get<string>('period')
+  const walletPanelId = $memory.cookie.get<string>('walletPanelId')
+  const searchCookie = $memory.cookie.get<IPageFinanceExtractFormSearch>('financeExtractFormSearch', { jsonParse: true })
+  const tableCookie = $memory.cookie.get<IPageFinanceExtractTable>('financeExtractTable', { jsonParse: true })
+  const token = $memory.cookie.get<string>('token')
 
   http.setToken(token)
 
-  const { code, data } = await http.financeItem.page(search)
+  const { code, data } = await http.financeItem.page({
+    /** searchCookie */
+    _q: searchCookie.query,
+    enable: searchCookie.enable,
+    status_id: searchCookie.status_id,
+    type_id: Number(searchCookie.type_id) as FinanceTypeId,
+    origin_id: searchCookie.origin_id,
+    tag_ids: searchCookie.tag_ids,
+    type_preveiw: searchCookie.type_preveiw,
+    /** tableCookie */
+    _limit: tableCookie.limit,
+    page: tableCookie.page,
+    /** ... */
+    period,
+    wallet_id: Number(walletPanelId)
+  })
 
-  return {
-    props: {
-      unauthenticated: code === 401,
-      data,
-      search
+  $memory.cookie.set('financeExtractTable', JSON.stringify({
+    limit: data.limit,
+    page: data.page,
+  }))
+
+  const teste: Pessoa = {
+    id: 2
+  }
+
+  const props: PageProps = {
+    unauthenticated: code === 401,
+    formSearch: searchCookie,
+    table: {
+      items: data.items,
+      total: data.total,
+      page: data.page,
+      limit: data.limit,
     }
   }
+
+  return { props }
 }

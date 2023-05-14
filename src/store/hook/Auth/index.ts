@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/hook"
 import { actionsAuthSlice } from "@/store/features/auth"
 import { User } from "@/types/system"
-import { $cookie } from "@/utils"
+import { $memory } from "@/@core/infra/memory"
 
 export const AuthStore = () => {
   const dispatch = useAppDispatch()
@@ -9,18 +9,10 @@ export const AuthStore = () => {
   const state = useAppSelector((e) => e.auth)
 
   const setUser = (value: User) => {
-    $cookie.set({
-      key: 'data_user',
-      value: JSON.stringify({
-        id: value.id,
-        name: value.name,
-      }),
-      options: {
-        path: '/'
-      },
-      keyCrypto: true,
-      valueCrypto: true
-    })
+    $memory.cookie.set('data_user', JSON.stringify({
+      id: value.id,
+      name: value.name,
+    }))
 
     dispatch(actionsAuthSlice.setUser(value))
   }

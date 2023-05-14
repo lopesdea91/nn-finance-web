@@ -1,5 +1,6 @@
 
 import { useTitlePage } from '@/hooks';
+import { Page } from '@/layouts/LayoutPrivate/components';
 import { SignInForm } from './components/SignInForm';
 import { AuthSignInPageMethods } from './index.methods';
 
@@ -8,7 +9,9 @@ export const AuthSignInPage = () => {
   const { onSubmit, messageSubmit } = AuthSignInPageMethods()
 
   return (
-    <SignInForm onSubmit={onSubmit} messageSubmit={messageSubmit} />
+    <Page>
+      <SignInForm onSubmit={onSubmit} messageSubmit={messageSubmit} />
+    </Page>
   )
 }
 AuthSignInPage.layout = 'public'

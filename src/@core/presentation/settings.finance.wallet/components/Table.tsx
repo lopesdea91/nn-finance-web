@@ -4,42 +4,35 @@ import { http } from '@/@core/infra/http'
 import { AppDivider, AppDropdown, AppDropdownHandle, AppIcon, Table2 } from '@/components'
 import { _limitApi } from '@/types/enum'
 import { FinanceWallet } from '@/types/entities/finance-wallet'
-import { FinanceWalletFormSearchFields } from '@/types/form/settingsFinanceWallet'
-import { SystemStore } from '@/store/hook'
+import { PageSettingsFinanceWalletStore, SystemStore } from '@/store/hook'
 import { $table } from '@/utils'
+import { SettingsFinanceWalletMethods } from '../index.methods'
 
-interface Props {
-  items: FinanceWallet[]
-  getItems: (args?: { search?: Partial<FinanceWalletFormSearchFields> }) => Promise<void>
-  search: {
-    page: number
-    total: number
-    limit: number
-  }
-  onChangeSearch: (value: Partial<FinanceWalletFormSearchFields>) => void
-}
+export const Table = () => {
+  const pageSettingsFinanceWalletStore = PageSettingsFinanceWalletStore()
+  const { table } = pageSettingsFinanceWalletStore.state
 
-export const Table = (props: Props) => {
   const tableMenuRef = createRef<AppDropdownHandle>();
 
-  function handleChangePage(newPage: number) {
-    props.onChangeSearch({ page: newPage })
+  const { getItems, onChangePage, onChangeLimit } = SettingsFinanceWalletMethods()
 
-    props.getItems({ search: { page: newPage } })
+  const handleChangePage = (newPage: number) => {
+    onChangePage(newPage)
+    getItems({ page: newPage })
   }
-  function handleChangeRowsPerPage(newLimit: _limitApi) {
-    props.onChangeSearch({ _limit: newLimit })
-
-    props.getItems({ search: { _limit: newLimit } })
+  const handleChangeRowsPerPage = (newLimit: _limitApi) => {
+    onChangePage(1)
+    onChangeLimit(newLimit)
+    getItems({ limit: newLimit, page: 1 })
   }
-  async function handleItemEnable(atcion: 'enabled' | 'disabled', id: number) {
+  const handleItemEnable = async (atcion: 'enabled' | 'disabled', id: number) => {
     atcion === 'enabled'
       ? await http.financeWallet.enabled(id)
       : await http.financeWallet.disabled(id)
 
     tableMenuRef.current?.handleClose()
 
-    await props.getItems()
+    await getItems()
   }
 
   return (
@@ -49,12 +42,12 @@ export const Table = (props: Props) => {
     }}
     >
       <Table2.Container
-        bodyItemsLength={props.items.length}
+        bodyItemsLength={table.items.length}
         columnsCount={6}
         search={{
-          'limit': props.search.limit,
-          'page': props.search.page,
-          'total': props.search.total,
+          'limit': table.limit,
+          'page': table.page,
+          'total': table.total,
         }}
         contentHeader={(
           <>
@@ -66,7 +59,7 @@ export const Table = (props: Props) => {
           </>
         )}
         contentBody={
-          props.items.map((row: FinanceWallet) => (
+          table.items.map((row: FinanceWallet) => (
             <Table2.Row key={row.id}>
               <Table2.Cell sx={{ width: 35, p: 0 }}>
                 <TableMenu row={row} />
@@ -91,9 +84,9 @@ export const Table = (props: Props) => {
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         search={{
-          limit: props.search.limit,
-          page: props.search.page,
-          total: props.search.total
+          limit: table.limit,
+          page: table.page,
+          total: table.total
         }}
       />
     </contextLocal.Provider>

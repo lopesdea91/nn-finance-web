@@ -1,23 +1,36 @@
 import { AxiosError, AxiosStatic } from "axios";
-import { ApiPageResponse } from "@/services/api";
-import { FinanceExtractFormSearchFields } from "@/types/form/financeExtract";
 import { FinanceItemFormFieldsPost, FinanceItemFormFieldsPut } from "@/types/form/financeItem";
 import { FinanceItem } from "@/types/entities/finance-item";
-import { FinanceStatusId } from "@/types/enum";
+import { Enable, FinanceExtractTypePreveiw, FinanceStatusId, FinanceTypeId, _limitApi } from "@/types/enum";
 import { $utils } from "@/utils";
+import { PageResponse } from "@/types/request";
 
 const url = '/v1/finance/item'
+
+export interface IFinanceWalletPagePayload {
+  _q: string
+  _limit: _limitApi
+  page: number
+  enable: Enable
+  status_id: FinanceStatusId | null
+  type_id: FinanceTypeId | null
+  origin_id: number | null
+  wallet_id: number | null
+  tag_ids: number[] | null
+  type_preveiw: FinanceExtractTypePreveiw
+  period: string
+}
 
 export class FinanceItemGeteway {
   constructor(private request: AxiosStatic) { }
 
-  async page(search: Partial<FinanceExtractFormSearchFields> = {}) {
+  async page(search: IFinanceWalletPagePayload) {
     const q = $utils.queryString({ _paginate: true, ...search })
 
     let error = null
     let code = 200
     let status = true
-    let data: ApiPageResponse<FinanceItem> = {
+    let data: PageResponse<FinanceItem> = {
       items: [],
       page: 1,
       total: 0,
@@ -26,7 +39,7 @@ export class FinanceItemGeteway {
     }
 
     try {
-      const result = await this.request.get<ApiPageResponse<FinanceItem>>(url + q)
+      const result = await this.request.get<PageResponse<FinanceItem>>(url + q)
 
       code = result.status
 

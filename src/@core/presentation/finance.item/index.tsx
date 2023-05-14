@@ -1,13 +1,15 @@
 import React, { useRef } from 'react'
 import dayjs from 'dayjs'
-import { AppButtonGroup, AppButtonIcon, AppDivider, AppTitle } from '@/components/base'
+import { AppButtonGroup, AppButtonIcon, AppTitle } from '@/components/base'
 import { ContextSSR } from '@/types/system'
-import { $cookie, $utils } from '@/utils'
+import { $utils } from '@/utils'
 import { SystemStore } from '@/store/hook'
 import { FinanceItemMethods } from './index.methods'
 import { http } from '@/@core/infra/http'
 import { Form, FormItemProps } from './components/Form'
 import { useTitlePage } from '@/hooks'
+import { $memory } from '@/@core/infra/memory'
+import { Page } from '@/layouts/LayoutPrivate/components'
 
 const defaultFields: FormItemProps['defaultValues'] = {
   id: null,
@@ -43,7 +45,7 @@ export const FinanceItemPage = (props: Props) => {
   // const queryData = $utils.parseQueryUrlForm({ id: router.query.id, copy: router.query.copy })
 
   return (
-    <>
+    <Page>
       <AppTitle
         variant="h5" mb={2}
         contentEnd={
@@ -83,7 +85,7 @@ export const FinanceItemPage = (props: Props) => {
         initialValues={props.form}
         defaultValues={defaultFields}
       />
-    </>
+    </Page>
   )
 }
 
@@ -104,7 +106,9 @@ export const FinanceItemGetServerSideProps = async (ctx: ContextSSR) => {
     ...defaultFields
   }
 
-  const token = $cookie.getToken({ ctx })
+  $memory.cookie.setContext(ctx)
+
+  const token = $memory.cookie.get<string>('token')
 
   http.setToken(token)
 

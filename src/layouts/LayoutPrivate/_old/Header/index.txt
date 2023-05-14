@@ -1,7 +1,6 @@
 import React from 'react'
 import { useStoreSystem } from '@/hooks/useStoreSystem'
 import { HeaderBtn, Container, InputPeriod, InputsWrapper, SelectWallet } from './styled'
-import { $cookie } from '@/utils'
 import { useAppSelector } from '@/store/hook'
 
 export default function Header() {
@@ -12,21 +11,9 @@ export default function Header() {
   }))
 
   async function handlePeriod(period: string) {
-    $cookie.set({
-      key: 'period',
-      value: period,
-      options: { path: '/' },
-    })
-
     setPeriod(period)
   }
   function handleWalletPanelId(walletPanelId: number) {
-    $cookie.set({
-      key: 'walletPanelId',
-      value: String(walletPanelId),
-      options: { path: '/' },
-    })
-
     setWalletPanelId(walletPanelId)
   }
 

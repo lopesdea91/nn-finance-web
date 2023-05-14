@@ -1,34 +1,18 @@
 import { useAppDispatch, useAppSelector } from "@/store/hook"
 import { actionsSystemSlice } from "@/store/features/system"
-import { $cookie } from "@/utils"
+import { $memory } from "@/@core/infra/memory"
 
 export const SystemStore = () => {
   const dispatch = useAppDispatch()
   const state = useAppSelector(e => e.system)
 
   function setPeriod(value: string) {
-    $cookie.set({
-      key: 'period',
-      value: value,
-      options: {
-        path: '/'
-      },
-      // keyCrypto: true,
-      // valueCrypto: true
-    })
+    $memory.cookie.set('period', value)
 
     dispatch(actionsSystemSlice.setPeriod(value))
   }
   function setWalletPanelId(value: number) {
-    $cookie.set({
-      key: 'walletPanelId',
-      value: String(value),
-      options: {
-        path: '/'
-      },
-      // keyCrypto: true,
-      // valueCrypto: true
-    })
+    $memory.cookie.set('walletPanelId', String(value))
 
     dispatch(actionsSystemSlice.setWalletPanelId(value))
   }

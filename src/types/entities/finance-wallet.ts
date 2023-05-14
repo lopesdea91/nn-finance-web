@@ -1,9 +1,14 @@
 import { Enable, FinanceTypeId, _limitApi, FinanceStatusId } from '../enum'
 
+export type FinanceWalletComposition = {
+  tag_id: string
+  percentage: string
+}
 export interface FinanceWallet {
   id: number
   description: string
   json: Record<string, string>,
+  composition: FinanceWalletComposition[],
   enable: Enable
   panel: Enable
 }
@@ -26,7 +31,13 @@ export interface FinanceWalletConsolidateMonthBalance {
   expense: string
   revenue: string
 }
-export interface FinanceWalletConsolidateMonthComposition { }
+export interface FinanceWalletConsolidateMonthComposition {
+  tag_id: number
+  tag_description: string
+  percentage: string
+  percentage_current: string
+  value: string
+}
 export interface FinanceWalletConsolidateMonthStatus {
   description: string
   count: string

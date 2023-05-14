@@ -1,5 +1,5 @@
-import React from 'react'
-import { AppButtonGroup, AppButtonIcon, AppColumn, AppColumns, AppForm, AppInput, AppSelect, AppTitle, Table2 } from '@/components'
+import React, { useMemo } from 'react'
+import { AppAlert, AppButtonGroup, AppButtonIcon, AppColumn, AppColumns, AppForm, AppInput, AppSelect, AppTitle, Table2 } from '@/components'
 import { FinanceStore, SystemStore } from '@/store/hook'
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,51 +7,75 @@ import { z } from 'zod'
 import { $utils } from '@/utils'
 import { SelectChangeEvent } from '@mui/material'
 import { Box } from '@mui/system'
+import { http } from '@/@core/infra/http'
+
+const itemSchema = z.object({
+  id: z.number(),
+  tag: z.object({
+    id: z.string().nonempty('Seleciona uma tag'),
+    description: z.string()
+  }),
+  percentage: z.string().nonempty('Adicione um valor percentual para a tag'),
+})
+export type ItemComposition = z.infer<typeof itemSchema>;
 
 const formSchema = z.object({
-  objectives: z.array(z.object({
-    id: z.number(),
-    tag: z.object({
-      id: z.string(),
-      description: z.string()
-    }), //.nonempty('Seleciona uma tag'),
-    value: z.string().nonempty('Adicione um valor percentual para a tag'),
-  })).min(1, 'Adicione uma tag para criar a composição')
+  items: z.array(itemSchema),
+  msg: z.string().optional(),
+}).superRefine((val, ctx) => {
+  const total = val.items.reduce((acc, el) => acc + (+el.percentage), 0)
+
+  if (total >= 100) {
+    ctx.addIssue({
+      path: ['msg'],
+      code: z.ZodIssueCode.custom,
+      message: "A composição não pode ser maior que 100% no total",
+    })
+  }
+  return true
 })
 
-export type FormData = z.infer<typeof formSchema>;
+export type FormDataComposition = z.infer<typeof formSchema>;
+export interface TabCompositionProps {
+  form: {
+    initialValues: FormDataComposition['items']
+    defaultValues: FormDataComposition['items']
+  }
+}
 
-export const TabComposition = () => {
+export const TabComposition = (props: TabCompositionProps) => {
   const systemStore = SystemStore()
   const financeStore = FinanceStore()
 
   const options = financeStore.state.tag.filter(el => el.type.id === 2)
+
+  const defaultValuesWithDescriptions = useMemo(() => {
+    function applyDescription(el: ItemComposition) {
+      const find = financeStore.state.tag.find(e => e.id === Number(el.tag.id))
+      el.tag.description = find?.description as string
+      return el
+    }
+
+    return {
+      items: props.form.initialValues.map(el => applyDescription(el))
+    }
+  }, [])
 
   const {
     handleSubmit,
     formState: { errors },
     control,
     setValue
-  } = useForm<FormData>({
-    defaultValues: {
-      objectives: []
-    },
+  } = useForm<FormDataComposition>({
+    defaultValues: defaultValuesWithDescriptions,
     resolver: zodResolver(formSchema),
   });
 
-  const items = useWatch({
-    control,
-    name: "objectives",
-  });
-  const itemsWithValues = items.filter(el => {
-    return !!el.tag.id && !!el.value
-  })
-  const total = itemsWithValues.reduce((acc, el) => acc + (+el.value), 0)
+  const items = useWatch({ control, name: "items" });
+  const itemsWithValues = items.filter(el => (!!el.tag.id && !!el.percentage))
+  const total = itemsWithValues.reduce((acc, el) => acc + (+el.percentage), 0)
 
-  const { fields, append, remove, } = useFieldArray({
-    control,
-    name: 'objectives'
-  })
+  const { fields, append, remove, } = useFieldArray({ control, name: 'items' })
 
   function addItem() {
     append({
@@ -60,7 +84,7 @@ export const TabComposition = () => {
         id: '',
         description: ''
       },
-      value: '',
+      percentage: '',
     })
   }
   function removeItem(id: number) {
@@ -68,21 +92,31 @@ export const TabComposition = () => {
   }
   function handleSelectTag(index: number, id: number) {
     const find = financeStore.state.tag.find(tag => tag.id === id)
+
     if (!find) {
-      setValue(`objectives.${index}.tag.id`, '')
-      setValue(`objectives.${index}.tag.description`, '')
+      setValue(`items.${index}.tag.description`, '')
       return
     }
-
-    setValue(`objectives.${index}.tag.id`, String(find.id))
-    setValue(`objectives.${index}.tag.description`, find.description)
+    setValue(`items.${index}.tag.description`, find.description)
   }
-  function onSubmit(fields: FormData) {
-    console.log('... onSubmit')
+  function onSubmit(fields: FormDataComposition) {
+    systemStore.loadingStart()
+
+    const id = 1
+
+    const composition = JSON.stringify(fields.items.map(el => ({
+      tag_id: el.tag.id,
+      percentage: el.percentage
+    })))
+
+    http.financeWallet.composition(id, composition)
+
+    systemStore.loadingEnd()
   }
 
   const hasValeus: boolean = !(items.length || false)
   const hasItemsWithValues: boolean = !!itemsWithValues.length
+  const maxValue = (!!errors?.msg?.message || total > 100) ? "A composição não pode ser maior que 100% no total" : ""
 
   return (
     <div>
@@ -110,6 +144,12 @@ export const TabComposition = () => {
 
       <AppColumns>
         <AppColumn xs={12} md={6} lg={6}>
+          {maxValue && (
+            <AppAlert color="warning" variant="standard" severity="info" sx={{ mb: 2 }}>
+              {maxValue}
+            </AppAlert>
+          )}
+
           <AppForm
             onSubmit={handleSubmit(onSubmit)}
             id="form-composition"
@@ -123,21 +163,24 @@ export const TabComposition = () => {
               }}>
                 <Controller
                   control={control}
-                  name={`objectives.${index}.tag.id`}
+                  name={`items.${index}.tag.id`}
                   render={(p) => <AppSelect
                     label='Tag'
                     options={options.map($utils.parseItemToOption)}
                     disabled={systemStore.state.loading}
-                    error={errors?.objectives?.[index]?.tag?.id?.message}
+                    error={errors?.items?.[index]?.tag?.id?.message}
                     value={p.field.value}
-                    onChange={(e) => handleSelectTag(index, Number((e as SelectChangeEvent).target.value))}
+                    onChange={(e) => {
+                      p.field.onChange(String((e as SelectChangeEvent).target.value))
+                      handleSelectTag(index, Number((e as SelectChangeEvent).target.value))
+                    }}
                     optionEmpty
                   />}
                 />
 
                 <Controller
                   control={control}
-                  name={`objectives.${index}.value`}
+                  name={`items.${index}.percentage`}
                   render={(p) => (
                     <AppInput
                       labelProps={{
@@ -146,7 +189,7 @@ export const TabComposition = () => {
                       inputProps={{
                         type: 'number',
                         step: '0.1',
-                        error: errors?.objectives?.[index]?.value?.message,
+                        error: errors?.items?.[index]?.percentage?.message,
                         disabled: systemStore.state.loading,
                         ...p.field,
                         onChange: (e) => p.field.onChange(String((e as SelectChangeEvent).target.value))
@@ -178,7 +221,7 @@ export const TabComposition = () => {
                   {itemsWithValues.map((el, index) => (
                     <Table2.Row key={`${el.id}-123-${index}`}>
                       <Table2.Cell>{el.tag.description}</Table2.Cell>
-                      <Table2.Cell>{el.value ? `${el.value}%` : ''}</Table2.Cell>
+                      <Table2.Cell>{el.percentage ? `${el.percentage}%` : ''}</Table2.Cell>
                     </Table2.Row>
                   ))}
                   <Table2.Row>
@@ -191,9 +234,6 @@ export const TabComposition = () => {
           </AppColumn>
         }
       </AppColumns>
-
-
-
     </div>
   )
 }

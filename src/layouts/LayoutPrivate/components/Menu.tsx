@@ -93,7 +93,7 @@ const Footer = () => {
         <MenuFooterItemIcon variant='gear' />
       </MenuFooterItem>
 
-      <MenuFooterItem href='/sign-out' onClick={() => handleMenuLink()}>
+      <MenuFooterItem href='/auth/sign-out' onClick={() => handleMenuLink()}>
         <MenuFooterItemIcon variant='signOut' />
       </MenuFooterItem>
     </MenuFooter>
@@ -106,8 +106,6 @@ export const Menu = () => {
 
   useEffect(() => {
     systemStore.closeMenu()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minTable])
 
   if (minTable)

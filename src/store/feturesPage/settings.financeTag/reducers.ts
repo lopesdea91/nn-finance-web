@@ -1,22 +1,27 @@
-import { FinanceTag, FinanceTagSearch } from "@/types/entities/finance-tag"
 import { settingsFinanceTagState } from "./initialState"
 
 type S = settingsFinanceTagState
 
-export type setSearchAction = Partial<FinanceTagSearch>
-export type setListAction = { items: FinanceTag[], total: number, lastPage: number }
+export type ReducerPayloadProps = {
+  setFormSearch: S['formSearch'],
+  setTable: S['table'],
+}
 
 const reducers = {
-  setSearch(state: S, action: { payload: setSearchAction }) {
-    state.search = {
-      ...state.search,
-      ...action.payload
-    }
+  setFormSearch(state: S, action: { payload: ReducerPayloadProps['setFormSearch'] }) {
+    state.formSearch = action.payload
   },
-  setList(state: S, action: { payload: setListAction }) {
-    state.items = action.payload.items
-    state.total = action.payload.total
-    state.lastPage = action.payload.lastPage
+  setTable(state: S, action: { payload: ReducerPayloadProps['setTable'] }) {
+    state.table.items = action.payload.items
+    state.table.total = action.payload.total
+    state.table.page = action.payload.page
+    state.table.limit = action.payload.limit
+  },
+  setTablePage(state: S, action: { payload: ReducerPayloadProps['setTable']['page'] }) {
+    state.table.page = action.payload
+  },
+  setTableLimit(state: S, action: { payload: ReducerPayloadProps['setTable']['limit'] }) {
+    state.table.limit = action.payload
   }
 }
 

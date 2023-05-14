@@ -1,5 +1,4 @@
 import React from 'react'
-import { $cookie } from '@/utils'
 import { SystemStore, useAppSelector } from '@/store/hook'
 import { AppButtonIcon, AppInput, AppSelect } from '@/components/base'
 import styled, { containerGeral, containerResponsive, containerResponsivePadding } from '@/layouts/LayoutPrivate/components/_styled'
@@ -11,23 +10,10 @@ export const Header = () => {
     systemState: e.system,
     financeState: e.finance
   }))
-
   async function handlePeriod(period: string) {
-    $cookie.set({
-      key: 'period',
-      value: period,
-      options: { path: '/' },
-    })
-
     systemStore.setPeriod(period)
   }
   function handleWalletPanelId(walletPanelId: number) {
-    $cookie.set({
-      key: 'walletPanelId',
-      value: String(walletPanelId),
-      options: { path: '/' },
-    })
-
     systemStore.setWalletPanelId(walletPanelId)
   }
 

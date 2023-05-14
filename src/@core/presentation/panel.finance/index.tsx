@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { BalanceCard, BalanceItem, BalanceItemDisplayNumber } from '@/components'
-import { AppText } from '@/components/base'
-import { $cookie } from '@/utils'
+import { AppButtonGroup, AppButtonIcon, AppTitle } from '@/components/base'
 import { ContextSSR } from '@/types/system'
 import { FinanceWalletConsolidateMonth } from '@/types/entities/finance-wallet'
-import { PageFinanceExtractStore, PagePanelFinanceStore, SystemStore, useAppSelector } from '@/store/hook'
-import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
-import { FinanceStatusId, FinanceTypeId } from '@/types/enum'
+import { FinanceStore, PagePanelFinanceStore, useAppSelector } from '@/store/hook'
 import { http } from '@/@core/infra/http'
 import { useTitlePage } from '@/hooks'
+import { SectionBalance, SectionComposition } from './components'
+import { PanelFinanceMethods } from './index.methods'
+import { $memory } from '@/@core/infra/memory'
+import { Page } from '@/layouts/LayoutPrivate/components'
 
 let render = 0
 
@@ -24,25 +24,38 @@ export const PanelFinancePage = (props: Props) => {
   const isMounted = useRef(false)
   const router = useRouter()
   const pagePanelFinance = PagePanelFinanceStore()
-  const { getItems, handleClick } = PanelFinanceCore()
+  const { getItems, processConsolidateMonth } = PanelFinanceMethods()
 
   const { pageState, systemState } = useAppSelector(e => ({
     pageState: e.pagePanelFinance,
     systemState: e.system
   }))
+  const financeStore = FinanceStore()
 
   useEffect(() => {
     if (isMounted.current) {
       getItems()
     } else {
-      pagePanelFinance.setData(props.data)
+
+      props.data.composition.map(el => {
+        const find = financeStore.state.tag.find(e => e.id === Number(el.tag_id))
+        el.tag_description = find?.description as string
+        return el
+      })
+
+      pagePanelFinance.setData({
+        balance: props.data.balance,
+        composition: props.data.composition,
+        originTransactional: props.data.originTransactional,
+        invoice: props.data.invoice,
+        tag: props.data.tag,
+        status: props.data.status,
+      })
     }
 
     return () => {
       isMounted.current = true
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemState.period, systemState.walletPanelId])
 
   const balances = [
@@ -60,22 +73,32 @@ export const PanelFinancePage = (props: Props) => {
   }
 
   return (
-    <>
-      <BalanceCard>
-        {pageState.dataPage.status.map((item, i) => (
-          <BalanceItemDisplayNumber
-            key={`${render}-${i}-status`}
-            desc={item.description}
-            num={item.count}
-            onClick={() => handleClick({
-              tag_ids: [],
-              status_id: item.status_id,
-              type_id: item.type_id,
-            })}
-          />
-        ))}
-      </BalanceCard>
+    <Page>
+      <AppTitle
+        variant="h5"
+        contentEnd={
+          <AppButtonGroup>
+            <AppButtonIcon
+              variant="reload"
+              onClick={() => getItems()}
+              title="Recarregar dados"
+            />
+            <AppButtonIcon
+              variant="sync"
+              onClick={() => processConsolidateMonth()}
+              title="Reprocessar dados"
+            />
+          </AppButtonGroup>
+        }
+      >
+        Painel
+      </AppTitle>
 
+      <SectionBalance />
+
+      <SectionComposition />
+
+      {/*
       <AppText variant='h5'>Resumo</AppText>
       <BalanceCard>
         {balances.map((item, i) => (
@@ -127,22 +150,23 @@ export const PanelFinancePage = (props: Props) => {
             })}
           />
         ))}
-      </BalanceCard>
-    </>
+      </BalanceCard> */}
+    </Page>
   )
 }
 
 export const PanelFinanceGetServerSideProps = async (ctx: ContextSSR) => {
-  // const user = $cookie.getUser({ ctx })
-  const token = $cookie.getToken({ ctx })
-  const period = $cookie.getPeriod({ ctx })
-  const walletPanelId = $cookie.getWalletPanelId({ ctx })
+  $memory.cookie.setContext(ctx)
+
+  const token = $memory.cookie.get<string>('token')
+  const period = $memory.cookie.get<string>('period')
+  const walletPanelId = $memory.cookie.get('walletPanelId')
 
   http.setToken(token)
 
   const { code, data } = await http.financeWallet.consolidateMonth({
     period,
-    wallet_id: walletPanelId
+    wallet_id: Number(walletPanelId)
   })
 
   return {
@@ -153,48 +177,48 @@ export const PanelFinanceGetServerSideProps = async (ctx: ContextSSR) => {
   }
 }
 
-export const PanelFinanceCore = () => {
-  const router = useRouter()
-  const { systemState } = useAppSelector(e => ({
-    systemState: e.system
-  }))
+// export const PanelFinanceCore = () => {
+//   const router = useRouter()
+//   const { systemState } = useAppSelector(e => ({
+//     systemState: e.system
+//   }))
 
-  const system = SystemStore()
-  const pagePanelFinance = PagePanelFinanceStore()
-  const pageFinanceExtractStore = PageFinanceExtractStore()
+//   const system = SystemStore()
+//   const pagePanelFinance = PagePanelFinanceStore()
+//   const pageFinanceExtractStore = PageFinanceExtractStore()
 
-  async function getItems() {
-    system.loadingPageStart()
+//   async function getItems() {
+//     system.loadingPageStart()
 
-    const { data } = await http.financeWallet
-      .consolidateMonth({
-        period: systemState.period,
-        wallet_id: Number(systemState.walletPanelId)
-      })
+//     const { data } = await http.financeWallet
+//       .consolidateMonth({
+//         period: systemState.period,
+//         wallet_id: Number(systemState.walletPanelId)
+//       })
 
-    system.loadingPageEnd()
+//     system.loadingPageEnd()
 
-    pagePanelFinance.setData(data)
-  }
+//     pagePanelFinance.setData(data)
+//   }
 
-  async function handleClick(values: Partial<FinanceExtractFormSearchFields>) {
-    const newSearch: FinanceExtractFormSearchFields = {
-      ...pageFinanceExtractStore.state.search,
-      ...values,
-      page: 1,
-      enable: 1,
-      _q: '',
-      _limit: 30,
-      type_preveiw: 'extract'
-    }
+//   async function handleClick(values: Partial<FinanceExtractFormSearchFields>) {
+//     const newSearch: FinanceExtractFormSearchFields = {
+//       ...pageFinanceExtractStore.state.search,
+//       ...values,
+//       page: 1,
+//       enable: 1,
+//       _q: '',
+//       _limit: 30,
+//       type_preveiw: 'extract'
+//     }
 
-    pageFinanceExtractStore.setSearch(newSearch)
+//     pageFinanceExtractStore.setSearch(newSearch)
 
-    router.push('/finance/extract')
-  }
+//     router.push('/finance/extract')
+//   }
 
-  return {
-    getItems,
-    handleClick
-  }
-}
+//   return {
+//     getItems,
+//     handleClick
+//   }
+// }

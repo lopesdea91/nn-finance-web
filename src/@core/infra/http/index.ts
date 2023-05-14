@@ -1,4 +1,3 @@
-import { $cookie, $env } from "@/utils"
 import axios, { AxiosStatic } from "axios"
 import { AuthGeteway } from "@/@core/infra/geteway/AuthGeteway"
 import { FinanceGeteway } from "@/@core/infra/geteway/FinanceGeteway"
@@ -17,14 +16,6 @@ class Api {
   }
 
   setToken(token: string) {
-    $cookie.set({
-      key: 'token',
-      value: token,
-      options: {
-        path: '/'
-      }
-    })
-
     this.request.defaults.headers['Authorization'] = token ? `Bearer ${token}` : ''
   }
 
@@ -33,7 +24,7 @@ class Api {
     this.request.defaults.headers['Accept'] = 'application/json'
   }
   private setBaseUrl() {
-    const baseUrl = $env.envBaseUrl()
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     this.request.defaults.baseURL = baseUrl
   }
 

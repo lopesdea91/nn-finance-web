@@ -1,36 +1,29 @@
-import React, { createContext, createRef, useContext } from 'react'
+import { createContext, createRef, useContext } from 'react'
+import { useRouter } from 'next/router'
+import { http } from '@/@core/infra/http'
 import { AppDropdown, AppIcon, AppDivider, Table2, AppDropdownHandle } from '@/components'
 import { _limitApi } from '@/types/enum'
 import { FinanceOrigin } from '@/types/entities/finance-origin'
-import { FinanceOriginFormSearchFields } from '@/types/form/settingsFinanceOrigin'
+import { PageSettingsFinanceOriginStore, SystemStore } from '@/store/hook'
 import { $table } from '@/utils'
-import { useRouter } from 'next/router'
-import { SystemStore } from '@/store/hook'
-import { http } from '@/@core/infra/http'
+import { SettingsFinanceOriginMethods } from '../index.methods'
 
-interface Props {
-  items: FinanceOrigin[]
-  getItems: (args?: { search?: Partial<FinanceOriginFormSearchFields> }) => Promise<void>
-  search: {
-    page: number
-    total: number
-    limit: number
-  }
-  onChangeSearch: (value: Partial<FinanceOriginFormSearchFields>) => void
-}
+export const Table = () => {
+  const pageSettingsFinanceOriginStore = PageSettingsFinanceOriginStore()
+  const { table } = pageSettingsFinanceOriginStore.state
 
-export const Table = (props: Props) => {
   const tableMenuRef = createRef<AppDropdownHandle>();
 
-  function handleChangePage(newPage: number) {
-    props.onChangeSearch({ page: newPage })
+  const { getItems, onChangePage, onChangeLimit } = SettingsFinanceOriginMethods()
 
-    props.getItems({ search: { page: newPage } })
+  function handleChangePage(newPage: number) {
+    onChangePage(newPage)
+    getItems({ page: newPage })
   }
   function handleChangeRowsPerPage(newLimit: _limitApi) {
-    props.onChangeSearch({ _limit: newLimit })
-
-    props.getItems({ search: { _limit: newLimit } })
+    onChangePage(1)
+    onChangeLimit(newLimit)
+    getItems({ limit: newLimit, page: 1 })
   }
   async function handleItemEnable(atcion: 'enabled' | 'disabled', id: number) {
     atcion === 'enabled'
@@ -39,7 +32,7 @@ export const Table = (props: Props) => {
 
     tableMenuRef.current?.handleClose()
 
-    await props.getItems({})
+    await getItems({})
   }
 
   return (
@@ -49,12 +42,12 @@ export const Table = (props: Props) => {
     }}
     >
       <Table2.Container
-        bodyItemsLength={props.items.length}
+        bodyItemsLength={table.items.length}
         columnsCount={6}
         search={{
-          'limit': props.search.limit,
-          'page': props.search.page,
-          'total': props.search.total,
+          'limit': table.limit,
+          'page': table.page,
+          'total': table.total,
         }}
         contentHeader={(
           <>
@@ -67,7 +60,7 @@ export const Table = (props: Props) => {
           </>
         )}
         contentBody={
-          props.items.map((row: FinanceOrigin) => (
+          table.items.map((row: FinanceOrigin) => (
             <Table2.Row key={row.id}>
               <Table2.Cell sx={{ width: 35, p: 0 }}>
                 <TableMenu row={row} />
@@ -94,9 +87,9 @@ export const Table = (props: Props) => {
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         search={{
-          limit: props.search.limit,
-          page: props.search.page,
-          total: props.search.total
+          limit: table.limit,
+          page: table.page,
+          total: table.total
         }}
       />
     </contextLocal.Provider >

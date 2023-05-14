@@ -1,54 +1,69 @@
 import { http } from "@/@core/infra/http"
-import { SystemStore } from "@/store/hook"
-import { PageSettingsFinanceTagStore } from "@/store/hook/PageSettingsFinanceTag"
-import { FinanceTagSearch } from "@/types/entities/finance-tag"
+import { SystemStore, PageSettingsFinanceTagStore } from "@/store/hook"
+import { _limitApi } from "@/types/enum"
+import { IPageSettingsFinanceTagFormSearch } from "@/types/pages/SettingsFinanceTag"
+
+interface IGetItems {
+  page?: number
+  limit?: number
+}
+interface IOnChangeSearch extends Partial<IPageSettingsFinanceTagFormSearch> { }
 
 export const SettingsFinanceTagMethods = () => {
   const systemStore = SystemStore()
   const pageSettingsFinanceTagStore = PageSettingsFinanceTagStore()
 
-  async function getItems(args: { search?: Partial<FinanceTagSearch> } = { search: {} }) {
+  const getItems = async (search: IGetItems = {}) => {
     systemStore.loadingStart()
 
+    const { formSearch, table } = pageSettingsFinanceTagStore.state
+
     const { error, data } = await http.financeTag.page({
-      ...pageSettingsFinanceTagStore.state.search,
-      ...args.search
+      _q: formSearch.query,
+      enable: formSearch.enable,
+      type_id: formSearch.type_id,
+      wallet_id: formSearch.wallet_id,
+      _limit: (search.limit || table.limit) as _limitApi,
+      page: search.page || table.page,
     })
 
     if (error) {
       systemStore.loadingEnd()
-
-      return console.log('... error getItems', error);
+      return
     }
 
-    pageSettingsFinanceTagStore.setList({
+    pageSettingsFinanceTagStore.setTable({
       items: data.items,
-      lastPage: data.lastPage,
-      total: data.total
-    })
-
-    pageSettingsFinanceTagStore.setSearch({
+      total: data.total,
       page: data.page,
+      limit: data.limit,
     })
 
     systemStore.loadingEnd()
   }
-  function onChangeSearch(values: Partial<FinanceTagSearch>) {
-    pageSettingsFinanceTagStore.setSearch(values)
+  const onChangeSearch = (values: IOnChangeSearch) => {
+    pageSettingsFinanceTagStore.setFormSearch(values)
   }
-  function resetSearch() {
-    pageSettingsFinanceTagStore.setSearch({
-      _limit: 15,
-      _q: '',
+  const resetSearch = () => {
+    pageSettingsFinanceTagStore.setFormSearch({
+      query: '',
       enable: 1,
       type_id: null,
       wallet_id: null,
     })
   }
+  const onChangePage = (value: number) => {
+    pageSettingsFinanceTagStore.setTablePage(value)
+  }
+  const onChangeLimit = (value: _limitApi) => {
+    pageSettingsFinanceTagStore.setTableLimit(value)
+  }
 
   return {
     getItems,
     onChangeSearch,
-    resetSearch
+    resetSearch,
+    onChangePage,
+    onChangeLimit,
   }
 }

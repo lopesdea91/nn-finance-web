@@ -1,29 +1,24 @@
-import { FinanceItem } from "@/types/entities/finance-item"
-import { FinanceExtractFormSearchFields } from "@/types/form/financeExtract"
-
+import { IPageFinanceExtractFormSearch, IPageFinanceExtractTable } from "@/types/pages/FinanceExtract"
 export interface financeExtractState {
-  search: FinanceExtractFormSearchFields
-  items: FinanceItem[]
-  total: number
-  lastPage: number
+  formSearch: IPageFinanceExtractFormSearch
+  table: IPageFinanceExtractTable
 }
 const state: financeExtractState = {
-  search: {
-    _q: '',
-    _limit: 15,
-    page: 0,
+  formSearch: {
+    query: '',
     enable: 1,
     status_id: 1,
     type_id: null,
     origin_id: null,
-    wallet_id: null,
-    tag_ids: null,
+    tag_ids: [],
     type_preveiw: 'extract',
-    period: ''
   },
-  items: [],
-  total: 0,
-  lastPage: 0,
+  table: {
+    items: [],
+    total: 0,
+    page: 0,
+    limit: 15,
+  }
 }
 
 export default state

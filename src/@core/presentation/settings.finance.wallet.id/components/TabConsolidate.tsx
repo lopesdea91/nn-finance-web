@@ -23,8 +23,6 @@ export const TabConsolidate = () => {
     setData(result.data)
 
     system.loadingEnd()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const consolidationMonth = useCallback(async (period: string) => {
@@ -36,14 +34,10 @@ export const TabConsolidate = () => {
     })
 
     system.loadingEnd()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [system.state.walletPanelId])
 
   useEffect(() => {
     getItems()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

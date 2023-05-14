@@ -1,13 +1,13 @@
 import React, { useRef } from 'react'
-import { AppButtonGroup, AppButtonIcon, AppDivider, AppTitle } from '@/components/base'
+import { AppButtonGroup, AppButtonIcon, AppTitle } from '@/components/base'
 import { ContextSSR } from '@/types/system'
 import { SystemStore } from '@/store/hook'
 import { http } from '@/@core/infra/http'
-import { $cookie } from '@/utils'
-import { Section } from '@/layouts/LayoutPrivate/components'
+import { Page, Section } from '@/layouts/LayoutPrivate/components'
 import { Form, FormOriginIdProps } from './components'
 import { SettingsFinanceOriginIdMethods } from './index.methods'
 import { useTitlePage } from '@/hooks'
+import { $memory } from '@/@core/infra/memory'
 
 const defaultFields: FormOriginIdProps['defaultValues'] = {
   id: null,
@@ -35,7 +35,7 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
   useTitlePage(`${title} de origem`)
 
   return (
-    <>
+    <Page>
       <AppTitle
         variant="h5" mb={2}
         contentEnd={
@@ -82,7 +82,7 @@ export const SettingsFinanceOriginIdPage = (props: PageProps) => {
           defaultValues={defaultFields}
         />
       </Section>
-    </>
+    </Page>
   )
 }
 
@@ -102,7 +102,9 @@ export const SettingsFinanceOriginIdServerSideProps = async (ctx: ContextSSR) =>
     ...defaultFields
   }
 
-  const token = $cookie.getToken({ ctx })
+  $memory.cookie.setContext(ctx)
+
+  const token = $memory.cookie.get<string>('token')
 
   http.setToken(token)
 

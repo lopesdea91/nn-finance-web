@@ -1,25 +1,22 @@
-import { FinanceOriginFormSearchFields } from "@/types/form/settingsFinanceOrigin"
-import { FinanceOrigin } from "@/types/entities/finance-origin"
-
+import { IPageSettingsFinanceOriginFormSearch, IPageSettingsFinanceOriginTable } from "@/types/pages/SettingsFinanceOrigin"
 export interface settingsFinanceOriginState {
-  search: FinanceOriginFormSearchFields
-  items: FinanceOrigin[]
-  total: number
-  lastPage: number
+  formSearch: IPageSettingsFinanceOriginFormSearch
+  table: IPageSettingsFinanceOriginTable
 }
 const state: settingsFinanceOriginState = {
-  search: {
-    _q: '',
-    _limit: 15,
-    page: 0,
+  formSearch: {
+    query: '',
     enable: 1,
     parent_id: null,
     wallet_id: null,
-    type_id: null,
+    type_id: [],
   },
-  items: [],
-  total: 0,
-  lastPage: 0,
+  table: {
+    items: [],
+    total: 0,
+    page: 0,
+    limit: 15,
+  }
 }
 
 export default state

@@ -40,35 +40,6 @@ body,
   list-style-type: none;
 }
 
-.MuiTable-root {
-  .MuiTablePagination-root {
-    border-bottom: none;
-  }
-}
-
-.MuiFormControlLabel-labelPlacementTop {
-  .MuiSwitch-root {
-    margin-top: 0.125rem
-  }
-
-  // .MuiTypography-root {
-  // margin-top: 2px
-  // }
-}
-
-.MuiFormControlLabel-labelPlacementStart,
-.MuiFormControlLabel-labelPlacementEnd {
-  min-height: unset !important;
-}
-
-.MuiFormControlLabel-labelPlacementStart {
-  margin-left: 0.25rem !important;
-}
-
-.MuiFormControlLabel-labelPlacementEnd {
-  margin-right: 0.25rem !important;
-}
-
-.MuiFormControl-root {
-  padding-top: unset !important;
+.page {
+  animation: opacityIn 0.2s ease-in forwards;
 }

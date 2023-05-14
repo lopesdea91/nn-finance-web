@@ -15,7 +15,7 @@ export const SettingsFinanceOriginIdMethods = () => {
   const systemStore = SystemStore()
   const financeStore = FinanceStore()
 
-  async function handleSubmit(fields: FormOriginIdProps['defaultValues']) {
+  const handleSubmit = async (fields: FormOriginIdProps['defaultValues']) => {
     systemStore.loadingStart()
 
     const id = Number(fields.id)
@@ -28,28 +28,32 @@ export const SettingsFinanceOriginIdMethods = () => {
       parent_id: Number(fields.parentId),
     }
 
-    try {
-      const { code } = !!id
-        ? await handleUpdate(id, form)
-        : await handleCreate(form)
+    const result = !!id
+      ? await handleUpdate(id, form)
+      : await handleCreate(form)
 
-      if (code === 201) {
-        router.push('/settings/finance/origin')
-      }
-    } catch (error) {
-      console.log('... error', error);
+    // toast
+
+    if (!result.error) {
+      systemStore.loadingEnd()
+      return
     }
 
-    const { data } = await http.financeOrigin.get({
+    const resultGet = await http.financeOrigin.get({
       enable: 1
     })
 
-    if (data)
-      financeStore.setOrigin(data.sort(sortDataGet))
+    if (resultGet.error) {
+      // toast
+    } else {
+      financeStore.setOrigin(
+        (resultGet.data as FinanceOrigin[]).sort(sortDataGet)
+      )
+    }
 
     systemStore.loadingEnd()
   }
-  async function handleCreate(fields: FinanceOriginFormFieldsPost) {
+  const handleCreate = async (fields: FinanceOriginFormFieldsPost) => {
     return await http.financeOrigin.post({
       description: fields.description,
       enable: fields.enable,
@@ -58,7 +62,7 @@ export const SettingsFinanceOriginIdMethods = () => {
       parent_id: fields.parent_id || null,
     })
   }
-  async function handleUpdate(id: number, fields: FinanceOriginFormFieldsPut) {
+  const handleUpdate = async (id: number, fields: FinanceOriginFormFieldsPut) => {
     return await http.financeOrigin.put(id, {
       description: fields.description,
       enable: fields.enable,
@@ -67,7 +71,7 @@ export const SettingsFinanceOriginIdMethods = () => {
       parent_id: fields.parent_id || null,
     })
   }
-  async function handleDelete(id: number) {
+  const handleDelete = async (id: number) => {
     const confirm = window.confirm('ao confirmar será excluido permanente! deseja continuar?')
 
     if (confirm) {

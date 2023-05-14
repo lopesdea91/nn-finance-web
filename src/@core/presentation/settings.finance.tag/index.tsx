@@ -1,36 +1,27 @@
 import React, { useEffect, useRef } from 'react'
 import Router, { useRouter } from 'next/router'
 import { AppButtonIcon, AppTitle } from '@/components/base'
-import { ApiPageResponse } from '@/services/api'
 import { SystemStore } from '@/store/hook'
-import { FinanceTag } from '@/types/entities/finance-tag'
-import { FinanceTagFormSearchFields } from '@/types/form/settingsFinanceTag'
 import { ContextSSR } from '@/types/system'
-import { $cookie } from '@/utils'
 import { FormSearch } from './components/FormSearch'
 import { Table } from './components/Table'
 import { PageSettingsFinanceTagStore } from '@/store/hook/PageSettingsFinanceTag'
-import { Section } from '@/layouts/LayoutPrivate/components'
+import { Page, Section } from '@/layouts/LayoutPrivate/components'
 import { http } from '@/@core/infra/http'
 import { SettingsFinanceTagMethods } from './index.methods'
-import { cookiesName } from '@/constants'
 import { useTitlePage } from '@/hooks'
-
-const searchDefault: FinanceTagFormSearchFields = {
-  _limit: 15,
-  _q: '',
-  page: 0,
-  enable: 1,
-  type_id: null,
-  wallet_id: null,
-}
+import { $memory } from '@/@core/infra/memory'
+import { IPageSettingsFinanceTagFormSearch, IPageSettingsFinanceTagTable } from '@/types/pages/SettingsFinanceTag'
+import { FinanceTypeId } from '@/types/enum'
 
 interface PageProps {
   unauthenticated: boolean
-  data: ApiPageResponse<FinanceTag>
-  search: Partial<FinanceTagFormSearchFields>
+  formSearch: IPageSettingsFinanceTagFormSearch
+  table: IPageSettingsFinanceTagTable
 }
 export const SettingsFinanceTagPage = (props: PageProps) => {
+  useTitlePage('Tags')
+
   const isMounted = useRef(false)
   const router = useRouter()
   const systemStore = SystemStore()
@@ -42,23 +33,21 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
     if (isMounted.current) {
       getItems()
     } else {
-      pageSettingsFinanceTagStore.setSearch(props.search)
+      pageSettingsFinanceTagStore.setFormSearch(props.formSearch)
 
-      pageSettingsFinanceTagStore.setList({
-        items: props.data.items,
-        total: props.data.total,
-        lastPage: props.data.lastPage,
+      pageSettingsFinanceTagStore.setTable({
+        items: props.table.items,
+        total: props.table.total,
+        page: props.table.page,
+        limit: props.table.limit,
       })
     }
 
     return () => {
       isMounted.current = true
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useTitlePage('Tags')
 
   if (props.unauthenticated) {
     router.push('/auth/sign-in')
@@ -66,7 +55,7 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
   }
 
   return (
-    <div data-testid="page">
+    <Page>
       <AppTitle
         variant="h5" mb={2}
         contentEnd={
@@ -81,48 +70,48 @@ export const SettingsFinanceTagPage = (props: PageProps) => {
       </AppTitle>
 
       <Section>
-
-        <FormSearch
-          getItems={getItems}
-          search={pageSettingsFinanceTagStore.state.search}
-          onChangeSearch={onChangeSearch}
-          resetSearch={resetSearch}
-        />
-
-        <Table
-          getItems={getItems}
-          items={pageSettingsFinanceTagStore.state.items}
-          onChangeSearch={onChangeSearch}
-          search={{
-            limit: Number(pageSettingsFinanceTagStore.state.search._limit),
-            page: Number(pageSettingsFinanceTagStore.state.search.page),
-            total: Number(pageSettingsFinanceTagStore.state.total),
-          }}
-        />
+        <FormSearch />
+        <Table />
       </Section>
-    </div>
+    </Page>
   )
 }
 
 export const SettingsFinanceTagServerSideProps = async (ctx: ContextSSR) => {
-  const searchCookie = $cookie.getSearchPage<Partial<FinanceTagFormSearchFields>>({ ctx, searchKey: cookiesName.financeTagSearch })
+  $memory.cookie.setContext(ctx)
 
-  const search: FinanceTagFormSearchFields = {
-    ...searchDefault,
-    ...searchCookie
-  }
-
-  const token = $cookie.getToken({ ctx })
+  const searchCookie = $memory.cookie.get<IPageSettingsFinanceTagFormSearch>('financeTagFormSearch', { jsonParse: true })
+  const tableCookie = $memory.cookie.get<IPageSettingsFinanceTagTable>('financeTagTable', { jsonParse: true })
+  const token = $memory.cookie.get<string>('token')
 
   http.setToken(token)
 
-  const { code, data } = await http.financeTag.page(search)
+  const { code, data } = await http.financeTag.page({
+    /** searchCookie */
+    _q: searchCookie.query,
+    enable: searchCookie.enable,
+    type_id: searchCookie.type_id as FinanceTypeId,
+    wallet_id: searchCookie.wallet_id,
+    /** tableCookie */
+    _limit: tableCookie.limit,
+    page: tableCookie.page,
+  })
 
-  return {
-    props: {
-      unauthenticated: code === 401,
-      data,
-      search
+  $memory.cookie.set('financeTagTable', JSON.stringify({
+    limit: data.limit,
+    page: data.page,
+  }))
+
+  const props: PageProps = {
+    unauthenticated: code === 401,
+    formSearch: searchCookie,
+    table: {
+      items: data.items,
+      total: data.total,
+      page: data.page,
+      limit: data.limit,
     }
   }
+
+  return { props }
 }

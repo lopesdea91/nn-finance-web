@@ -1,24 +1,29 @@
+import React from 'react'
 import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect } from '@/components/base'
 import { Enable } from '@/types/enum'
-import { FinanceOriginFormSearchFields } from '@/types/form/settingsFinanceOrigin'
-import { SystemStore, FinanceStore } from '@/store/hook'
+import { SystemStore, FinanceStore, PageSettingsFinanceOriginStore } from '@/store/hook'
 import { $utils } from '@/utils'
+import { SettingsFinanceOriginMethods } from '../index.methods'
 
-interface Props {
-  getItems: () => Promise<void>
-  search: FinanceOriginFormSearchFields
-  onChangeSearch: (value: Partial<FinanceOriginFormSearchFields>) => void
-  resetSearch: () => void
-}
+export const FormSearch = () => {
+  const { getItems, onChangeSearch, resetSearch, onChangePage } = SettingsFinanceOriginMethods()
 
-export const FormSearch = (props: Props) => {
   const systemStore = SystemStore()
+  const pageSettingsFinanceOriginStore = PageSettingsFinanceOriginStore()
   const financeStore = FinanceStore()
+
+  const formSearchRef = React.createRef<{ close: () => void }>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    props.getItems()
+    getItems()
+    formSearchRef.current?.close()
   }
+
+  const { formSearch } = pageSettingsFinanceOriginStore.state
+
+  console.log('... formSearch', formSearch);
+
 
   return (
     <AppForm onSubmit={handleSubmit}>
@@ -26,10 +31,11 @@ export const FormSearch = (props: Props) => {
         <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Carteira */}
           <AppSelect
             label='Carteira'
-            value={props.search.wallet_id ? String(props.search.wallet_id) : ''}
+            value={formSearch.wallet_id ? String(formSearch.wallet_id) : ''}
             onChange={(e) => {
-              props.onChangeSearch({
-                wallet_id: Number(e.target.value),
+              onChangePage(1)
+              onChangeSearch({
+                wallet_id: e.target.value as number,
                 parent_id: null
               })
             }}
@@ -42,14 +48,15 @@ export const FormSearch = (props: Props) => {
         <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Parent */}
           <AppSelect
             label='Parent'
-            value={props.search.parent_id ? String(props.search.parent_id) : ''}
+            value={formSearch.parent_id ? String(formSearch.parent_id) : ''}
             onChange={(e) => {
-              props.onChangeSearch({
+              onChangePage(1)
+              onChangeSearch({
                 parent_id: e.target.value as number
               })
             }}
-            options={financeStore.state.origin.filter(el => el.wallet.id === props.search.wallet_id).map($utils.parseItemToOption)}
-            disabled={systemStore.state.loading || !props.search.wallet_id}
+            options={financeStore.state.origin.filter(el => el.wallet.id === formSearch.wallet_id).map($utils.parseItemToOption)}
+            disabled={systemStore.state.loading || !formSearch.wallet_id}
             optionEmpty
           />
         </AppColumn>
@@ -57,10 +64,10 @@ export const FormSearch = (props: Props) => {
         <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Status */}
           <AppSelect
             label='Status'
-            value={String(props.search.enable)}
+            value={String(formSearch.enable)}
             onChange={(e) => {
-              props.onChangeSearch({
-                page: 1,
+              onChangePage(1)
+              onChangeSearch({
                 enable: e.target.value as Enable
               })
             }}
@@ -76,10 +83,10 @@ export const FormSearch = (props: Props) => {
         <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Tipo */}
           <AppSelect
             label='Tipo'
-            value={props.search.type_id ? props.search.type_id : []}
+            value={formSearch.type_id ? formSearch.type_id : []}
             onChange={(e) => {
-              props.onChangeSearch({
-                page: 1,
+              onChangePage(1)
+              onChangeSearch({
                 type_id: e.target.value as number[]
               })
             }}
@@ -96,11 +103,11 @@ export const FormSearch = (props: Props) => {
               label: 'Pesquisar'
             }}
             inputProps={{
-              value: String(props.search._q),
+              value: String(formSearch.query),
               onChange: (e) => {
-                props.onChangeSearch({
-                  page: 1,
-                  _q: e.target.value,
+                onChangePage(1)
+                onChangeSearch({
+                  query: e.target.value,
                 })
               },
               disabled: systemStore.state.loading
@@ -114,7 +121,7 @@ export const FormSearch = (props: Props) => {
           <AppIcon variant='search' />
         </AppButton>
 
-        <AppButton type="button" onClick={() => props.resetSearch()}>
+        <AppButton type="button" onClick={() => resetSearch()}>
           <AppIcon variant='reset' />
         </AppButton>
       </AppButtonGroup>

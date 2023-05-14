@@ -1,9 +1,9 @@
 import { AxiosError, AxiosStatic } from "axios";
-import { ApiPageResponse } from "@/services/api";
 import { FinanceTag, FinanceTagResponse, FinanceTagSearch } from "@/types/entities/finance-tag";
 import { FinanceTagFormFieldsPost, FinanceTagFormFieldsPut } from "@/types/form/settingsFinanceTag";
 import { $utils } from "@/utils";
 import { Enable } from "@/types/enum";
+import { PageResponse } from "@/types/request";
 
 const url = '/v1/finance/tag'
 
@@ -17,7 +17,7 @@ export class FinanceTagGeteway {
     let error = null
     let code = 200
     let status = true
-    let data: ApiPageResponse<FinanceTag> = {
+    let data: PageResponse<FinanceTag> = {
       items: [],
       page: 1,
       total: 0,
@@ -26,7 +26,7 @@ export class FinanceTagGeteway {
     }
 
     try {
-      const result = await this.request.get<ApiPageResponse<FinanceTagResponse>>(url + q)
+      const result = await this.request.get<PageResponse<FinanceTagResponse>>(url + q)
 
       code = result.status
 

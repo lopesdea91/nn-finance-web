@@ -1,38 +1,38 @@
-import React, { createContext, createRef, useContext } from 'react'
+import React, { createContext, createRef, useCallback, useContext } from 'react'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import { http } from '@/@core/infra/http'
 import { AppDropdown, AppDropdownHandle, AppIcon, AppDivider, AppColumns, AppColumn, Table2, TableCard } from '@/components'
 import { FinanceStatusId, _limitApi } from '@/types/enum'
 import { FinanceItem } from '@/types/entities/finance-item'
-import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
 import { $table } from '@/utils'
-import { SystemStore } from '@/store/hook'
+import { PageFinanceExtractStore, SystemStore } from '@/store/hook'
 import { useMediaQuerys } from '@/hooks'
+import { FinanceExtractMethods } from '../index.methods'
 
-interface Props {
-  items: FinanceItem[]
-  getItems: (args?: { search?: Partial<FinanceExtractFormSearchFields> }) => Promise<void>
-  search: { limit: number, page: number, total: number }
-  onChangeSearch: (value: Partial<FinanceExtractFormSearchFields>) => void
-}
-export const FinanceExtractTable = (props: Props) => {
+export const FinanceExtractTable = () => {
+  const pageFinanceExtractStore = PageFinanceExtractStore()
+  const { table } = pageFinanceExtractStore.state
+
   const systemStore = SystemStore()
   const tableMenuRef = createRef<AppDropdownHandle>()
 
   const { minTable, minDesktop } = useMediaQuerys()
 
-  function handleChangePage(newPage: number) {
-    props.onChangeSearch({ page: newPage })
+  const { getItems, onChangePage, onChangeLimit } = FinanceExtractMethods()
 
-    props.getItems({ search: { page: newPage } })
+  const handleChangePage = (newPage: number) => {
+    onChangePage(newPage)
+    getItems({ page: newPage })
   }
-  function handleChangeRowsPerPage(newLimit: _limitApi) {
-    props.onChangeSearch({ _limit: newLimit })
 
-    props.getItems({ search: { _limit: newLimit } })
+  const handleChangeRowsPerPage = (newLimit: _limitApi) => {
+    onChangePage(1)
+    onChangeLimit(newLimit)
+    getItems({ limit: newLimit, page: 1 })
   }
-  async function handleStatus(id: number, statusId: FinanceStatusId) {
+
+  const handleStatus = useCallback(async (id: number, statusId: FinanceStatusId) => {
     tableMenuRef.current?.handleClose()
 
     systemStore.loadingStart()
@@ -46,9 +46,10 @@ export const FinanceExtractTable = (props: Props) => {
       return
     }
 
-    await props.getItems()
-  }
-  async function handleItemEnable(atcion: 'enabled' | 'disabled', id: number) {
+    await getItems()
+  }, [])
+
+  const handleItemEnable = useCallback(async (atcion: 'enabled' | 'disabled', id: number) => {
     tableMenuRef.current?.handleClose()
 
     systemStore.loadingStart()
@@ -64,8 +65,8 @@ export const FinanceExtractTable = (props: Props) => {
       return
     }
 
-    await props.getItems()
-  }
+    await getItems()
+  }, [])
 
   return (
     <contextLocal.Provider value={{
@@ -74,12 +75,12 @@ export const FinanceExtractTable = (props: Props) => {
       tableMenuRef: tableMenuRef
     }}>
       <Table2.Container
-        bodyItemsLength={props.items.length}
+        bodyItemsLength={table.items.length}
         columnsCount={6}
         search={{
-          'limit': props.search.limit,
-          'page': props.search.page,
-          'total': props.search.total,
+          limit: table.limit,
+          page: table.page,
+          total: table.total,
         }}
         contentHeader={minTable && (
           <>
@@ -98,7 +99,7 @@ export const FinanceExtractTable = (props: Props) => {
         )
         }
         contentBody={
-          props.items.map(row => (
+          table.items.map(row => (
             <Table2.RowResponsive
               key={row.id}
               previewMobile={<RowMobile row={row} />}
@@ -113,9 +114,9 @@ export const FinanceExtractTable = (props: Props) => {
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         search={{
-          limit: props.search.limit,
-          page: props.search.page,
-          total: props.search.total
+          limit: table.limit,
+          page: table.page,
+          total: table.total,
         }}
       />
     </contextLocal.Provider>

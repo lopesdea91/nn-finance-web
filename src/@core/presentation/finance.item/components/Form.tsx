@@ -77,8 +77,6 @@ export const Form = forwardRef((props: FormItemProps, ref) => {
         description: el.description,
         type_id: el.type.id,
       }))
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeIdValue])
 
   return (

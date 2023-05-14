@@ -1,24 +1,20 @@
+import React from 'react'
 import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, FormSearchResponsive, AppIcon, AppInput, AppSelect } from '@/components'
 import { Enable } from '@/types/enum'
-import { FinanceWalletFormSearchFields } from '@/types/form/settingsFinanceWallet'
-import { SystemStore } from '@/store/hook'
-import React from 'react'
+import { SystemStore, PageSettingsFinanceWalletStore } from '@/store/hook'
+import { SettingsFinanceWalletMethods } from '../index.methods'
 
-interface Props {
-  getItems: () => Promise<void>
-  search: FinanceWalletFormSearchFields
-  onChangeSearch: (value: Partial<FinanceWalletFormSearchFields>) => void
-  resetSearch: () => void
-}
+export const FormSearch = () => {
+  const { getItems, onChangeSearch, resetSearch, onChangePage } = SettingsFinanceWalletMethods()
 
-export const FormSearch = (props: Props) => {
   const systemStore = SystemStore()
+  const pageSettingsFinanceWalletStore = PageSettingsFinanceWalletStore()
 
   const formSearchRef = React.createRef<{ close: () => void }>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    props.getItems()
+    getItems()
     formSearchRef.current?.close()
   }
 
@@ -30,10 +26,10 @@ export const FormSearch = (props: Props) => {
             <AppSelect
               data-testid="select-status"
               label='Status'
-              value={String(props.search.enable)}
+              value={String(pageSettingsFinanceWalletStore.state.formSearch.enable)}
               onChange={(e) => {
-                props.onChangeSearch({
-                  page: 1,
+                onChangePage(1)
+                onChangeSearch({
                   enable: e.target.value as Enable
                 })
               }}
@@ -50,10 +46,10 @@ export const FormSearch = (props: Props) => {
             <AppSelect
               data-testid="select-panel"
               label='Painel'
-              value={String(props.search.panel)}
+              value={String(pageSettingsFinanceWalletStore.state.formSearch.panel)}
               onChange={(e) => {
-                props.onChangeSearch({
-                  page: 1,
+                onChangePage(1)
+                onChangeSearch({
                   panel: e.target.value as number
                 })
               }}
@@ -72,11 +68,11 @@ export const FormSearch = (props: Props) => {
                 label: 'Pesquisar'
               }}
               inputProps={{
-                value: String(props.search._q),
+                value: String(pageSettingsFinanceWalletStore.state.formSearch.query),
                 onChange: (e) => {
-                  props.onChangeSearch({
-                    page: 1,
-                    _q: e.target.value,
+                  onChangePage(1)
+                  onChangeSearch({
+                    query: e.target.value,
                   })
                 },
                 disabled: systemStore.state.loading
@@ -90,7 +86,7 @@ export const FormSearch = (props: Props) => {
             <AppIcon variant='search' />
           </AppButton>
 
-          <AppButton type="button" onClick={() => props.resetSearch()} data-testid="button-reset">
+          <AppButton type="button" onClick={() => resetSearch()} data-testid="button-reset">
             <AppIcon variant='reset' />
           </AppButton>
         </AppButtonGroup>

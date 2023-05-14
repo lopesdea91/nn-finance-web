@@ -27,11 +27,13 @@ export const SettingsFinanceWalletIdMethods = () => {
       // json: fields.json,
     }
 
-    const { error } = !!id
+    const result = !!id
       ? await handleUpdate(id, form)
       : await handleCreate(form)
 
-    if (!!error) {
+    // toast
+
+    if (!result.error) {
       systemStore.loadingEnd()
       return
     }
@@ -39,16 +41,16 @@ export const SettingsFinanceWalletIdMethods = () => {
     const resultGet = await http.financeWallet.get({
       enable: 1
     })
-    !!resultGet.data && financeStore.setWallet(resultGet.data.sort(sortDataGet))
+
+    if (resultGet.error) {
+      // toast
+    } else {
+      financeStore.setWallet(
+        (resultGet.data as FinanceWallet[]).sort(sortDataGet)
+      )
+    }
 
     systemStore.loadingEnd()
-
-    // toast.addToast({
-    //   message: `Carteira ${id ? 'atualizada' : 'criada'} com sucesso!`,
-    //   type: 'success'
-    // })
-
-    router.push('/settings/finance/wallet')
   }
   const handleCreate = async (fields: FinanceWalletFormFieldsPost) => {
     return http.financeWallet.post({

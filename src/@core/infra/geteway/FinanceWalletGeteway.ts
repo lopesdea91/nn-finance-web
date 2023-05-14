@@ -1,8 +1,8 @@
-import { AxiosStatic } from "axios";
-import { ApiPageResponse } from "@/services/api";
+import { AxiosError, AxiosStatic } from "axios";
 import { FinanceWallet, FinanceWalletConsolidateMonth, FinanceWalletConsolidateMonthPayload, FinanceWalletConsolidateMonthResponse, FinanceWalletPeriodsData, FinanceWalletPeriodsDataPayload, FinanceWalletPeriodsDataResponse, FinanceWalletProcessConsolidateMonthPayload, FinanceWalletProcessConsolidateMonthResponse, FinanceWalletSearch } from "@/types/entities/finance-wallet";
 import { FinanceWalletFormFieldsPost, FinanceWalletFormFieldsPut } from "@/types/form/settingsFinanceWallet";
 import { $utils } from "@/utils";
+import { PageResponse } from "@/types/request";
 
 let url = '/v1/finance/wallet'
 
@@ -14,7 +14,7 @@ export class FinanceWalletGeteway {
     let code = 200
     let status = false
 
-    let data: ApiPageResponse<FinanceWallet> = {
+    let data: PageResponse<FinanceWallet> = {
       items: [],
       page: 1,
       total: 0,
@@ -25,7 +25,7 @@ export class FinanceWalletGeteway {
     try {
       const q = $utils.queryString({ _paginate: true, ...search })
 
-      const result = await this.request.get<ApiPageResponse<FinanceWallet>>(url + q)
+      const result = await this.request.get<PageResponse<FinanceWallet>>(url + q)
 
       code = result.status
       status = true
@@ -230,7 +230,15 @@ export class FinanceWalletGeteway {
         result.data.balance.revenue = Number(result.data.balance.revenue).toFixed(2)
 
         data.balance = result.data.balance
-        data.composition = result.data.composition
+        data.composition = result.data.composition.map(el => {
+          return {
+            tag_id: el.tag_id,
+            tag_description: '',
+            percentage: el.percentage,
+            percentage_current: el.percentage_current,
+            value: Number(el.value).toFixed(2)
+          }
+        })
         data.originTransactional = result.data.originTransactional.map(el => {
           el.sum = Number(el.sum).toFixed(2)
           return el
@@ -300,5 +308,23 @@ export class FinanceWalletGeteway {
     }
 
     return { error, code, status, data }
+  }
+  async composition(id: number, composition: string) {
+    let error = null
+    let code = 200
+
+    const form = {
+      composition
+    }
+    try {
+      const result = await this.request.post<{ message: string }>(`${url}/${id}/composition`, form)
+
+      code = result.status
+    }
+    catch (err) {
+      error = (err as AxiosError).response
+    }
+
+    return { error, code }
   }
 }

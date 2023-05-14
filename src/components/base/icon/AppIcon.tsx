@@ -9,8 +9,13 @@ import {
   faArrowLeft,
   faArrowRight,
   faFilter,
+  faRotateRight,
 } from '@fortawesome/free-solid-svg-icons'
-import { faCopy, faCircleCheck } from '@fortawesome/free-regular-svg-icons'
+import {
+  faCopy, faCircleCheck, faCirclePlay,
+  faFile,
+  faFileLines
+} from '@fortawesome/free-regular-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
 export type IconNames = 'menu'
@@ -33,10 +38,14 @@ export type IconNames = 'menu'
   | 'copy'
   | 'circleCheck'
   | 'trash'
+  | 'reload'
   | 'sync'
   | 'arrowLeft'
   | 'arrowRight'
   | 'filterList'
+  | 'circlePlay'
+  | 'file'
+  | 'fileLines'
 // | "wallet"
 // | "arrowLeft"
 // | "arrowRight"
@@ -63,6 +72,7 @@ export const AppIcon = ({ variant, ...rest }: Props) => {
     edit: faEdit,
     save: faSave,
     remove: faRemove,
+    reload: faRotateRight,
     reset: faRotateBack,
     search: faSearch,
     clean: faBroom,
@@ -74,7 +84,10 @@ export const AppIcon = ({ variant, ...rest }: Props) => {
     // wallet: faWallet,
     arrowLeft: faArrowLeft,
     arrowRight: faArrowRight,
-    filterList: faFilter
+    filterList: faFilter,
+    circlePlay: faCirclePlay,
+    file: faFile,
+    fileLines: faFileLines,
     // close: faX
   }
   const selected = variants[variant]

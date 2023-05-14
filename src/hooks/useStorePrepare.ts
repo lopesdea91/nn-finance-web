@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from "next/router"
-import { $cookie } from '@/utils'
-import { FinanceStore, SystemStore, useAppSelector } from '@/store/hook'
+import { FinanceStore, SystemStore } from '@/store/hook'
 import { AuthStore } from '@/store/hook/Auth'
 import { http } from '@/@core/infra/http'
+import { $memory } from '@/@core/infra/memory'
 
 const routesPublic = [
   // '/auth/sign-in',
@@ -50,7 +50,7 @@ export const useStorePrepare = () => {
       return
     }
 
-    const token = $cookie.getToken()
+    const token = $memory.cookie.get<string>('token')
 
     if (!token) {
       if (!routesPublic.includes(router.asPath)) router.push('/auth/sign-in')
@@ -60,10 +60,14 @@ export const useStorePrepare = () => {
     }
 
     try {
+      $memory.cookie.set('token', token)
+
       http.setToken(token)
 
       await userData()
       await financeData()
+
+      $memory.init()
 
     } catch (error) {
       console.log('onSubmit - error', error)
@@ -82,8 +86,6 @@ export const useStorePrepare = () => {
     if (!authStore.state.user.id || !isPending) {
       handler()
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return { isPending }

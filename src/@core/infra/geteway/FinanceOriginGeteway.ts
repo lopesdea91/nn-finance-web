@@ -1,9 +1,9 @@
 import { AxiosStatic } from "axios";
-import { ApiPageResponse } from "@/services/api";
 import { FinanceOrigin, FinanceOriginSearch } from "@/types/entities/finance-origin";
 import { FinanceOriginFormFieldsPost, FinanceOriginFormFieldsPut } from "@/types/form";
 import { $utils } from "@/utils";
 import { Enable } from "@/types/enum";
+import { PageResponse } from "@/types/request";
 
 let url = '/v1/finance/origin'
 
@@ -15,7 +15,7 @@ export class FinanceOriginGeteway {
     let code = 200
     let status = false
 
-    let data: ApiPageResponse<FinanceOrigin> = {
+    let data: PageResponse<FinanceOrigin> = {
       items: [],
       page: 1,
       total: 0,
@@ -26,7 +26,7 @@ export class FinanceOriginGeteway {
     try {
       const q = $utils.queryString({ _paginate: true, ...search })
 
-      const result = await this.request.get<ApiPageResponse<FinanceOrigin>>(url + q)
+      const result = await this.request.get<PageResponse<FinanceOrigin>>(url + q)
 
       code = result.status
       status = true

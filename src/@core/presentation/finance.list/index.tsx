@@ -1,9 +1,10 @@
 import { useTitlePage } from "@/hooks"
+import { Page } from "@/layouts/LayoutPrivate/components"
 
 export default function FinanceListPage() {
   useTitlePage('Finança listas')
 
   return (
-    <div>list</div>
+    <Page>list</Page>
   )
 }

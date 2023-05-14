@@ -4,9 +4,10 @@ import { ContextSSR } from '@/types/system'
 import { SystemStore } from '@/store/hook'
 import { Form, FormTagIdProps } from './components/Form'
 import { SettingsFinanceTagIdMethods } from './index.methods'
-import { $cookie } from '@/utils'
 import { http } from '@/@core/infra/http'
 import { useTitlePage } from '@/hooks'
+import { $memory } from '@/@core/infra/memory'
+import { Page } from '@/layouts/LayoutPrivate/components'
 
 const defaultFields: FormTagIdProps['defaultValues'] = {
   id: null,
@@ -33,7 +34,7 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
   useTitlePage(`${title} de tag`)
 
   return (
-    <>
+    <Page>
       <AppTitle
         variant="h5" mb={2}
         contentEnd={
@@ -76,7 +77,7 @@ export const SettingsFinanceTagIdPage = (props: PageProps) => {
         }}
         defaultValues={defaultFields}
       />
-    </>
+    </Page>
   )
 }
 
@@ -96,7 +97,9 @@ export const SettingsFinanceTagIdServerSideProps = async (ctx: ContextSSR) => {
     ...defaultFields
   }
 
-  const token = $cookie.getToken({ ctx })
+  $memory.cookie.setContext(ctx)
+
+  const token = $memory.cookie.get<string>('token')
 
   http.setToken(token)
 

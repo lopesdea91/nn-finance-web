@@ -1,33 +1,31 @@
-import React from 'react'
+import { useMemo, createRef } from 'react'
 import styled from 'styled-components'
-import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect, AppSwitch } from '@/components/base'
+import { AppButton, AppButtonGroup, AppColumn, AppColumns, AppForm, AppIcon, AppInput, AppSelect, AppSwitch, FormSearchResponsive } from '@/components'
 import { Enable, FinanceExtractTypePreveiw, FinanceStatusId, FinanceTypeId } from '@/types/enum'
-import { FinanceExtractFormSearchFields } from '@/types/form/financeExtract'
+import { FinanceStore, PageFinanceExtractStore, SystemStore } from '@/store/hook'
 import { $utils } from '@/utils'
-import { FinanceStore, SystemStore } from '@/store/hook'
-import { FormSearchResponsive } from '@/components'
+import { FinanceExtractMethods } from '../index.methods'
 
-interface Props {
-  getItems: () => Promise<void>
-  search: FinanceExtractFormSearchFields
-  onChangeSearch: (value: Partial<FinanceExtractFormSearchFields>) => void
-  resetSearch: () => void
-}
-export const FinanceExtractFormSearch = (props: Props) => {
+export const FinanceExtractFormSearch = () => {
+  const { getItems, onChangeSearch, resetSearch, onChangePage } = FinanceExtractMethods()
+
   const systemStore = SystemStore()
   const financeStore = FinanceStore()
+  const pageFinanceExtractStore = PageFinanceExtractStore()
 
-  const formSearchRef = React.createRef<{ close: () => void }>();
+  const formSearchRef = createRef<{ close: () => void }>();
 
-  const optionsTag = props.search.type_id
-    ? financeStore.state.tag.filter(el => el.type.id === props.search.type_id)
-    : financeStore.state.tag
+  const optionsTag = useMemo(() => {
+    return pageFinanceExtractStore.state.formSearch.type_id
+      ? financeStore.state.tag.filter(el => el.type.id === pageFinanceExtractStore.state.formSearch.type_id)
+      : financeStore.state.tag
+  }, [pageFinanceExtractStore.state.formSearch.type_id])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = ((e: React.FormEvent) => {
     e.preventDefault()
-    props.getItems()
+    getItems()
     formSearchRef.current?.close()
-  }
+  })
 
   return (
     <FormSearchResponsive ref={formSearchRef}>
@@ -36,10 +34,10 @@ export const FinanceExtractFormSearch = (props: Props) => {
           <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Tipo de extrato */}
             <AppSelect
               label='Tipo de extrato'
-              value={String(props.search.type_preveiw)}
+              value={String(pageFinanceExtractStore.state.formSearch.type_preveiw)}
               onChange={(e) => {
-                props.onChangeSearch({
-                  page: 1,
+                onChangePage(1)
+                onChangeSearch({
                   type_preveiw: e.target.value as FinanceExtractTypePreveiw
                 })
               }}
@@ -55,10 +53,10 @@ export const FinanceExtractFormSearch = (props: Props) => {
           <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Tipo */}
             <AppSelect
               label='Tipo'
-              value={props.search.type_id || ''}
+              value={pageFinanceExtractStore.state.formSearch.type_id || ''}
               onChange={(e) => {
-                props.onChangeSearch({
-                  page: 1,
+                onChangePage(1)
+                onChangeSearch({
                   type_id: Number(e.target.value) as FinanceTypeId
                 })
               }}
@@ -74,10 +72,10 @@ export const FinanceExtractFormSearch = (props: Props) => {
           <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Tag */}
             <AppSelect
               label='Tag'
-              value={props.search.tag_ids || []}
+              value={pageFinanceExtractStore.state.formSearch.tag_ids || []}
               onChange={(e) => {
-                props.onChangeSearch({
-                  page: 1,
+                onChangePage(1)
+                onChangeSearch({
                   tag_ids: e.target.value as number[]
                 })
               }}
@@ -90,10 +88,10 @@ export const FinanceExtractFormSearch = (props: Props) => {
           <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Situação */}
             <AppSelect
               label='Situação'
-              value={props.search.status_id || ''}
+              value={pageFinanceExtractStore.state.formSearch.status_id || ''}
               onChange={(e) => {
-                props.onChangeSearch({
-                  page: 1,
+                onChangePage(1)
+                onChangeSearch({
                   status_id: e.target.value as FinanceStatusId
                 })
               }}
@@ -110,9 +108,10 @@ export const FinanceExtractFormSearch = (props: Props) => {
           <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Origem */}
             <AppSelect
               label='Origem'
-              value={props.search.origin_id || ''}
+              value={pageFinanceExtractStore.state.formSearch.origin_id || ''}
               onChange={(e) => {
-                props.onChangeSearch({
+                onChangePage(1)
+                onChangeSearch({
                   origin_id: Number(e.target.value)
                 })
               }}
@@ -125,9 +124,9 @@ export const FinanceExtractFormSearch = (props: Props) => {
           {/* <AppColumn xs={6} sm={4} md={3} lg={2}> {/* Status * /}
             <AppSelect
               label='Status'
-              value={props.search.enable || ''}
+              value={pageFinanceExtractStore.state.formSearch.enable || ''}
               onChange={(e) => {
-                props.onChangeSearch({
+                onChangeSearch({
                   page: 1,
                   enable: e.target.value as Enable,
                   type_preveiw: e.target.value === '1' ? 'extract' : 'moviment'
@@ -148,11 +147,11 @@ export const FinanceExtractFormSearch = (props: Props) => {
                 label: 'Pesquisar'
               }}
               inputProps={{
-                value: props.search._q || '',
+                value: pageFinanceExtractStore.state.formSearch.query || '',
                 onChange: (e) => {
-                  props.onChangeSearch({
-                    page: 1,
-                    _q: e.target.value,
+                  onChangePage(1)
+                  onChangeSearch({
+                    query: e.target.value,
                   })
                 },
                 disabled: systemStore.state.loading
@@ -167,7 +166,7 @@ export const FinanceExtractFormSearch = (props: Props) => {
               <AppIcon variant='search' />
             </AppButton>
 
-            <AppButton type="button" onClick={() => props.resetSearch()}>
+            <AppButton type="button" onClick={() => resetSearch()}>
               <AppIcon variant='reset' />
             </AppButton>
 
@@ -175,10 +174,10 @@ export const FinanceExtractFormSearch = (props: Props) => {
 
           <AppSwitch
             label="Status"
-            value={props.search.enable == 1}
+            value={pageFinanceExtractStore.state.formSearch.enable == 1}
             onChange={(e: unknown) => {
-              props.onChangeSearch({
-                page: 1,
+              onChangePage(1)
+              onChangeSearch({
                 enable: e as Enable,
                 type_preveiw: e == 1 ? 'extract' : 'moviment'
               })

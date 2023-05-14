@@ -17,13 +17,14 @@ type Props = {
 }
 const AppInput = (props: Props) => {
   const { labelProps, inputProps, ...restProps } = props
-  const { error, ...restInput } = inputProps
+  const { error, type, ...restInput } = inputProps
 
   return (
     <FormControl fullWidth error={!!error} sx={{ py: 0.15 }}>
       <TextField
         inputProps={{
           'data-testid': 'app-input',
+          type
         }}
         className="shadow-sm"
         type="text"
