@@ -1,4 +1,4 @@
-import { SettingsFinanceOriginPage, settingsFinanceOriginServerSideProps } from '@/@core/presentation/settings.finance.origin'
+import { SettingsFinanceOriginPage, settingsFinanceOriginServerSideProps } from '@/@core/presentation/views/settings.finance.origin'
 
 export default SettingsFinanceOriginPage
 

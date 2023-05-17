@@ -1,3 +1,3 @@
-import FinanceListPage from "@/@core/presentation/finance.list";
+import FinanceListPage from "@/@core/presentation/views/finance.list";
 
 export default FinanceListPage

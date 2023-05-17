@@ -1,4 +1,4 @@
-import { SettingsFinanceWalletPage, settingsFinanceWalletServerSideProps } from '@/@core/presentation/settings.finance.wallet'
+import { SettingsFinanceWalletPage, settingsFinanceWalletServerSideProps } from '@/@core/presentation/views/settings.finance.wallet'
 
 export default SettingsFinanceWalletPage
 

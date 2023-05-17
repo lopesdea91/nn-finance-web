@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from 'next'
-import { IconNames } from "@/components/base/icon/AppIcon"
+import { IconNames } from "@/@core/presentation/shared/base/icon/AppIcon"
 
 export interface User {
   id: number | null,

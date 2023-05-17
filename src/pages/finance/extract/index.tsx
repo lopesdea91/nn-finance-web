@@ -1,4 +1,4 @@
-import { FinanceExtractPage, FinanceExtractGetServerSideProps } from "@/@core/presentation/finance.extract";
+import { FinanceExtractPage, FinanceExtractGetServerSideProps } from "@/@core/presentation/views/finance.extract";
 
 export default FinanceExtractPage
 
