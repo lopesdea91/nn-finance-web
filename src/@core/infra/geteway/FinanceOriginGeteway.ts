@@ -1,214 +1,155 @@
 import { AxiosStatic } from "axios";
-import { FinanceOrigin, FinanceOriginSearch } from "@/types/entities/finance-origin";
-import { FinanceOriginFormFieldsPost, FinanceOriginFormFieldsPut } from "@/types/form";
+import { FinanceOrigin, FinanceOriginShort } from "@/types/entities/finance-origin";
 import { $utils } from "@/utils";
-import { Enable } from "@/types/enum";
+import { Enable, _limitApi } from "@/types/enum";
 import { PageResponse } from "@/types/request";
+import { FinanceType } from "@/types/entities/finance-type";
+import { FinanceWalletShort } from "@/types/entities/finance-wallet";
 
-let url = '/v1/finance/origin'
+const url = '/v1/finance/origin'
 
 export class FinanceOriginGeteway {
   constructor(private request: AxiosStatic) { }
 
-  async page(search: Partial<FinanceOriginSearch> = {}) {
-    let error = null
-    let code = 200
-    let status = false
+  async page(search: IPageProps = {}) {
+    const queryString = $utils.queryString({
+      _paginate: true,
+      _q: search?.query,
+      _limit: search?.limit,
+      page: search?.page,
+      enable: search?.enable,
+      type_id: search?.typeId,
+      wallet_id: search?.walletId,
+      parent_id: search?.parentId,
+    })
 
-    let data: PageResponse<FinanceOrigin> = {
-      items: [],
-      page: 1,
-      total: 0,
-      limit: 15,
-      lastPage: 0,
+    const result = await this.request.get<PageResponse<IDataResponse>>(`${url}${queryString}`)
+
+    return {
+      ...result,
+      data: pageParseResponse(result.data)
     }
-
-    try {
-      const q = $utils.queryString({ _paginate: true, ...search })
-
-      const result = await this.request.get<PageResponse<FinanceOrigin>>(url + q)
-
-      code = result.status
-      status = true
-
-      if (result.status === 200) {
-        data.items = result.data.items.map(this.parseResponse)
-        data.page = result.data.page
-        data.total = result.data.total
-        data.limit = result.data.limit
-        data.lastPage = result.data.lastPage
-      }
-    } catch (err) {
-      error = err
-    }
-
-    return { error, code, status, data }
   }
-  async get(search: Partial<FinanceOriginSearch> = {}) {
-    let error = null
-    let code = 200
-    let status = false
-    let data: FinanceOrigin[] | null = null
+  async get(search: IGetProps = {}) {
+    const queryString = $utils.queryString({
+      _q: search?.query,
+      _limit: search?.limit,
+      page: search?.page,
+      enable: search?.enable,
+      type_id: search?.typeId,
+      wallet_id: search?.walletId,
+      parent_id: search?.parentId,
+    })
 
-    try {
-      const q = $utils.queryString(search)
+    const result = await this.request.get<IDataResponse[]>(`${url}${queryString}`)
 
-      const result = await this.request.get<FinanceOrigin[]>(url + q)
-
-      code = result.status
-      status = true
-
-      if (result.status === 200) {
-        data = result.data.map(this.parseResponse)
-      }
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
+    return {
+      ...result,
+      data: result.data.map(dataParseResponse)
     }
-
-    return { error, code, status, data }
   }
   async id(id: number) {
-    let error = null
-    let code = 200
-    let status = false
-    let data: FinanceOrigin | null = null
+    const result = await this.request.get<IDataResponse>(`${url}/${id}`)
 
-    try {
-      const result = await this.request.get<FinanceOrigin>(`${url}/${id}`)
-
-      code = result.status
-      status = true
-
-      if (result.status === 200) {
-        data = this.parseResponse(result.data)
-      }
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
+    return {
+      ...result,
+      data: dataParseResponse(result.data)
     }
-
-    return { error, code, status, data }
   }
-  async post(form: FinanceOriginFormFieldsPost) {
-    let error = null
-    let code = 201
-    let status = true
-    let data: { message: string } = { message: '' }
-
-    try {
-      const result = await this.request.post<{ message: string }>(url, form)
-
-      code = result.status
-      status = true
-
-      if (result.status === 201) {
-        data = result.data
-      }
-
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
-    }
-
-    return { error, code, status, data }
+  async post(form: IPostProps) {
+    return await this.request.post<{ message: string }>(url, {
+      ...form,
+      type_id: form.typeId,
+      wallet_id: form.walletId,
+      parent_id: form.parentId,
+    })
   }
-  async put(id: number, form: FinanceOriginFormFieldsPut) {
-    let error = null
-    let code = 201
-    let status = true
-    let data: { message: string } = { message: '' }
-
-    try {
-      const result = await this.request.put<{ message: string }>(`${url}/${id}`, form)
-
-      code = result.status
-      status = true
-
-      if (result.status === 201) {
-        data = result.data
-      }
-
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
-    }
-
-    return { error, code, status, data }
+  async put(id: number, form: IPutProps) {
+    return await this.request.put<{ message: string }>(`${url}/${id}`, {
+      ...form,
+      type_id: form.typeId,
+      wallet_id: form.walletId,
+      parent_id: form.parentId,
+    })
   }
   async remove(id: number) {
-    let error = null
-    let code = 204
-    let status = true
-
-    try {
-      const result = await this.request.delete<{ message: string }>(`${url}/${id}`)
-
-      code = result.status
-      status = true
-
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
-    }
-
-    return { error, code, status }
+    return await this.request.delete<{ message: string }>(`${url}/${id}`)
   }
   async enabled(id: number) {
-    let error = null
-    let code = 200
-    let status = true
-
-    try {
-      const result = await this.request.get<{ message: string }>(`${url}/${id}/enabled`)
-
-      code = result.status
-      status = true
-
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
-    }
-
-    return { error, code, status }
+    return await this.request.get<{ message: string }>(`${url}/${id}/enabled`)
   }
   async disabled(id: number) {
-    let error = null
-    let code = 200
-    let status = true
-
-    try {
-      const result = await this.request.get<{ message: string }>(`${url}/${id}/disabled`)
-
-      code = result.status
-      status = true
-
-    } catch (err) {
-      error = err
-      code = 500
-      status = false
-    }
-
-    return { error, code, status }
-  }
-
-  private parseResponse(data: FinanceOrigin): FinanceOrigin {
-    return {
-      id: data.id,
-      description: data.description,
-      enable: +data.enable as Enable,
-      parent: data.parent,
-      parentId: data.parent ? +data.parent.id : null,
-      type: data.type,
-      typeId: +data.type?.id as number,
-      wallet: data.wallet,
-      walletId: +data.wallet?.id,
-    }
+    return await this.request.get<{ message: string }>(`${url}/${id}/disabled`)
   }
 }
+interface IDataResponse {
+  id: number
+  description: string
+  enable: Enable
+  type: FinanceType
+  type_id: number
+  wallet: FinanceWalletShort
+  wallet_id: number
+  parent: FinanceOriginShort | null
+  parent_id: number | null
+  createdAt: string
+  updatedAt: string
+}
+interface IPageProps {
+  query?: string
+  limit?: _limitApi
+  page?: number
+  enable?: Enable
+  typeId?: number[] | null
+  walletId?: number | null
+  parentId?: number | null
+}
+interface IGetProps {
+  query?: string
+  limit?: _limitApi
+  page?: number
+  enable?: Enable
+  typeId?: number[] | null
+  walletId?: number | null
+  parentId?: number | null
+}
+interface IPostProps {
+  // id: number | null
+  description: string
+  enable: Enable
+  typeId: number | null
+  // type?: FinanceType
+  walletId: number | null
+  // wallet?: FinanceWalletShort
+  parentId: number | null
+}
+interface IPutProps {
+  // id: number | null
+  description: string
+  enable: Enable
+  typeId: number | null
+  // type?: FinanceType
+  walletId: number | null
+  // wallet?: FinanceWalletShort
+  parentId: number | null
+}
+const dataParseResponse = (data: IDataResponse): FinanceOrigin => ({
+  id: data.id,
+  description: data.description,
+  enable: data.enable,
+  type: data.type,
+  typeId: data.type.id,
+  wallet: data.wallet,
+  walletId: data.wallet.id,
+  parent: data.parent,
+  parentId: data.parent?.id || null,
+  createdAt: data.createdAt,
+  updatedAt: data.updatedAt,
+})
+const pageParseResponse = (data: PageResponse<IDataResponse>) => ({
+  items: data.items.map(dataParseResponse),
+  page: data.page,
+  total: data.total,
+  limit: data.limit,
+  lastPage: data.lastPage,
+})

@@ -1,229 +1,168 @@
-import { AxiosError, AxiosStatic } from "axios";
-import { FinanceItemFormFieldsPost, FinanceItemFormFieldsPut } from "@/types/form/financeItem";
-import { FinanceItem } from "@/types/entities/finance-item";
+import { AxiosStatic } from "axios";
 import { Enable, FinanceExtractTypePreveiw, FinanceStatusId, FinanceTypeId, _limitApi } from "@/types/enum";
 import { $utils } from "@/utils";
 import { PageResponse } from "@/types/request";
+import { FinanceOriginShort } from "@/types/entities/finance-origin";
+import { FinanceTagShort } from "@/types/entities/finance-tag";
+import { FinanceType } from "@/types/entities/finance-type";
+import { FinanceStatus } from "@/types/entities/finance-status";
+import { FinanceWalletShort } from "@/types/entities/finance-wallet";
+import { FinanceItemRepeat } from "@/types/entities/finance-item"
 
 const url = '/v1/finance/item'
-
-export interface IFinanceWalletPagePayload {
-  _q: string
-  _limit: _limitApi
-  page: number
-  enable: Enable
-  status_id: FinanceStatusId | null
-  type_id: FinanceTypeId | null
-  origin_id: number | null
-  wallet_id: number | null
-  tag_ids: number[] | null
-  type_preveiw: FinanceExtractTypePreveiw
-  period: string
-}
 
 export class FinanceItemGeteway {
   constructor(private request: AxiosStatic) { }
 
-  async page(search: IFinanceWalletPagePayload) {
-    const q = $utils.queryString({ _paginate: true, ...search })
+  async page(search: IPageProps) {
+    const q = $utils.queryString({
+      _paginate: true,
+      _q: search.query,
+      _limit: search.limit,
+      page: search.page,
+      enable: search.enable,
+      status_id: search.statusId,
+      type_id: search.typeId,
+      origin_id: search.originId,
+      wallet_id: search.walletId,
+      tag_ids: search.tagIds,
+      type_preveiw: search.typePreveiw,
+      period: search.period,
+    })
 
-    let error = null
-    let code = 200
-    let status = true
-    let data: PageResponse<FinanceItem> = {
-      items: [],
-      page: 1,
-      total: 0,
-      limit: 15,
-      lastPage: 0,
+    const result = await this.request.get<PageResponse<IDataResponse>>(url + q)
+
+    return {
+      ...result,
+      data: pageParseResponse(result.data)
     }
-
-    try {
-      const result = await this.request.get<PageResponse<FinanceItem>>(url + q)
-
-      code = result.status
-
-      if (result.status === 200) {
-        data.items = result.data.items.map(this.parseResponse)
-        data.page = result.data.page
-        data.total = result.data.total
-        data.limit = result.data.limit
-        data.lastPage = result.data.lastPage
-      }
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status, data }
   }
   async id(id: number) {
-    let error = null
-    let code = 200
-    let status = true
-    let data: FinanceItem | null = null
+    const result = await this.request.get<IDataResponse>(`${url}/${id}`)
 
-    try {
-      const result = await this.request.get<FinanceItem>(`${url}/${id}`)
-
-      code = result.status
-
-      if (code === 200) {
-        data = this.parseResponse(result.data)
-      }
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
+    return {
+      ...result,
+      data: dataParseResponse(result.data)
     }
-
-    return { error, code, status, data }
   }
-  async post(form: FinanceItemFormFieldsPost) {
-    let error = null
-    let code = 201
-    let status = true
-    let data: { message: string } = { message: '' }
-
+  async post(form: IPostProps) {
     if (form.obs === '') {
       delete form.obs
     }
 
-    try {
-      const result = await this.request.post<{ message: string }>(url, form)
-
-      code = result.status
-
-      if (code === 201) {
-        data = result.data
-      }
-
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status, data }
+    return await this.request.post<{ message: string }>(url, {
+      ...form,
+      origin_id: form.originId,
+      status_id: form.statusId,
+      tagIds: form.tagIds,
+      type_id: form.typeId,
+      wallet_id: form.walletId,
+    })
   }
-  async put(id: number, form: FinanceItemFormFieldsPut) {
-    let error = null
-    let code = 201
-    let status = true
-    let data: { message: string } = { message: '' }
-
+  async put(id: number, form: IPutProps) {
     if (form.obs === '') {
       delete form.obs
     }
 
-    try {
-      const result = await this.request.put<{ message: string }>(`${url}/${id}`, form)
-
-      code = result.status
-
-      if (code === 201) {
-        data = result.data
-      }
-
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status, data }
+    return await this.request.put<{ message: string }>(`${url}/${id}`, {
+      ...form,
+      origin_id: form.originId,
+      status_id: form.statusId,
+      tagIds: form.tagIds,
+      type_id: form.typeId,
+      wallet_id: form.walletId,
+    })
   }
   async remove(id: number) {
-    let error = null
-    let code = 204
-    let status = true
-
-    try {
-      const result = await this.request.delete<{ message: string }>(`${url}/${id}`)
-
-      code = result.status
-
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status }
+    return await this.request.delete<{ message: string }>(`${url}/${id}`)
   }
   async enabled(id: number) {
-    let error = null
-    let code = 200
-    let status = true
-
-    try {
-      const result = await this.request.get<{ message: string }>(`${url}/${id}/enabled`)
-
-      code = result.status
-
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status }
+    return await this.request.get<{ message: string }>(`${url}/${id}/enabled`)
   }
   async disabled(id: number) {
-    let error = null
-    let code = 200
-    let status = true
-
-    try {
-      const result = await this.request.get<{ message: string }>(`${url}/${id}/disabled`)
-
-      code = result.status
-      status = true
-
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status }
+    return await this.request.get<{ message: string }>(`${url}/${id}/disabled`)
   }
-  async status<R>(id: number, statusId: FinanceStatusId) {
-    let error = null
-    let code = 200
-    let status = true
-
-    try {
-      const result = await this.request.get(`v1/finance/item/${id}/status/${statusId}`)
-
-      code = result.status
-      status = true
-
-    } catch (err) {
-      error = (err as AxiosError).response?.data
-      code = (err as AxiosError).response?.status as number
-      status = false
-    }
-
-    return { error, code, status }
-  }
-
-  private parseResponse(data: FinanceItem): FinanceItem {
-    return {
-      id: data.id,
-      value: data.value,
-      date: data.date,
-      sort: data.sort,
-      enable: data.enable,
-      obs: data.obs,
-      origin: data.origin,
-      status: data.status,
-      tag_ids: data.tag_ids,
-      type: data.type,
-      wallet: data.wallet,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-    }
+  async status(id: number, statusId: FinanceStatusId) {
+    return await this.request.get(`v1/finance/item/${id}/status/${statusId}`)
   }
 }
+interface IPageProps {
+  query?: string
+  limit?: _limitApi
+  page?: number
+  enable?: Enable
+  statusId?: FinanceStatusId | null
+  typeId?: FinanceTypeId | null
+  originId?: number | null
+  walletId: number | null
+  tagIds?: number[] | null
+  typePreveiw?: FinanceExtractTypePreveiw
+  period: string
+}
+interface IPostProps {
+  value: number
+  date: string
+  sort: number
+  enable: Enable
+  obs?: string
+  originId: number
+  statusId: FinanceStatusId
+  tagIds: number[]
+  typeId: FinanceTypeId
+  walletId: number
+  repeat: FinanceItemRepeat
+}
+interface IPutProps {
+  value: number
+  date: string
+  sort: number
+  enable: Enable
+  obs?: string
+  originId: number
+  statusId: FinanceStatusId
+  tagIds: number[]
+  typeId: FinanceTypeId
+  walletId: number
+  repeat: FinanceItemRepeat
+}
+interface IDataResponse {
+  id: number
+  value: number
+  date: string
+  sort: number
+  enable: Enable
+  obs: string
+  origin: FinanceOriginShort,
+  status: FinanceStatus
+  tag_ids: FinanceTagShort[]
+  type: FinanceType
+  wallet: FinanceWalletShort
+  createdAt: string
+  updatedAt: string
+}
+const dataParseResponse = (data: IDataResponse) => ({
+  id: data.id,
+  value: data.value,
+  date: data.date,
+  sort: data.sort,
+  enable: data.enable,
+  obs: data.obs,
+  originId: data.origin.id,
+  origin: data.origin,
+  statusId: data.status.id,
+  status: data.status,
+  tagIds: data.tag_ids,
+  typeId: data.type.id,
+  type: data.type,
+  walletId: data.wallet.id,
+  wallet: data.wallet,
+  createdAt: data.createdAt,
+  updatedAt: data.updatedAt,
+})
+const pageParseResponse = (data: PageResponse<IDataResponse>) => ({
+  items: data.items.map(dataParseResponse),
+  page: data.page,
+  total: data.total,
+  limit: data.limit,
+  lastPage: data.lastPage,
+})

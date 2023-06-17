@@ -1,4 +1,4 @@
-import { Enable, FinanceTypeId, _limitApi } from '../enum'
+import { Enable, _limitApi } from '../enum'
 import { FinanceType } from './finance-type'
 import { FinanceWalletShort } from './finance-wallet'
 
@@ -7,22 +7,15 @@ export interface FinanceOrigin {
   description: string
   enable: Enable
   type: FinanceType
-  typeId: number | null
+  typeId: number
   wallet: FinanceWalletShort
-  walletId: number | null
+  walletId: number
   parent: FinanceOriginShort | null
   parentId: number | null
+  createdAt: string
+  updatedAt: string
 }
 export interface FinanceOriginShort {
   id: number
   description: string
-}
-export interface FinanceOriginSearch {
-  _q: string
-  _limit: _limitApi
-  page: number
-  enable: Enable
-  type_id: number[] | null
-  wallet_id: number | null
-  parent_id: number | null
 }

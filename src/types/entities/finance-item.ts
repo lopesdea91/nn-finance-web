@@ -14,26 +14,16 @@ export interface FinanceItem {
   sort: number
   enable: Enable
   obs: string
+  originId: number
   origin: FinanceOriginShort,
+  statusId: number
   status: FinanceStatus
-  tag_ids: FinanceTagShort[]
+  tagIds: FinanceTagShort[]
+  typeId: number
   type: FinanceType
+  walletId: number
   wallet: FinanceWalletShort
   createdAt: string
   updatedAt: string
 }
-export interface FinanceItemShort {
-}
-export interface FinanceItemSearch {
-  // _total?: number
-  // lastPage?: number
-  _q: string
-  _limit: _limitApi
-  page: number
-  enable: Enable
-  status_id: FinanceStatusId | null
-  type_id: FinanceTypeId | null
-  origin_id: number | null
-  wallet_id: number | null
-  tag_ids: number[] | null
-}
+
