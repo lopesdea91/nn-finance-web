@@ -1,10 +1,10 @@
-export interface IFinanceWalletConsolidationMonthBalance {
+export interface IFinanceConsolidationMonthBalance {
   revenue: number
   expense: number
   available: number
   estimate: number
 }
-export interface IFinanceWalletConsolidationMonthComposition {
+export interface IFinanceConsolidationMonthComposition {
   id: number
   valueCurrent: number
   valueLimit: number
@@ -14,7 +14,7 @@ export interface IFinanceWalletConsolidationMonthComposition {
   tagDescription: string
   consolidationId: number
 }
-export interface IFinanceWalletConsolidationMonthOriginTransactional {
+export interface IFinanceConsolidationMonthOriginTransactional {
   id: number
   revenue: number
   expense: number
@@ -23,14 +23,14 @@ export interface IFinanceWalletConsolidationMonthOriginTransactional {
   originDescription: string
   consolidationId: number
 }
-export interface IFinanceWalletConsolidationMonthOriginCredit {
+export interface IFinanceConsolidationMonthOriginCredit {
   id: number
   sum: number
   originId: number
   originDescription: string
   consolidationId: number
 }
-export interface IFinanceWalletConsolidationYearBalance {
+export interface IFinanceConsolidationYearBalance {
   label: string
   month: number
   balance: {

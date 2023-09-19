@@ -1,5 +1,4 @@
-import httpParseParams from './httpParseParams'
-import httpPrepareUrl from './httpPrepareUrl'
+import { httpParseParams, httpPrepareUrl } from '.'
 
 describe('src/@core/utils/httpPrepareUrl', () => {
   it('execute with param url', () => {

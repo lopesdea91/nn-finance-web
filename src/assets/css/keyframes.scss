@@ -1,0 +1,11 @@
+@keyframes modalFadeIn {
+  from {
+    max-height: 0px;
+    opacity: 0;
+  }
+
+  to {
+    max-height: min-content;
+    opacity: 1;
+  }
+}

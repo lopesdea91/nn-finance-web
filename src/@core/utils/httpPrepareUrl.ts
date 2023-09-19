@@ -4,7 +4,7 @@ interface httpPrepareUrlProps {
   queryString?: string
 }
 
-export default function httpPrepareUrl({ url, id, queryString }: httpPrepareUrlProps) {
+export const httpPrepareUrl = ({ url, id, queryString }: httpPrepareUrlProps) => {
   if (id) {
     url += `/${id}`
   }

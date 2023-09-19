@@ -1,0 +1,47 @@
+import { renderUI, screen, act } from "@/@core/__tests__"
+import { fireEvent, waitFor } from "@testing-library/react"
+import { appCookie, financeWalletCookie } from "@/@core/infra/memory"
+import { TableWallet } from "./"
+import { redirectObserver, observer } from "@/@core/domain/observer"
+import { IFinanceWallet } from "@/@core/domain/entities/finance-wallet"
+
+// jest.mock('../FinanceWalletListPage.context', () => ({
+//   __esModule: true,
+//   ...jest.requireActual('../FinanceWalletListPage.context')
+// }))
+
+// const spyUseContextPage = jest.spyOn(require('../FinanceWalletListPage.context'), 'useContextPage')
+
+describe('src/@core/presentation/views/finance.wallet/components/table', () => {
+  // const reloadDataMock = jest.fn()
+  // const redirectMock = jest.fn()
+
+  // const itemWallet: IFinanceWallet = {
+  //   id: 1,
+  //   description: 'Carteira teste',
+  //   panel: 1
+  // }
+
+  // spyUseContextPage.mockImplementation(() => ({
+  //   data: { items: [itemWallet] }
+  // }))
+
+  // appCookie.init()
+
+  // it('change inputs', async () => {
+  //   observer.subscribe(redirectObserver({subscribe: redirectMock}))
+
+  //   renderUI(<TableWallet />)
+
+  //   const elButtonEdit = screen.queryByTestId('row-1') as HTMLButtonElement
+  //   const textDescription = screen.queryByText('Carteira teste')
+
+  //   expect(textDescription).toBeTruthy()
+
+  //   await act(() => {
+  //     elButtonEdit.click()
+  //   })
+
+  //   expect(redirectMock).toBeCalledTimes(1)
+  // })
+})

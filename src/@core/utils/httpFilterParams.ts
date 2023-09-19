@@ -1,4 +1,4 @@
-export default function httpFilterParams(obj: Object) {
+export const httpFilterParams = (obj: Object) => {
   return Object.fromEntries(
     Object.entries(obj).filter(([_, v]) => {
       if (Array.isArray(v)) {

@@ -6,17 +6,17 @@ const createJestConfig = nextJest({
 
 module.exports = createJestConfig(async () => {
   return {
+    testEnvironment: 'jest-environment-jsdom',
+
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
     moduleDirectories: ['node_modules', '<rootDir>/'],
-
-    testEnvironment: 'jest-environment-jsdom',
 
     moduleNameMapper: {
       '@/(.*)': '<rootDir>/src/$1'
     },
 
-    coveragePathIgnorePatterns: [
+    testPathIgnorePatterns: [
       // '/src/store/*',
     ],
 

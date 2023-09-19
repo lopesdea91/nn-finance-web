@@ -1,0 +1,15 @@
+button {
+  @apply duration-300;
+
+  &:not(:disabled) {
+    @apply hover:bg-black/10 dark:hover:bg-white/10;
+  }
+
+  &:disabled {
+    @apply opacity-80 cursor-not-allowed;
+  }
+  
+  &[data-active="true"] {
+    @apply opacity-90 bg-black/10;
+  }
+}

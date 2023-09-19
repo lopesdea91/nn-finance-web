@@ -1,4 +1,4 @@
-export default function httpParseParams(data: Object) {
+export const httpParseParams = (data: Object) => {
   const paramsEntries = Object.entries(data)
   const paramsLength = paramsEntries.length
 

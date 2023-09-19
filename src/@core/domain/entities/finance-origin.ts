@@ -1,17 +1,16 @@
-import { Enable } from '@/types/enum'
 import { IFinanceType } from '@/@core/domain/entities/finance-type'
-import { FinanceWalletShort } from '@/@core/domain/entities/finance-wallet'
+import { IFinanceWalletShort } from '@/@core/domain/entities/finance-wallet'
 
 export interface IFinanceOrigin {
   id: number
   description: string
-  enable: Enable
-  type: IFinanceType
+  type?: IFinanceType
   typeId: number
-  wallet: FinanceWalletShort
+  wallet?: IFinanceWalletShort
   walletId: number
-  parent: IFinanceOriginShort | null
+  parent?: IFinanceOriginShort | null
   parentId: number | null
+  trashed?: 1 | 0
 }
 export interface IFinanceOriginShort {
   id: number

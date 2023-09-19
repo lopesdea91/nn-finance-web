@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './keyframes.scss';
+@import './ui.scss';
+@import './geral.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+.app_duration {
+  @apply duration-300;
+}
+
+.app_shadow {
+  @apply shadow shadow-neutral-300 dark:shadow-neutral-600;
+}
+
+.app_text {
+  @apply text-neutral-800 dark:text-neutral-200;
+}
+
+.app_textBody {
+  @apply text-neutral-700 dark:text-neutral-300;
+}
+
+.app_bgCard {
+  @apply bg-white dark:bg-zinc-800;
+}
+
+.react-select {
+  &__control {
+    @apply min-h-[8] shadow-none bg-gray-50 #{!important};
+    // min-height: unset !important;
+  }
+  &__value-container {
+    @apply py-0 #{!important};
+  }
+  &__placeholder {
+    @apply m-0 truncate #{!important};
+  }
+  &__input-container {
+    @apply m-0 #{!important};
+  }
+  // &__input {
+  // }
+
+  &__multi-value {
+    @apply flex px-0 #{!important};
+  }
+  &__multi-value__label {
+    @apply pl-2 pr-1 #{!important};
+  }
+  &__multi-value__remove {
+    @apply text-center w-6 flex items-center justify-center border-l-black/20 border-l-[1px];
+    &:hover {
+      @apply bg-transparent text-gray-800 hover:text-gray-800/30 #{!important};
+    }
+  }
+}
+
+body {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+}

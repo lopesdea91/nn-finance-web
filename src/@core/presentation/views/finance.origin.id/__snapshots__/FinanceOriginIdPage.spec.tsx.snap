@@ -1,0 +1,256 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`src/@core/presentation/views/finance.origin/FinanceOriginIdtPage change inputs and submit form 1`] = `
+<div>
+  <h2
+    class="font-sans font-bold uppercase text-2xl mb-2"
+  >
+    Criar
+     Origem:
+  </h2>
+  <div
+    class="app_shadow app_bgCard rounded-md  p-3 rounded-b-none mb-1 flex flex-wrap gap-2"
+  >
+    <button
+      class="font-medium rounded-sm border border-zinc-300 dark:border-zinc-600 focus:ring-2 focus:border-white text-gray-900  dark:text-white
+            bg-white hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-1.5 text-xs px-0"
+      data-testid="button-back"
+      title="voltar"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-chevron-left w-8"
+        data-icon="chevron-left"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 320 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <button
+      class="font-medium rounded-sm border border-zinc-300 dark:border-zinc-600 focus:ring-2 focus:border-white text-gray-900  dark:text-white
+            bg-white hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-1.5 text-xs px-0 "
+      data-testid="button-submit"
+      form="formOrigin"
+      title="salvar"
+      type="submit"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-floppy-disk w-8"
+        data-icon="floppy-disk"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 448 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <button
+      class="font-medium rounded-sm border border-zinc-300 dark:border-zinc-600 focus:ring-2 focus:border-white text-gray-900  dark:text-white
+            bg-white hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-1.5 text-xs px-0 "
+      data-testid="button-clean"
+      title="limpar formulário"
+      type="reset"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-broom w-8"
+        data-icon="broom"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 576 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M566.6 54.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192-34.7-34.7c-4.2-4.2-10-6.6-16-6.6c-12.5 0-22.6 10.1-22.6 22.6v29.1L364.3 320h29.1c12.5 0 22.6-10.1 22.6-22.6c0-6-2.4-11.8-6.6-16l-34.7-34.7 192-192zM341.1 353.4L222.6 234.9c-42.7-3.7-85.2 11.7-115.8 42.3l-8 8C76.5 307.5 64 337.7 64 369.2c0 6.8 7.1 11.2 13.2 8.2l51.1-25.5c5-2.5 9.5 4.1 5.4 7.9L7.3 473.4C2.7 477.6 0 483.6 0 489.9C0 502.1 9.9 512 22.1 512l173.3 0c38.8 0 75.9-15.4 103.4-42.8c30.6-30.6 45.9-73.1 42.3-115.8z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <button
+      class="font-medium rounded-sm border border-zinc-300 dark:border-zinc-600 focus:ring-2 focus:border-white text-gray-900  dark:text-white
+            bg-white hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-1.5 text-xs px-0 "
+      data-testid="button-reset"
+      title="voltar formulário ao início"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-rotate-left w-8"
+        data-icon="rotate-left"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M48.5 224H40c-13.3 0-24-10.7-24-24V72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8H48.5z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <button
+      class="font-medium rounded-sm border border-zinc-300 dark:border-zinc-600 focus:ring-2 focus:border-white text-gray-900  dark:text-white
+            bg-white hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-700 px-3 py-1.5 text-xs px-0 "
+      data-testid="button-restore"
+      title="restaurar"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-recycle w-8"
+        data-icon="recycle"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M174.7 45.1C192.2 17 223 0 256 0s63.8 17 81.3 45.1l38.6 61.7 27-15.6c8.4-4.9 18.9-4.2 26.6 1.7s11.1 15.9 8.6 25.3l-23.4 87.4c-3.4 12.8-16.6 20.4-29.4 17l-87.4-23.4c-9.4-2.5-16.3-10.4-17.6-20s3.4-19.1 11.8-23.9l28.4-16.4L283 79c-5.8-9.3-16-15-27-15s-21.2 5.7-27 15l-17.5 28c-9.2 14.8-28.6 19.5-43.6 10.5c-15.3-9.2-20.2-29.2-10.7-44.4l17.5-28zM429.5 251.9c15-9 34.4-4.3 43.6 10.5l24.4 39.1c9.4 15.1 14.4 32.4 14.6 50.2c.3 53.1-42.7 96.4-95.8 96.4L320 448v32c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-64-64c-9.4-9.4-9.4-24.6 0-33.9l64-64c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2v32l96.2 0c17.6 0 31.9-14.4 31.8-32c0-5.9-1.7-11.7-4.8-16.7l-24.4-39.1c-9.5-15.2-4.7-35.2 10.7-44.4zm-364.6-31L36 204.2c-8.4-4.9-13.1-14.3-11.8-23.9s8.2-17.5 17.6-20l87.4-23.4c12.8-3.4 26 4.2 29.4 17L182 241.2c2.5 9.4-.9 19.3-8.6 25.3s-18.2 6.6-26.6 1.7l-26.5-15.3L68.8 335.3c-3.1 5-4.8 10.8-4.8 16.7c-.1 17.6 14.2 32 31.8 32l32.2 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32.2 0C42.7 448-.3 404.8 0 351.6c.1-17.8 5.1-35.1 14.6-50.2l50.3-80.5z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="app_shadow app_bgCard rounded-md  p-3 rounded-t-none"
+  >
+    <form
+      id="formOrigin"
+    >
+      <div
+        class="sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+      >
+        <div
+          class="w-full"
+        >
+          <label
+            class="block text-xs text-gray-800 dark:text-white/50"
+            for=":r8:"
+          >
+            Pesquisar
+          </label>
+          <input
+            class="rounded bg-gray-50 block w-full p-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 border border-zinc-300 dark:bg-transparent dark:border-zinc-600 dark:placeholder-gray-400 dark:text-zinc-200 dark:focus:ring-blue-500 dark:focus:border-brlue-500 outline-none h-8"
+            data-testid="input-description"
+            id=":r8:"
+            name="description"
+            placeholder="Digite uma descrição"
+            type="text"
+          />
+        </div>
+        <div
+          class="w-full"
+        >
+          <label
+            class="block text-xs text-gray-800 dark:text-white/50"
+            for=":r9:"
+          >
+            Tipo
+          </label>
+          <select
+            class="rounded bg-gray-50 block w-full px-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 border border-zinc-300 dark:bg-transparent dark:border-zinc-600 dark:placeholder-gray-400 dark:text-zinc-200 dark:focus:ring-blue-500 dark:focus:border-brlue-500 outline-none h-8"
+            data-testid="input-typeId"
+            id=":r9:"
+            name="typeId"
+            placeholder="Selecione um tipo"
+          >
+            <option
+              value="0"
+            >
+              Selecione
+            </option>
+            <option
+              value="1"
+            >
+              origin type 1
+            </option>
+            <option
+              value="2"
+            >
+              origin type 2
+            </option>
+          </select>
+        </div>
+        <div
+          class="w-full"
+        >
+          <label
+            class="block text-xs text-gray-800 dark:text-white/50"
+            for=":ra:"
+          >
+            Parent
+          </label>
+          <select
+            class="rounded bg-gray-50 block w-full px-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 border border-zinc-300 dark:bg-transparent dark:border-zinc-600 dark:placeholder-gray-400 dark:text-zinc-200 dark:focus:ring-blue-500 dark:focus:border-brlue-500 outline-none h-8"
+            data-testid="input-parentId"
+            id=":ra:"
+            name="parentId"
+            placeholder="Selecione um parent"
+          >
+            <option
+              value=""
+            >
+              Selecione
+            </option>
+            <option
+              value="0"
+            >
+              origin 1
+            </option>
+            <option
+              value="2"
+            >
+              origin 2
+            </option>
+          </select>
+        </div>
+        <div
+          class="w-full"
+        >
+          <label
+            class="block text-xs text-gray-800 dark:text-white/50"
+            for=":rb:"
+          >
+            Carteira
+          </label>
+          <select
+            class="rounded bg-gray-50 block w-full px-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 border border-zinc-300 dark:bg-transparent dark:border-zinc-600 dark:placeholder-gray-400 dark:text-zinc-200 dark:focus:ring-blue-500 dark:focus:border-brlue-500 outline-none h-8"
+            data-testid="input-walletId"
+            id=":rb:"
+            name="walletId"
+            placeholder="Selecione um carteira"
+          >
+            <option
+              value=""
+            >
+              Selecione
+            </option>
+            <option
+              value="1"
+            >
+              wallet 1
+            </option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

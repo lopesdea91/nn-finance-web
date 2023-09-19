@@ -1,4 +1,4 @@
-import httpParseParams from './httpParseParams'
+import { httpParseParams } from '.'
 
 describe('src/@core/utils/httpParseParams', () => {
   it('execute object with array value', () => {
