@@ -17,3 +17,5 @@ export interface StorePageProps<T> {
   children: ReactNode
   initial: T
 }
+
+export type ILanguageMode = 'pt-br' | 'en'

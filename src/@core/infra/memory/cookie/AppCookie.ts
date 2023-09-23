@@ -1,43 +1,21 @@
-import CookieAbstract from './CookieAbstract'
-import CookieKeyBase from './CookieKeyBase'
-import { AuthCookie } from './AuthCookie'
-import { SystemCookie } from './SystemCookie'
-import { FinanceWalletCookie } from './FinanceWalletCookie'
-import { FinanceOriginCookie } from './FinanceOriginCookie'
-import { FinanceTagCookie } from './FinanceTagCookie'
-import { FinanceItemCookie } from './FinanceItemCookie'
+import { systemCookie } from './SystemCookie'
+import { financeWalletCookie } from './FinanceWalletCookie'
+import { financeOriginCookie } from './FinanceOriginCookie'
+import { financeTagCookie } from './FinanceTagCookie'
+import { financeItemCookie } from './FinanceItemCookie'
+import { authCookie } from './AuthCookie'
 
-class AppCookie extends CookieAbstract {
-  constructor() {
-    super('')
+class AppCookie {
+  private cookies = [authCookie, systemCookie, financeWalletCookie, financeOriginCookie, financeTagCookie, financeItemCookie]
+
+  up() {
+    this.cookies.forEach((cookie) => cookie.up())
   }
-
-  private initKeys: CookieKeyBase[] = [SystemCookie, FinanceWalletCookie, FinanceOriginCookie, FinanceTagCookie, FinanceItemCookie]
-
-  // private resetKeys: CookieKeyBase[] = [SystemCookie]
-
-  init() {
-    this.initKeys.forEach((item) => {
-      const currentKey = item.key
-      const currentValue = item.default
-
-      this.key = currentKey /** update key CookieAbstract */
-
-      // const value: string = JSON.stringify(currentValue)
-
-      this.updatingValuesEmpty(currentValue) /** set cookie in CookieAbstract */
-    })
+  down() {
+    this.cookies.forEach((cookie) => cookie.down())
   }
-
   reset() {
-    this.removeCookie(SystemCookie.key)
-    this.removeCookie(AuthCookie.key)
-    this.removeCookie(FinanceWalletCookie.key)
-    this.removeCookie(FinanceOriginCookie.key)
-
-    // this.resetKeys.forEach((currentClass) => {
-    //   this.removeCookie(currentClass.key)
-    // })
+    this.cookies.forEach((cookie) => cookie.reset())
   }
 }
 

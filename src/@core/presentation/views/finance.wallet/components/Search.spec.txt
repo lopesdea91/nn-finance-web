@@ -18,11 +18,11 @@ describe('src/@core/presentation/views/finance.wallet/components/search', () => 
   // const redirectMock = jest.fn()
 
   // beforeEach(() => {
-  //   appCookie.init()
+  //   appCookie.up()
   // })
 
   // it('reloadData withou cookie search', async () => {
-  //   appCookie.reset()
+  //   appCookie.down()
 
   //   spyFinanceWalletGatewayV1.mockImplementation(() => ({
   //     page: jest.fn().mockResolvedValue(({ data: { items: [] } }))

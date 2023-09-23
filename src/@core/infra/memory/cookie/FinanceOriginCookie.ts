@@ -1,62 +1,56 @@
 import { _SortApi, _limitApi } from '@/types/enum'
 import CookieAbstract from './CookieAbstract'
 
-interface FinanceOriginCookieData {
+interface CookieData {
   query: string
   sort: _SortApi
   order: 'id' | 'description'
   page: number
   limit: _limitApi
   typeId?: number[]
-  parentId?: number
-  walletId?: number
-  deleted?: 1
+  parentId?: number | null
+  walletId?: number | null
+  deleted?: 1 | null
 }
 /** NonNullable remove null of all keys Data */
-type RequiredData = { [K in keyof FinanceOriginCookieData]: NonNullable<FinanceOriginCookieData[K]> }
+type RequiredData = { [K in keyof CookieData]: NonNullable<CookieData[K]> }
 
 export class FinanceOriginCookie extends CookieAbstract {
-  static key: string = 'financeOrigin'
+  constructor(readonly cookieName: string, readonly cookieInitialData: CookieData) {
+    super()
 
-  static default: FinanceOriginCookieData = {
-    query: '',
-    limit: 15,
-    page: 1,
-    sort: 'asc',
-    order: 'description',
-    typeId: []
-    // parentId?: null
-    // walletId?: null
-    // deleted?: null
+    this.key = cookieName
   }
-
-  constructor() {
-    super('financeOrigin')
+  
+   up() {
+    this.setCookieObject(this.cookieInitialData)
+  }
+  down() {
+    this.destroyCookie()
+  }
+  reset(value: Partial<CookieData> = {}) {
+    return this.setCookieObject({ ...this.cookieInitialData, ...value })
   }
 
   get() {
-    return this.getCookie<RequiredData>({ jsonParse: true })
+    return this.getCookie<RequiredData>( )
   }
-  set(value: Partial<FinanceOriginCookieData>) {
+  set(value: Partial<CookieData>) {
     return this.mergeWithOldValueBeforeUpdating(value)
   }
-  getByKey(key: keyof FinanceOriginCookieData) {
-    return this.getCookie<FinanceOriginCookieData>({ jsonParse: true })?.[key]
-  }
-  reset(value: Partial<FinanceOriginCookieData> = {}) {
-    return this.setCookieObject({
-      query: '',
-      limit: 15,
-      page: 1,
-      sort: 'asc',
-      order: 'description',
-      typeId: [],
-      parentId: null,
-      walletId: null,
-      deleted: null,
-      ...value
-    })
+  getByKey(key: keyof CookieData) {
+    return this.getCookie<CookieData>( )?.[key]
   }
 }
 
-export const financeOriginCookie = new FinanceOriginCookie()
+export const financeOriginCookie = new FinanceOriginCookie('financeOrigin', {
+  query: '',
+  limit: 15,
+  page: 1,
+  sort: 'asc',
+  order: 'description',
+  typeId: [],
+  parentId: null,
+  walletId: null,
+  deleted: null
+})

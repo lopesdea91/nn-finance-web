@@ -25,7 +25,7 @@ describe('src/@core/presentation/views/finance.tag/FinanceTagIdtPage', () => {
   const onRestoreSpy = jest.spyOn(pageMethods, 'onRestore')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observer.reset()
   })
 
@@ -185,7 +185,7 @@ describe('src/@core/presentation/views/finance.tag/FinanceTagIdtPage.methods', (
   const spyFinanceTagGatewayV1 = jest.spyOn(require('@/@core/infra/geteway'), 'financeTagGatewayV1')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observerKey.reset()
     observer.reset()
 

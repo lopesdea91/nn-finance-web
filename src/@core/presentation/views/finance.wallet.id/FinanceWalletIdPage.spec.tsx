@@ -26,7 +26,7 @@ describe('src/@core/presentation/views/finance.wallet/FinanceWalletIdtPage', () 
   const onRestoreSpy = jest.spyOn(pageMethods, 'onRestore')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observer.reset()
   })
 
@@ -182,7 +182,7 @@ describe('src/@core/presentation/views/finance.wallet/FinanceWalletIdtPage.metho
   const spyFinanceWalletGatewayV1 = jest.spyOn(require('@/@core/infra/geteway'), 'financeWalletGatewayV1')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observerKey.reset()
     observer.reset()
 

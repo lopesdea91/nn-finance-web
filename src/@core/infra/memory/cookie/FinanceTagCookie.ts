@@ -1,7 +1,7 @@
-import { IFinanceTypeId, _OrderApi, _SortApi, _limitApi } from '@/types/enum'
 import CookieAbstract from './CookieAbstract'
+import { IFinanceTypeId, _OrderApi, _SortApi, _limitApi } from '@/types/enum'
 
-interface FinanceTagCookieData {
+interface CookieData {
   query: string
   limit: _limitApi
   page: number
@@ -12,44 +12,41 @@ interface FinanceTagCookieData {
   deleted?: 1
 }
 /** NonNullable remove null of all keys Data */
-type RequiredData = { [K in keyof FinanceTagCookieData]: NonNullable<FinanceTagCookieData[K]> }
+type RequiredData = { [K in keyof CookieData]: NonNullable<CookieData[K]> }
 
 export class FinanceTagCookie extends CookieAbstract {
-  static key: string = 'financeTag'
+  constructor(readonly cookieName: string, readonly cookieInitialData: CookieData) {
+    super()
 
-  static default: FinanceTagCookieData = {
-    query: '',
-    limit: 15,
-    page: 1,
-    sort: 'asc',
-    order: 'description',
-    typeId: []
+    this.key = cookieName
   }
 
-  constructor() {
-    super('financeTag')
+  up() {
+    this.setCookieObject(this.cookieInitialData)
+  }
+  down() {
+    this.destroyCookie()
+  }
+  reset(value: Partial<CookieData> = {}) {
+    return this.setCookieObject({ ...this.cookieInitialData, ...value })
   }
 
   get() {
-    return this.hasCookie().getCookie<RequiredData>({ jsonParse: true })
+    return this.hasCookie().getCookie<RequiredData>()
   }
-  set(value: Partial<FinanceTagCookieData>) {
+  set(value: Partial<CookieData>) {
     return this.mergeWithOldValueBeforeUpdating(value)
   }
-  getByKey(key: keyof FinanceTagCookieData) {
-    return this.getCookie<FinanceTagCookieData>({ jsonParse: true })?.[key]
-  }
-  reset(value: Partial<FinanceTagCookieData> = {}) {
-    return this.setCookieObject({
-      query: '',
-      limit: 15,
-      page: 1,
-      sort: 'asc',
-      order: 'description',
-      typeId: [],
-      ...value
-    })
+  getByKey(key: keyof CookieData) {
+    return this.getCookie<CookieData>()?.[key]
   }
 }
 
-export const financeTagCookie = new FinanceTagCookie()
+export const financeTagCookie = new FinanceTagCookie('financeTag', {
+  query: '',
+  limit: 15,
+  page: 1,
+  sort: 'asc',
+  order: 'description',
+  typeId: []
+})

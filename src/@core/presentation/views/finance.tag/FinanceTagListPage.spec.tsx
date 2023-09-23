@@ -24,7 +24,7 @@ describe('src/@core/presentation/views/finance.tag/FinanceTagListPage', () => {
   const getItemsSpy = jest.spyOn(pageMethods, 'getItems')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observer.reset()
   })
   afterAll(() => {
@@ -144,7 +144,7 @@ describe('src/@core/presentation/views/finance.tag/FinanceTagListPage.methods', 
   const spyFinanceTagGatewayV1 = jest.spyOn(require('@/@core/infra/geteway'), 'financeTagGatewayV1')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observerKey.reset()
     observer.reset()
   })

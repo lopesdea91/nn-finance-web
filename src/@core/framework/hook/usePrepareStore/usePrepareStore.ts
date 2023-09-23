@@ -10,7 +10,7 @@ export const usePrepareStore = () => {
   const [isPending, setStatus] = React.useState<boolean>(true)
 
   const handler = useCallback(async () => {
-    const token = authCookie.getToken()
+    const token = authCookie.getByKey('token')
     const routeCurrent = router.pathname
 
     try {
@@ -18,7 +18,7 @@ export const usePrepareStore = () => {
 
       http.setToken(token)
 
-      appCookie.init()
+      appCookie.up()
 
       await authService.signIn()
 

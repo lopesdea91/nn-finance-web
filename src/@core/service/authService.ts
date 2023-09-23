@@ -77,7 +77,7 @@ export const authService = {
   },
 
   signOut: async () => {
-    appCookie.reset()
+    appCookie.down()
 
     await new Promise((res) => setTimeout(res, 750))
 

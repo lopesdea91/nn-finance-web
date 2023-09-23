@@ -1,15 +1,15 @@
 import { IFinanceItemTypePreview, IFinanceStatusId, IFinanceTypeId, _SortApi, _limitApi } from '@/types/enum'
 import CookieAbstract from './CookieAbstract'
 
-interface FinanceItemCookieData {
+interface CookieData {
   query: string
   limit: _limitApi
   page: number
   sort: _SortApi
   order?: 'id' | 'value' | 'date' | 'created' | 'updated'
-  statusId?: IFinanceStatusId
-  typeId?: IFinanceTypeId
-  originId?: number[]
+  statusId?: IFinanceStatusId | null
+  typeId?: IFinanceTypeId | null
+  originId?: number[] | null
   tagIds?: { id: number; label: string }[]
   walletId?: number
   typePreview?: IFinanceItemTypePreview
@@ -18,51 +18,48 @@ interface FinanceItemCookieData {
   deleted?: 1 | 0
 }
 /** NonNullable remove null of all keys Data */
-type RequiredData = { [K in keyof FinanceItemCookieData]: NonNullable<FinanceItemCookieData[K]> }
+type RequiredData = { [K in keyof CookieData]: NonNullable<CookieData[K]> }
 
 export class FinanceItemCookie extends CookieAbstract {
-  static key: string = 'financeItem'
+  constructor(readonly cookieName: string, readonly cookieInitialData: CookieData) {
+    super()
 
-  static default: FinanceItemCookieData = {
-    query: '',
-    limit: 15,
-    page: 1,
-    sort: 'desc',
-    order: 'date'
+    this.key = cookieName
   }
 
-  constructor() {
-    super('financeItem')
+  up() {
+    this.setCookieObject(this.cookieInitialData)
+  }
+  down() {
+    this.destroyCookie()
+  }
+  reset(value: Partial<CookieData> = {}) {
+    return this.setCookieObject({ ...this.cookieInitialData, ...value })
   }
 
   get() {
-    return this.getCookie<RequiredData>({ jsonParse: true })
+    return this.getCookie<RequiredData>()
   }
-  set(value: Partial<FinanceItemCookieData>) {
+  set(value: Partial<CookieData>) {
     return this.mergeWithOldValueBeforeUpdating(value)
   }
-  getByKey(key: keyof FinanceItemCookieData) {
-    return this.getCookie<FinanceItemCookieData>({ jsonParse: true })?.[key]
-  }
-  reset(value: Partial<FinanceItemCookieData> = {}) {
-    return this.setCookieObject({
-      query: '',
-      limit: 15,
-      page: 1,
-      sort: 'desc',
-      order: 'date',
-      statusId: null,
-      typeId: null,
-      originId: null,
-      tagIds: [],
-      // walletId: null,
-      // typePreview?: IFinanceItemTypePreview
-      minDate: '',
-      maxDate: '',
-      // deleted?: 1 | 0
-      ...value
-    })
+  getByKey(key: keyof CookieData) {
+    return this.getCookie<CookieData>()?.[key]
   }
 }
 
-export const financeItemCookie = new FinanceItemCookie()
+export const financeItemCookie = new FinanceItemCookie('financeItem', {
+  query: '',
+  limit: 15,
+  page: 1,
+  sort: 'desc',
+  order: 'date',
+  statusId: null,
+  typeId: null,
+  originId: null,
+  tagIds: [],
+  // walletId: null,
+  // typePreview?: IFinanceItemTypePreview
+  minDate: '',
+  maxDate: ''
+})

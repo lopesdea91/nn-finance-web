@@ -23,7 +23,7 @@ describe('src/@core/presentation/views/finance.wallet/FinanceWalletListPage', ()
   const getItemsSpy = jest.spyOn(pageMethods, 'getItems')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observer.reset()
   })
   afterAll(() => {
@@ -143,7 +143,7 @@ describe('src/@core/presentation/views/finance.wallet/FinanceWalletListPage.meth
   const spyFinanceWalletGatewayV1 = jest.spyOn(require('@/@core/infra/geteway'), 'financeWalletGatewayV1')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observerKey.reset()
     observer.reset()
   })

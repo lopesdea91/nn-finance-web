@@ -27,7 +27,7 @@ describe('src/@core/presentation/views/finance.origin/FinanceOriginListPage', ()
   const getItemsSpy = jest.spyOn(pageMethods, 'getItems')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
   })
   beforeAll(() => {
   })
@@ -157,7 +157,7 @@ describe('src/@core/presentation/views/finance.origin/FinanceOriginListPage.meth
   const spyFinanceOriginGatewayV1 = jest.spyOn(require('@/@core/infra/geteway'), 'financeOriginGatewayV1')
 
   beforeEach(() => {
-    appCookie.init()
+    appCookie.up()
     observerKey.reset()
     observer.reset()
   })

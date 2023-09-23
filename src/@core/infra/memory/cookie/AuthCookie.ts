@@ -1,26 +1,38 @@
 import CookieAbstract from './CookieAbstract'
 
-interface AuthCookieData {
+interface CookieData {
   token: string
 }
-
 export class AuthCookie extends CookieAbstract {
-  static key: string = 'auth'
+  constructor(readonly cookieName: string, readonly cookieInitialData: CookieData) {
+    super()
 
-  static default: AuthCookieData = {
-    token: ''
+    this.key = cookieName
   }
 
-  constructor() {
-    super('auth')
+  up() {
+    if (!this.get()) {
+      this.setCookieObject(this.cookieInitialData)
+    }
+  }
+  down() {
+    this.destroyCookie()
+  }
+  reset(value: Partial<CookieData> = {}) {
+    return this.setCookieObject({ ...this.cookieInitialData, ...value })
   }
 
-  getToken() {
-    return this.getCookie<AuthCookieData>({ jsonParse: true })?.token
+  get() {
+    return this.getCookie<CookieData>()
   }
-  setToken(token: string) {
-    return this.mergeWithOldValueBeforeUpdating({ token })
+  set(value: Partial<CookieData>) {
+    return this.mergeWithOldValueBeforeUpdating(value)
+  }
+  getByKey(key: keyof CookieData) {
+    return this.getCookie<CookieData>()?.[key]
   }
 }
 
-export const authCookie = new AuthCookie()
+export const authCookie = new AuthCookie('auth', {
+  token: ''
+})

@@ -1,7 +1,7 @@
-import { _SortApi, _limitApi } from '@/types/enum'
 import CookieAbstract from './CookieAbstract'
+import { _SortApi, _limitApi } from '@/types/enum'
 
-interface FinanceWalletCookieData {
+interface CookieData {
   query: string
   sort: _SortApi
   order: 'id' | 'description'
@@ -11,46 +11,42 @@ interface FinanceWalletCookieData {
   deleted?: 1
 }
 /** NonNullable remove null of all keys Data */
-type RequiredData = { [K in keyof FinanceWalletCookieData]: NonNullable<FinanceWalletCookieData[K]> }
+type RequiredData = { [K in keyof CookieData]: NonNullable<CookieData[K]> }
 
 export class FinanceWalletCookie extends CookieAbstract {
-  static key: string = 'financeWallet'
+  constructor(readonly cookieName: string, readonly cookieInitialData: CookieData) {
+    super()
 
-  static default: FinanceWalletCookieData = {
-    query: '',
-    limit: 15,
-    page: 1,
-    sort: 'asc',
-    order: 'description'
-    // panel: null,
-    // deleted: null
+    this.key = cookieName
   }
 
-  constructor() {
-    super('financeWallet')
+  up() {
+    this.setCookieObject(this.cookieInitialData)
+  }
+  down() {
+    this.destroyCookie()
+  }
+  reset(value: Partial<CookieData> = {}) {
+    return this.setCookieObject({ ...this.cookieInitialData, ...value })
   }
 
   get() {
-    return this.getCookie<RequiredData>({ jsonParse: true })
+    return this.getCookie<RequiredData>()
   }
-  set(value: Partial<FinanceWalletCookieData>) {
+  set(value: Partial<CookieData>) {
     return this.mergeWithOldValueBeforeUpdating(value)
   }
-  getByKey(key: keyof FinanceWalletCookieData) {
-    return this.getCookie<FinanceWalletCookieData>({ jsonParse: true })?.[key]
-  }
-  reset(value: Partial<FinanceWalletCookieData> = {}) {
-    return this.setCookieObject({
-      query: '',
-      limit: 15,
-      page: 1,
-      sort: 'asc',
-      order: 'description',
-      // panel: null,
-      // deleted: null
-      ...value
-    })
+  getByKey(key: keyof CookieData) {
+    return this.getCookie<CookieData>()?.[key]
   }
 }
 
-export const financeWalletCookie = new FinanceWalletCookie()
+export const financeWalletCookie = new FinanceWalletCookie('financeWallet', {
+  query: '',
+  limit: 15,
+  page: 1,
+  sort: 'asc',
+  order: 'description'
+  // panel: null,
+  // deleted: null
+})
