@@ -1,20 +1,22 @@
-// import 'chart.js/auto';
-import React from 'react';
-import { Layout } from "@/@core/presentation/layouts";
-import { AppPropsLayout } from '@/types/layout';
-
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '@/assets/css/app.scss'
+
 import { AppProvider } from '@/@core/framework/providers';
-import { AppSubscribed } from '@/@core/framework/subscribe';
-// config.autoAddCss = false
+import { Layout } from "@/@core/presentation/layouts";
 
-function App({ Component, pageProps }: AppPropsLayout) {
-  // return <Component {...pageProps} />
-
+import { SetupKeyDown, SetupAppObserver, SetupSystemObserver, SetupStoreFinanceObserver, SetupData } from '@/@core/app/app.setup';
+import { IAppProps } from '@/@core/app/app.types';
+import { MyAppSSR } from '@/@core/app/appSSR';
+function MyApp({ Component, pageProps, pageInitialData }: IAppProps) {
   return (
     <AppProvider>
-      <AppSubscribed />
+
+      <SetupKeyDown />
+      <SetupAppObserver />
+      <SetupSystemObserver />
+      <SetupStoreFinanceObserver />
+
+      <SetupData initialData={pageInitialData} />
 
       <Layout layout={Component.layout}>
         <Component {...pageProps} />
@@ -23,4 +25,6 @@ function App({ Component, pageProps }: AppPropsLayout) {
   );
 }
 
-export default App
+MyApp.getInitialProps = MyAppSSR
+
+export default MyApp

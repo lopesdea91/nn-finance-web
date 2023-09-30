@@ -1,11 +1,6 @@
 import React from 'react'
-import { LayoutAuth } from '@/@core/presentation/layouts/types/LayoutAuth'
-import { LayoutDashboard } from '@/@core/presentation/layouts/types/LayoutDashboard'
-import { LayoutPrivate } from '@/@core/presentation/layouts/types/LayoutPrivate'
-import { LayoutSettings } from '@/@core/presentation/layouts/types/LayoutSettings'
-import { LayoutType } from '@/types/layout'
-import { Loading } from './shared'
-import { usePrepareStore } from '@/@core/framework/hook/usePrepareStore'
+import { LayoutType } from '@/@core/app/app.types'
+import { LayoutAuth, LayoutDashboard, LayoutPrivate, LayoutSettings } from './types'
 
 type LayoutProps = {
   children: React.ReactNode
@@ -13,12 +8,16 @@ type LayoutProps = {
 }
 
 export const Layout = ({ children, layout }: LayoutProps) => {
-  const { isPending } = usePrepareStore()
-  const LayoutSelected = React.useMemo(() => getCurrentLayout(layout), [layout])
+  const LayoutSelected = React.useMemo(() => {
+    const layouts = {
+      auth: LayoutAuth,
+      dashboard: LayoutDashboard,
+      private: LayoutPrivate,
+      settings: LayoutSettings
+    }
 
-  if (isPending) {
-    return <Loading />
-  }
+    return layouts[(layout || 'private')]
+  }, [layout])
 
   return (
     <LayoutSelected>
@@ -26,11 +25,3 @@ export const Layout = ({ children, layout }: LayoutProps) => {
     </LayoutSelected>
   )
 }
-
-const layouts = {
-  auth: LayoutAuth,
-  dashboard: LayoutDashboard,
-  private: LayoutPrivate,
-  settings: LayoutSettings
-}
-const getCurrentLayout = (key: LayoutType = 'private') => layouts[key]

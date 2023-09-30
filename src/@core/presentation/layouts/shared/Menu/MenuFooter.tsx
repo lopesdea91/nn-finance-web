@@ -4,7 +4,7 @@ import { loadingObserver, redirectObserver, observer } from '@/@core/domain/obse
 import { useUserStore } from '@/@core/framework/store'
 import { themeService } from '@/@core/service/themeService'
 import { Icon } from '@/@core/presentation/shared/ui'
-import { authService } from '@/@core/service/authService'
+import { appCookie } from '@/@core/infra/memory'
 
 export const MenuFooter: React.FC = () => {
   const useStore = useUserStore()
@@ -12,7 +12,11 @@ export const MenuFooter: React.FC = () => {
   const signOut = React.useCallback(async () => {
     await observer.publish(loadingObserver(true))
 
-    await authService.signOut()
+    appCookie.down()
+
+    await new Promise((res) => setTimeout(res, 750))
+
+    await observer.publish(redirectObserver('/auth/signIn'))
 
     await observer.publish(loadingObserver(false))
   }, [])
