@@ -16,6 +16,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+        <link rel="manifest" href="manifest.json" />
+        <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="application-name" content="PWA App" />
+        <meta name="msapplication-TileColor" content="#2c2a2a" />
+        <meta name="theme-color" content="#fff" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
+        />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
